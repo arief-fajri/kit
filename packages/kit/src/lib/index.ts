@@ -4,4 +4,3 @@ export { default as Card } from './Card.svelte';
 
 // Export types
 export type { ButtonProps, CardProps } from './types.js';
-

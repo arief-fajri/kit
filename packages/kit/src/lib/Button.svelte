@@ -5,16 +5,12 @@
 	export let variant: ButtonProps['variant'] = 'primary';
 	export let size: ButtonProps['size'] = 'md';
 	export let disabled: ButtonProps['disabled'] = false;
+	export let onclick: ButtonProps['onclick'] = undefined;
 
 	let classes = `btn btn-${variant} btn-${size}`;
 </script>
 
-<button
-	class={classes}
-	{disabled}
-	on:click={onclick}
-	{...$$restProps}
->
+<button class={classes} {disabled} on:click={onclick || undefined} {...$$restProps}>
 	<slot>{label}</slot>
 </button>
 
@@ -80,4 +76,3 @@
 		color: white;
 	}
 </style>
-

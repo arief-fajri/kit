@@ -19,4 +19,3 @@ export interface CardProps {
 	/** Card subtitle */
 	subtitle?: string;
 }
-

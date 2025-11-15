@@ -28,4 +28,3 @@ module.exports = {
 	],
 	ignorePatterns: ['dist', '.svelte-kit', 'node_modules']
 };
-

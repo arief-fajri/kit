@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { CardProps } from './types.js';
 
-	export let title: CardProps['title'];
-	export let subtitle: CardProps['subtitle'];
+	export let title: CardProps['title'] = undefined;
+	export let subtitle: CardProps['subtitle'] = undefined;
 </script>
 
 <div class="card" {...$$restProps}>
@@ -25,7 +25,9 @@
 	.card {
 		background: white;
 		border-radius: 0.5rem;
-		box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+		box-shadow:
+			0 1px 3px 0 rgba(0, 0, 0, 0.1),
+			0 1px 2px 0 rgba(0, 0, 0, 0.06);
 		overflow: hidden;
 		display: flex;
 		flex-direction: column;
@@ -53,4 +55,3 @@
 		flex: 1;
 	}
 </style>
-
