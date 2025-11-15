@@ -1,0 +1,15 @@
+{
+	"$schema": "https://typedoc.org/schema.json",
+	"entryPoints": ["src/index.ts"],
+	"out": "docs",
+	"plugin": [],
+	"readme": "README.md",
+	"includeVersion": true,
+	"excludePrivate": true,
+	"excludeProtected": true,
+	"excludeInternal": true,
+	"theme": "default",
+	"name": "Kit Library Documentation",
+	"tsconfig": "tsconfig.json"
+}
+
