@@ -1,0 +1,535 @@
+/**
+ * Default Style Configuration
+ * 
+ * This file contains all CSS custom properties (CSS variables) used across
+ * all components in the kit library. These can be overridden globally or
+ * per-component for theming and customization.
+ */
+
+/* ============================================
+   SHARED / GLOBAL VARIABLES
+   ============================================ */
+
+:root {
+  /* === COLOR PALETTE === */
+  --color-primary: #3b82f6;
+  --color-primary-hover: #2563eb;
+  --color-primary-active: #1d4ed8;
+  
+  --color-secondary: #6b7280;
+  --color-secondary-hover: #4b5563;
+  --color-secondary-active: #374151;
+  
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  --color-error: #ef4444;
+  
+  --color-surface: #ffffff;
+  --color-surface-secondary: #f9fafb;
+  --color-surface-hover: #f9fafb;
+  --color-surface-disabled: #f9fafb;
+  --color-on-surface: #111827;
+  
+  --color-border: #d1d5db;
+  
+  --color-text: #111827;
+  --color-text-secondary: #374151;
+  --color-text-muted: #6b7280;
+  
+  /* === TYPOGRAPHY === */
+  --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  
+  /* === SPACING === */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 0.75rem;
+  --spacing-lg: 1rem;
+  --spacing-xl: 1.5rem;
+  
+  /* === BORDER RADIUS === */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-full: 9999px;
+  
+  /* === SHADOWS === */
+  --shadow-focus: 0 0 0 3px rgb(59 130 246 / 0.1);
+  --shadow-error-focus: 0 0 0 3px rgb(239 68 68 / 0.1);
+}
+
+/* ============================================
+   BUTTON COMPONENT VARIABLES
+   ============================================ */
+
+:root {
+  /* === FILLED VARIANT === */
+  --btn-bg-filled: var(--color-primary);
+  --btn-bg-filled-hover: var(--color-primary-hover);
+  --btn-bg-filled-active: var(--color-primary-active);
+  --btn-text-filled: #ffffff;
+  --btn-text-filled-hover: #ffffff;
+  --btn-text-filled-active: #ffffff;
+  
+  /* === OUTLINED VARIANT === */
+  --btn-bg-outlined-hover: rgba(59, 130, 246, 0.05);
+  --btn-bg-outlined-active: rgba(59, 130, 246, 0.1);
+  --btn-border-outlined: var(--color-primary);
+  --btn-border-outlined-hover: var(--color-primary-hover);
+  --btn-border-outlined-active: var(--color-primary-active);
+  --btn-text-outlined: var(--color-primary);
+  --btn-text-outlined-hover: var(--color-primary-hover);
+  --btn-text-outlined-active: var(--color-primary-active);
+  
+  /* === TEXT VARIANT === */
+  --btn-bg-text-hover: rgba(59, 130, 246, 0.05);
+  --btn-bg-text-active: rgba(59, 130, 246, 0.1);
+  --btn-text-text: var(--color-primary);
+  --btn-text-text-hover: var(--color-primary-hover);
+  --btn-text-text-active: var(--color-primary-active);
+  
+  /* === LINK VARIANT === */
+  --btn-text-link: var(--color-primary);
+  --btn-text-link-hover: var(--color-primary-hover);
+  --btn-text-link-active: var(--color-primary-active);
+  
+  /* === SIZE: SMALL === */
+  --btn-padding-x-sm: 0.75rem;
+  --btn-padding-y-sm: 0.375rem;
+  --btn-min-height-sm: 2rem;
+  --btn-font-size-sm: 0.875rem;
+  --btn-gap-sm: 0.375rem;
+  --btn-border-radius-sm: var(--radius-sm);
+  
+  /* === SIZE: MEDIUM === */
+  --btn-padding-x-md: 1rem;
+  --btn-padding-y-md: 0.5rem;
+  --btn-min-height-md: 2.5rem;
+  --btn-font-size-md: 1rem;
+  --btn-gap-md: 0.5rem;
+  --btn-border-radius-md: var(--radius-md);
+  
+  /* === SIZE: LARGE === */
+  --btn-padding-x-lg: 1.25rem;
+  --btn-padding-y-lg: 0.625rem;
+  --btn-min-height-lg: 3rem;
+  --btn-font-size-lg: 1.125rem;
+  --btn-gap-lg: 0.625rem;
+  --btn-border-radius-lg: var(--radius-lg);
+  
+  /* === SIZE: EXTRA LARGE === */
+  --btn-padding-x-xl: 1.5rem;
+  --btn-padding-y-xl: 0.75rem;
+  --btn-min-height-xl: 3.5rem;
+  --btn-font-size-xl: 1.25rem;
+  --btn-gap-xl: 0.75rem;
+  --btn-border-radius-xl: var(--radius-lg);
+  
+  /* === STATES === */
+  --btn-bg-selected: var(--color-surface-hover);
+  --btn-text-selected: var(--color-on-surface);
+  
+  --btn-bg-highlight: #fef3c7;
+  --btn-text-highlight: #92400e;
+  --btn-border-highlight: #fbbf24;
+  
+  /* === DISABLED STATE === */
+  --btn-bg-disabled: #e5e7eb;
+  --btn-text-disabled: #9ca3af;
+  --btn-border-disabled: #d1d5db;
+  
+  /* === FOCUS === */
+  --btn-focus-ring-color: var(--color-primary);
+  --btn-focus-ring-width: 2px;
+  --btn-focus-ring-offset: 2px;
+  
+  /* === TYPOGRAPHY === */
+  --btn-font-family: var(--font-family-base);
+  --btn-font-weight: var(--font-weight-medium);
+  --btn-line-height: 1.5;
+  
+  /* === TRANSITIONS === */
+  --btn-transition-duration: 0.2s;
+  --btn-transition-timing: ease-in-out;
+}
+
+/* ============================================
+   INPUT TEXT COMPONENT VARIABLES
+   ============================================ */
+
+:root {
+  /* === CORE COLORS === */
+  --input-text-bg: var(--color-surface);
+  --input-text-border: var(--color-border);
+  --input-text-border-focus: var(--color-primary);
+  --input-text-border-error: var(--color-error);
+  --input-text-text: var(--color-text);
+  --input-text-text-placeholder: var(--color-text-muted);
+  --input-text-label: var(--color-text-secondary);
+  --input-text-error-text: var(--color-error);
+  
+  /* === LAYOUT & SPACING === */
+  --input-text-radius: var(--radius-md);
+  --input-text-shadow-focus: var(--shadow-focus);
+  
+  /* === SIZE: SMALL === */
+  --input-text-height-sm: 2rem;
+  --input-text-padding-x-sm: 0.5rem;
+  --input-text-font-size-sm: 0.875rem;
+  
+  /* === SIZE: MEDIUM === */
+  --input-text-height-md: 2.5rem;
+  --input-text-padding-x-md: 0.75rem;
+  --input-text-font-size-md: 1rem;
+  
+  /* === SIZE: LARGE === */
+  --input-text-height-lg: 3rem;
+  --input-text-padding-x-lg: 1rem;
+  --input-text-font-size-lg: 1.125rem;
+  
+  /* === STYLE VARIANTS === */
+  /* Filled variant */
+  --input-text-filled-bg: var(--color-surface-secondary);
+  --input-text-filled-bg-focus: var(--color-surface);
+  --input-text-filled-border: transparent;
+  
+  /* Outlined variant */
+  --input-text-outlined-border-width: 2px;
+  --input-text-outlined-bg: transparent;
+  
+  /* === STATES === */
+  --input-text-disabled-opacity: 0.6;
+  --input-text-disabled-bg: var(--color-surface-disabled);
+  --input-text-disabled-cursor: not-allowed;
+  
+  /* === ACTION BUTTONS === */
+  --input-text-action-btn-color: var(--color-text-muted);
+  --input-text-action-btn-hover-color: var(--color-text);
+  --input-text-action-btn-hover-bg: var(--color-surface-hover);
+  --input-text-action-btn-focus-shadow: 0 0 0 2px var(--color-primary);
+  
+  /* === TRANSITIONS === */
+  --input-text-transition-duration: 0.2s;
+  --input-text-transition-timing: ease-in-out;
+}
+
+/* ============================================
+   CHECKBOX COMPONENT VARIABLES
+   ============================================ */
+
+:root {
+  /* === CORE PROPERTIES === */
+  --checkbox-size: 1.25rem;
+  --checkbox-border-width: 2px;
+  --checkbox-border-color: currentColor;
+  --checkbox-border-radius: var(--radius-md);
+  --checkbox-background: transparent;
+  --checkbox-checkmark-color: currentColor;
+  --checkbox-disabled-opacity: 0.5;
+  --checkbox-focus-ring-color: var(--color-primary);
+  --checkbox-transition: all 0.2s ease-in-out;
+  --checkbox-gap: var(--spacing-sm);
+  
+  /* === DEFAULT VARIANT === */
+  --checkbox-bg-default: transparent;
+  --checkbox-bg-default-hover: var(--color-surface-hover);
+  --checkbox-border-default: var(--color-secondary);
+  --checkbox-border-default-hover: var(--color-primary);
+  --checkbox-text-default: var(--color-on-surface);
+  
+  /* === PRIMARY VARIANT === */
+  --checkbox-bg-primary: transparent;
+  --checkbox-bg-primary-hover: rgba(59, 130, 246, 0.1);
+  --checkbox-border-primary: var(--color-primary);
+  --checkbox-border-primary-hover: var(--color-primary-hover);
+  --checkbox-text-primary: var(--color-primary);
+  --checkbox-checkmark-primary: var(--color-primary);
+  
+  /* === SUCCESS VARIANT === */
+  --checkbox-bg-success: transparent;
+  --checkbox-bg-success-hover: rgba(16, 185, 129, 0.1);
+  --checkbox-border-success: var(--color-success);
+  --checkbox-border-success-hover: #059669;
+  --checkbox-text-success: var(--color-success);
+  --checkbox-checkmark-success: var(--color-success);
+  
+  /* === ERROR VARIANT === */
+  --checkbox-bg-error: transparent;
+  --checkbox-bg-error-hover: rgba(239, 68, 68, 0.1);
+  --checkbox-border-error: var(--color-danger);
+  --checkbox-border-error-hover: #dc2626;
+  --checkbox-text-error: var(--color-danger);
+  --checkbox-checkmark-error: var(--color-danger);
+  
+  /* === SIZE: EXTRA SMALL === */
+  --checkbox-size-xs: 0.75rem;
+  --checkbox-gap-xs: 0.25rem;
+  --checkbox-font-size-xs: 0.75rem;
+  
+  /* === SIZE: SMALL === */
+  --checkbox-size-sm: 1rem;
+  --checkbox-gap-sm: 0.375rem;
+  --checkbox-font-size-sm: 0.875rem;
+  
+  /* === SIZE: MEDIUM === */
+  --checkbox-size-md: 1.25rem;
+  --checkbox-gap-md: 0.5rem;
+  --checkbox-font-size-md: 1rem;
+  
+  /* === SIZE: LARGE === */
+  --checkbox-size-lg: 1.5rem;
+  --checkbox-gap-lg: 0.625rem;
+  --checkbox-font-size-lg: 1.125rem;
+  
+  /* === SIZE: EXTRA LARGE === */
+  --checkbox-size-xl: 1.75rem;
+  --checkbox-gap-xl: 0.75rem;
+  --checkbox-font-size-xl: 1.25rem;
+  
+  /* === DISABLED STATE === */
+  --checkbox-bg-disabled: #f3f4f6;
+  --checkbox-text-disabled: #9ca3af;
+  --checkbox-border-disabled: #d1d5db;
+  
+  /* === FOCUS === */
+  --checkbox-focus-ring-width: 2px;
+  --checkbox-focus-ring-offset: 2px;
+  
+  /* === TYPOGRAPHY === */
+  --checkbox-font-family: var(--font-family-base);
+  --checkbox-font-weight: var(--font-weight-medium);
+  --checkbox-line-height: 1.5;
+  
+  /* === DESCRIPTION === */
+  --checkbox-description-font-size: 0.875rem;
+  --checkbox-description-color: #6b7280;
+  --checkbox-description-margin-top: 0.25rem;
+}
+
+/* ============================================
+   RADIOBOX COMPONENT VARIABLES
+   ============================================ */
+
+:root {
+  /* === COLOR VARIANTS === */
+  --radiobox-primary: var(--color-primary);
+  --radiobox-secondary: var(--color-secondary);
+  --radiobox-success: var(--color-success);
+  --radiobox-error: var(--color-error);
+  --radiobox-warning: var(--color-warning);
+  
+  /* === LAYOUT & SPACING === */
+  --radiobox-gap: 0.5rem;
+  --radiobox-border: #d1d5db;
+  --radiobox-disabled: #9ca3af;
+  --radiobox-background: #ffffff;
+  
+  /* === SIZE: EXTRA SMALL === */
+  --radiobox-size-xs: 0.625;
+  --radiobox-indicator-size-xs: calc(1.25rem * var(--radiobox-size-xs));
+  
+  /* === SIZE: SMALL === */
+  --radiobox-size-sm: 0.75;
+  --radiobox-indicator-size-sm: calc(1.25rem * var(--radiobox-size-sm));
+  
+  /* === SIZE: MEDIUM (DEFAULT) === */
+  --radiobox-size-md: 1;
+  --radiobox-indicator-size-md: calc(1.25rem * var(--radiobox-size-md));
+  
+  /* === SIZE: LARGE === */
+  --radiobox-size-lg: 1.25;
+  --radiobox-indicator-size-lg: calc(1.25rem * var(--radiobox-size-lg));
+  
+  /* === SIZE: EXTRA LARGE === */
+  --radiobox-size-xl: 1.5;
+  --radiobox-indicator-size-xl: calc(1.25rem * var(--radiobox-size-xl));
+  
+  /* === INTERACTION STATES === */
+  --radiobox-focus-ring-width: 2px;
+  --radiobox-focus-ring-offset: 2px;
+  --radiobox-transition-duration: 0.2s;
+  --radiobox-transition-timing: ease-in-out;
+  
+  /* === TYPOGRAPHY === */
+  --radiobox-font-family: var(--font-family-base);
+  --radiobox-font-weight: var(--font-weight-medium);
+  --radiobox-line-height: 1.5;
+}
+
+/* ============================================
+   TEXTAREA COMPONENT VARIABLES
+   ============================================ */
+
+:root {
+  /* === BACKGROUND COLORS === */
+  --textarea-bg: var(--color-surface);
+  --textarea-bg-disabled: var(--color-surface-disabled);
+  
+  /* === BORDER COLORS === */
+  --textarea-border: var(--color-border);
+  --textarea-border-focus: var(--color-primary);
+  --textarea-border-error: var(--color-error);
+  
+  /* === TEXT COLORS === */
+  --textarea-text: var(--color-text);
+  --textarea-text-placeholder: var(--color-text-muted);
+  --textarea-label: var(--color-text-secondary);
+  --textarea-error-text: var(--color-error);
+  
+  /* === FOCUS STYLES === */
+  --textarea-shadow-focus: var(--shadow-focus);
+  --textarea-radius: var(--radius-md);
+  
+  /* === SIZE: SMALL === */
+  --textarea-padding-x-sm: var(--spacing-sm);
+  --textarea-padding-y-sm: 0.375rem;
+  --textarea-font-size-sm: 0.875rem;
+  
+  /* === SIZE: MEDIUM === */
+  --textarea-padding-x-md: var(--spacing-md);
+  --textarea-padding-y-md: var(--spacing-sm);
+  --textarea-font-size-md: 1rem;
+  
+  /* === SIZE: LARGE === */
+  --textarea-padding-x-lg: var(--spacing-lg);
+  --textarea-padding-y-lg: 0.625rem;
+  --textarea-font-size-lg: 1.125rem;
+  
+  /* === TRANSITIONS === */
+  --textarea-transition-duration: 0.2s;
+  --textarea-transition-timing: ease-in-out;
+}
+
+/* ============================================
+   DROPDOWN WRAPPER COMPONENT VARIABLES
+   ============================================ */
+
+:root {
+  /* === BASE STYLES === */
+  --dropdown-bg: var(--color-surface);
+  --dropdown-border-color: rgba(0, 0, 0, 0.1);
+  --dropdown-border-radius: var(--radius-md);
+  --dropdown-z-index: 9999;
+  
+  /* === SHADOWS === */
+  --dropdown-shadow: 
+    rgba(0, 0, 0, 0.05) 0px 0px 2px,
+    rgba(0, 0, 0, 0.07) 0px 2px 4px;
+  --dropdown-minimal-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px;
+  --dropdown-elevated-shadow:
+    rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,
+    rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+  
+  /* === BORDERS === */
+  --dropdown-border: 1px solid var(--dropdown-border-color);
+  --dropdown-outlined-border: 2px solid var(--dropdown-border-color);
+  
+  /* === SIZE: SMALL === */
+  --dropdown-min-width-sm: 120px;
+  --dropdown-max-width-sm: 200px;
+  
+  /* === SIZE: MEDIUM === */
+  --dropdown-min-width-md: 160px;
+  --dropdown-max-width-md: 280px;
+  
+  /* === SIZE: LARGE === */
+  --dropdown-min-width-lg: 200px;
+  --dropdown-max-width-lg: 360px;
+  
+  /* === SIZE: EXTRA LARGE === */
+  --dropdown-min-width-xl: 240px;
+  --dropdown-max-width-xl: 480px;
+  
+  /* === TYPOGRAPHY === */
+  --dropdown-font-family: var(--font-family-base);
+  --dropdown-font-size: 0.875rem;
+  --dropdown-line-height: 1.5;
+  --dropdown-text-color: var(--color-on-surface);
+  
+  /* === FOCUS === */
+  --dropdown-focus-color: var(--color-primary);
+  --dropdown-focus-outline: 2px solid var(--dropdown-focus-color);
+  --dropdown-focus-offset: 2px;
+  
+  /* === FALLBACK CONTENT === */
+  --dropdown-padding: 0.75rem;
+  --dropdown-fallback-color: rgba(0, 0, 0, 0.5);
+  
+  /* === BACKDROP FILTER === */
+  --dropdown-backdrop-filter: none;
+}
+
+/* ============================================
+   DARK THEME OVERRIDES
+   ============================================ */
+
+[data-theme="dark"] {
+  /* === GLOBAL COLORS === */
+  --color-surface: #1f2937;
+  --color-surface-secondary: #374151;
+  --color-surface-hover: #374151;
+  --color-surface-disabled: #374151;
+  --color-on-surface: #f9fafb;
+  --color-border: #4b5563;
+  --color-text: #f9fafb;
+  --color-text-secondary: #d1d5db;
+  --color-text-muted: #9ca3af;
+  
+  /* === BUTTON DARK THEME === */
+  --btn-bg-outlined-hover: rgba(59, 130, 246, 0.1);
+  --btn-bg-text-hover: rgba(59, 130, 246, 0.1);
+  --btn-bg-disabled: #374151;
+  --btn-text-disabled: #6b7280;
+  --btn-border-disabled: #4b5563;
+  
+  /* === INPUT TEXT DARK THEME === */
+  --input-text-bg: var(--color-surface);
+  --input-text-border: var(--color-border);
+  --input-text-text: var(--color-text);
+  --input-text-text-placeholder: var(--color-text-muted);
+  --input-text-label: var(--color-text-secondary);
+  --input-text-disabled-bg: var(--color-surface-disabled);
+  --input-text-filled-bg: var(--color-surface-secondary);
+  --input-text-action-btn-hover-bg: var(--color-surface-hover);
+  
+  /* === CHECKBOX DARK THEME === */
+  --checkbox-border-default: #6b7280;
+  --checkbox-text-default: var(--color-on-surface);
+  --checkbox-bg-disabled: #374151;
+  --checkbox-text-disabled: #6b7280;
+  --checkbox-border-disabled: #4b5563;
+  --checkbox-description-color: #9ca3af;
+  
+  /* === RADIOBOX DARK THEME === */
+  --radiobox-background: var(--color-surface);
+  --radiobox-border: #4b5563;
+  --radiobox-disabled: #6b7280;
+  --radiobox-primary: #60a5fa;
+  --radiobox-secondary: #9ca3af;
+  --radiobox-success: #34d399;
+  --radiobox-error: #f87171;
+  --radiobox-warning: #fbbf24;
+  
+  /* === TEXTAREA DARK THEME === */
+  --textarea-bg: var(--color-surface);
+  --textarea-border: var(--color-border);
+  --textarea-text: var(--color-text);
+  --textarea-text-placeholder: var(--color-text-muted);
+  --textarea-label: var(--color-text-secondary);
+  --textarea-bg-disabled: var(--color-surface-disabled);
+  
+  /* === DROPDOWN DARK THEME === */
+  --dropdown-bg: var(--color-surface);
+  --dropdown-border-color: rgba(255, 255, 255, 0.1);
+  --dropdown-text-color: var(--color-on-surface);
+  --dropdown-fallback-color: rgba(255, 255, 255, 0.5);
+  --dropdown-shadow: 
+    rgba(0, 0, 0, 0.3) 0px 0px 4px,
+    rgba(0, 0, 0, 0.2) 0px 4px 8px;
+  --dropdown-elevated-shadow:
+    rgba(0, 0, 0, 0.4) 0px 8px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 4px 8px -2px;
+}
+
