@@ -20,12 +20,10 @@ npm install svelte@^4.0.0
 
 ```svelte
 <script>
-	import { Button, Card } from '@rief/kit';
+	import { Button } from '@rief/kit';
 </script>
 
-<Card title="Welcome" subtitle="Get started with Kit">
-	<Button variant="primary" size="lg" on:click={() => console.log('Clicked!')}>Click me</Button>
-</Card>
+<Button variant="primary" size="lg" on:click={() => console.log('Clicked!')}>Click me</Button>
 ```
 
 ## Components

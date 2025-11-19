@@ -359,3 +359,88 @@ export interface SidebarWrapperProps {
 	/** Reference to sidebar DOM element */
 	sidebarElm?: HTMLElement;
 }
+
+// SelectOption component types
+export interface SelectOptionItem {
+	/** Option value (unique identifier) */
+	value: string | number;
+	/** Option display label */
+	label?: string;
+	/** Disabled state */
+	disabled?: boolean;
+	/** Optional group/category */
+	group?: string;
+	/** Additional metadata */
+	metadata?: Record<string, any>;
+}
+
+export type SelectOptionSize = 'sm' | 'md' | 'lg';
+export type SelectOptionVariant = 'default' | 'filled' | 'outlined';
+
+export interface SelectOptionStyling {
+	/** Select size variant */
+	size?: SelectOptionSize;
+	/** Select style variant */
+	variant?: SelectOptionVariant;
+	/** Custom CSS class for wrapper */
+	wrapperClass?: string;
+	/** Custom CSS class for trigger/input */
+	inputClass?: string;
+	/** Custom CSS class for label */
+	labelClass?: string;
+	/** Custom inline styles for wrapper */
+	wrapperStyle?: string;
+}
+
+export interface SelectOptionValidation {
+	/** Required field indicator */
+	required?: boolean;
+	/** Error state */
+	isError?: boolean;
+	/** Error message to display */
+	errorMessage?: string;
+}
+
+export interface SelectOptionBehavior {
+	/** Disabled state */
+	disabled?: boolean;
+	/** Enable multi-selection mode */
+	isMultiOption?: boolean;
+	/** Enable search/filter functionality */
+	isSearchable?: boolean;
+	/** Close dropdown on selection (single mode only) */
+	closeOnSelect?: boolean;
+	/** Search debounce delay in milliseconds */
+	debounceMs?: number;
+	/** Maximum dropdown height in pixels */
+	maxHeight?: number;
+	/** Placeholder text */
+	placeholder?: string;
+	/** Empty state message */
+	emptyMessage?: string;
+	/** Loading state */
+	loading?: boolean;
+}
+
+export interface SelectOptionProps {
+	/** Array of selectable options */
+	options?: SelectOptionItem[];
+	/** Selected value(s) - controlled mode */
+	value?: SelectOptionItem | SelectOptionItem[] | null;
+	/** Default value(s) - uncontrolled mode */
+	defaultValue?: SelectOptionItem | SelectOptionItem[] | null;
+	/** Label text */
+	label?: string;
+	/** Field name for form integration */
+	name?: string;
+	/** Field ID for label association */
+	id?: string;
+	/** Styling configuration */
+	styling?: SelectOptionStyling;
+	/** Validation configuration */
+	validation?: SelectOptionValidation;
+	/** Behavior configuration */
+	behavior?: SelectOptionBehavior;
+	/** Reference to trigger element */
+	triggerRef?: HTMLElement;
+}

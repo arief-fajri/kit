@@ -7,6 +7,7 @@ export { default as InputText } from './input-fields/text/InputText.svelte';
 export { default as Radiobox } from './input-fields/radiobox/Radiobox.svelte';
 export { default as Checkbox } from './input-fields/checkbox/Checkbox.svelte';
 export { default as TextArea } from './input-fields/textarea/TextArea.svelte';
+export { default as SelectOption } from './input-fields/select-option/SelectOption.svelte';
 export { default as DropdownWrapper } from './wrapper/dropdown/DropdownWrapper.svelte';
 export { default as BaseLayoutWrapper } from './wrapper/base-layout/BaseLayoutWrapper.svelte';
 export { default as PageWrapper } from './wrapper/page/PageWrapper.svelte';
@@ -33,6 +34,13 @@ export type {
   TextAreaValidation,
   TextAreaBehavior,
   TextAreaLayout,
+  SelectOptionProps,
+  SelectOptionItem,
+  SelectOptionStyling,
+  SelectOptionValidation,
+  SelectOptionBehavior,
+  SelectOptionSize,
+  SelectOptionVariant,
   DragLineProps,
   DragLineEventDetail,
   DrawerProps,

@@ -403,6 +403,105 @@
 }
 
 /* ============================================
+   SELECT OPTION COMPONENT VARIABLES
+   ============================================ */
+
+:root {
+  /* === CORE COLORS === */
+  --select-option-bg: var(--color-surface);
+  --select-option-bg-hover: var(--color-surface-hover);
+  --select-option-border: var(--color-border);
+  --select-option-border-focus: var(--color-primary);
+  --select-option-border-error: var(--color-error);
+  --select-option-text: var(--color-text);
+  --select-option-text-placeholder: var(--color-text-muted);
+  --select-option-text-disabled: var(--color-text-muted);
+  --select-option-label: var(--color-text-secondary);
+  --select-option-error-text: var(--color-error);
+  
+  /* === LAYOUT & SPACING === */
+  --select-option-width: 100%;
+  --select-option-display: flex;
+  --select-option-flex-direction: column;
+  --select-option-gap: 0.25rem;
+  --select-option-radius: var(--radius-md);
+  --select-option-shadow-focus: var(--shadow-focus);
+  
+  /* === SIZE: SMALL === */
+  --select-option-height-sm: 2rem;
+  --select-option-padding-x-sm: 0.5rem;
+  --select-option-padding-y-sm: 0.375rem;
+  --select-option-font-size-sm: 0.875rem;
+  
+  /* === SIZE: MEDIUM === */
+  --select-option-height-md: 2.5rem;
+  --select-option-padding-x-md: 0.75rem;
+  --select-option-padding-y-md: 0.5rem;
+  --select-option-font-size-md: 1rem;
+  
+  /* === SIZE: LARGE === */
+  --select-option-height-lg: 3rem;
+  --select-option-padding-x-lg: 1rem;
+  --select-option-padding-y-lg: 0.625rem;
+  --select-option-font-size-lg: 1.125rem;
+  
+  /* === BORDER === */
+  --select-option-border-width: 1px;
+  --select-option-border-radius: var(--radius-md);
+  
+  /* === STYLE VARIANTS === */
+  /* Filled variant */
+  --select-option-filled-bg: var(--color-surface-secondary);
+  --select-option-filled-bg-focus: var(--color-surface);
+  --select-option-filled-border: transparent;
+  
+  /* Outlined variant */
+  --select-option-outlined-border-width: 2px;
+  --select-option-outlined-bg: transparent;
+  
+  /* === STATES === */
+  --select-option-disabled-opacity: 0.6;
+  --select-option-disabled-bg: var(--color-surface-disabled);
+  --select-option-disabled-cursor: not-allowed;
+  
+  /* === ACTION BUTTONS === */
+  --select-option-chevron-color: var(--color-text-muted);
+  --select-option-chevron-hover-color: var(--color-text);
+  --select-option-clear-btn-color: var(--color-text-muted);
+  --select-option-clear-btn-hover-color: var(--color-text);
+  
+  /* === DROPDOWN === */
+  --select-option-dropdown-max-height: 240px;
+  --select-option-dropdown-padding: 0.25rem;
+  
+  /* === OPTION ITEMS === */
+  --select-option-item-padding-x: 0.75rem;
+  --select-option-item-padding-y: 0.375rem;
+  --select-option-item-gap: 0.5rem;
+  --select-option-item-radius: var(--radius-md);
+  --select-option-item-hover-bg: var(--color-surface-hover);
+  --select-option-item-selected-bg: rgba(59, 130, 246, 0.1);
+  --select-option-item-check-color: var(--color-primary);
+  
+  /* === LOADING === */
+  --select-option-skeleton-bg: linear-gradient(
+    90deg,
+    var(--color-surface-hover) 25%,
+    var(--color-surface) 50%,
+    var(--color-surface-hover) 75%
+  );
+  --select-option-skeleton-bg-size: 200% 100%;
+  
+  /* === EMPTY STATE === */
+  --select-option-empty-padding: 1rem;
+  --select-option-empty-text-color: var(--color-text-muted);
+  
+  /* === TRANSITIONS === */
+  --select-option-transition: all 0.15s ease-in-out;
+  --select-option-chevron-transition: transform 0.2s ease-in-out;
+}
+
+/* ============================================
    DROPDOWN WRAPPER COMPONENT VARIABLES
    ============================================ */
 
@@ -582,6 +681,32 @@
   --textarea-text-placeholder: var(--color-text-muted);
   --textarea-label: var(--color-text-secondary);
   --textarea-bg-disabled: var(--color-surface-disabled);
+  
+  /* === SELECT OPTION DARK THEME === */
+  --select-option-bg: var(--color-surface);
+  --select-option-bg-hover: var(--color-surface-hover);
+  --select-option-border: var(--color-border);
+  --select-option-text: var(--color-text);
+  --select-option-text-placeholder: var(--color-text-muted);
+  --select-option-text-disabled: var(--color-text-muted);
+  --select-option-label: var(--color-text-secondary);
+  --select-option-disabled-bg: var(--color-surface-disabled);
+  --select-option-filled-bg: var(--color-surface-secondary);
+  --select-option-filled-bg-focus: var(--color-surface);
+  --select-option-shadow-focus: 0 0 0 3px rgb(59 130 246 / 0.2);
+  --select-option-item-hover-bg: var(--color-surface-hover);
+  --select-option-item-selected-bg: rgba(59, 130, 246, 0.15);
+  --select-option-chevron-color: var(--color-text-muted);
+  --select-option-chevron-hover-color: var(--color-text);
+  --select-option-clear-btn-color: var(--color-text-muted);
+  --select-option-clear-btn-hover-color: var(--color-text);
+  --select-option-empty-text-color: var(--color-text-muted);
+  --select-option-skeleton-bg: linear-gradient(
+    90deg,
+    var(--color-surface-hover) 25%,
+    var(--color-surface) 50%,
+    var(--color-surface-hover) 75%
+  );
   
   /* === DROPDOWN DARK THEME === */
   --dropdown-bg: var(--color-surface);
