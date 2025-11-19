@@ -262,3 +262,15 @@ export interface DrawerProps {
 	/** ARIA label for drawer */
 	ariaLabel?: string;
 }
+
+// BaseLayoutWrapper component types
+export interface BaseLayoutWrapperProps {
+	/** Additional CSS classes for the outer layout container */
+	layoutClassName?: string;
+	/** Inline styles for the outer layout container */
+	layoutStyle?: string;
+	/** Additional CSS classes for the inner body container */
+	bodyClassName?: string;
+	/** Inline styles for the inner body container */
+	bodyStyle?: string;
+}

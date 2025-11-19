@@ -462,6 +462,26 @@
 }
 
 /* ============================================
+   BASE LAYOUT WRAPPER COMPONENT VARIABLES
+   ============================================ */
+
+:root {
+  /* === LAYOUT CONTAINER === */
+  --base-layout-bg: transparent;
+  --base-layout-z-index: 0;
+  --base-layout-user-select: none;
+  
+  /* === BODY CONTAINER === */
+  --base-layout-body-bg: transparent;
+  --base-layout-body-padding: 0;
+  --base-layout-text-color: var(--color-on-surface);
+  
+  /* === DIMENSIONS === */
+  --base-layout-width: 100vw;
+  --base-layout-height: 100vh;
+}
+
+/* ============================================
    DARK THEME OVERRIDES
    ============================================ */
 
@@ -531,5 +551,10 @@
   --dropdown-elevated-shadow:
     rgba(0, 0, 0, 0.4) 0px 8px 12px -2px,
     rgba(0, 0, 0, 0.3) 0px 4px 8px -2px;
+  
+  /* === BASE LAYOUT DARK THEME === */
+  --base-layout-text-color: var(--color-on-surface);
+  --base-layout-bg: transparent;
+  --base-layout-body-bg: transparent;
 }
 
