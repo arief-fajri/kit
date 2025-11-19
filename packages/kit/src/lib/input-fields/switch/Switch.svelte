@@ -1,0 +1,217 @@
+<script lang="ts">
+  import { createEventDispatcher } from "svelte";
+  import type { SwitchSize, SwitchVariant, SwitchEventDetail, FocusEventDetail } from "./types";
+
+  // Core props
+  export let id: string | undefined = undefined;
+  export let name: string = "switch";
+  export let checked: boolean = false;
+  export let disabled: boolean = false;
+  export let required: boolean = false;
+  export let value: any = undefined;
+
+  // Content props
+  export let label: string = "";
+
+  // Layout props
+  export let size: SwitchSize = "md";
+  export let variant: SwitchVariant = "default";
+
+  // Styling props
+  let className: string = "";
+  export { className as class };
+
+  // Behavior props
+  export let stopPropagation: boolean = false;
+
+  // Constants
+  const dispatch = createEventDispatcher<{
+    change: SwitchEventDetail;
+    focus: FocusEventDetail;
+    blur: FocusEventDetail;
+  }>();
+
+  const sizeValues: Record<SwitchSize, string> = {
+    xs: "0.75",
+    sm: "0.875",
+    md: "1",
+    lg: "1.125",
+    xl: "1.25"
+  };
+
+  // Event handlers
+  const handleChange = (event: Event) => {
+    if (disabled) return;
+
+    dispatch("change", {
+      checked,
+      value: value || checked,
+      originalEvent: event
+    });
+  };
+
+  const handleFocus = (event: FocusEvent) => {
+    dispatch("focus", { originalEvent: event });
+  };
+
+  const handleBlur = (event: FocusEvent) => {
+    dispatch("blur", { originalEvent: event });
+  };
+</script>
+
+<div
+  class="switch-wrapper {className}"
+  style="--switch-size: {sizeValues[size]};"
+  on:click={(e) => {
+    if (stopPropagation) e.stopPropagation();
+  }}
+  role="presentation"
+>
+  <label class="switch-container" for={id}>
+    <input
+      type="checkbox"
+      role="switch"
+      {id}
+      {name}
+      bind:checked
+      {disabled}
+      {required}
+      {value}
+      aria-checked={checked}
+      aria-disabled={disabled}
+      on:change={handleChange}
+      on:focus={handleFocus}
+      on:blur={handleBlur}
+      {...$$restProps}
+    />
+    <span class="switch-slider" data-variant={variant} />
+    <slot name="label">
+      {#if label}
+        <span class="switch-label">{label}</span>
+      {/if}
+    </slot>
+  </label>
+</div>
+
+<style>
+  .switch-wrapper {
+    --switch-size: 1;
+    --switch-width-base: 32px;
+    --switch-height-base: 18px;
+    --switch-slider-size-base: 14px;
+    --switch-slider-offset: 2px;
+    --switch-transition-duration: 0.4s;
+    --switch-transition-timing: ease;
+    
+    --switch-bg-unchecked: #888888;
+    --switch-bg-unchecked-hover: #4f4f4f;
+    --switch-bg-checked: #1b1c21;
+    --switch-slider-color: white;
+    --switch-disabled-opacity: 0.5;
+    --switch-focus-ring-color: #3b82f6;
+    --switch-focus-ring-width: 2px;
+    --switch-focus-ring-offset: 2px;
+    --switch-gap: 0.5rem;
+
+    /* Variant colors */
+    --switch-color-primary: #3b82f6;
+    --switch-color-success: #10b981;
+    --switch-color-error: #ef4444;
+    --switch-color-warning: #f59e0b;
+
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .switch-container {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--switch-gap);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .switch-container input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  .switch-slider {
+    position: relative;
+    display: inline-block;
+    width: calc(var(--switch-width-base) * var(--switch-size));
+    height: calc(var(--switch-height-base) * var(--switch-size));
+    background-color: var(--switch-bg-unchecked);
+    border-radius: 9999px;
+    transition: background-color var(--switch-transition-duration) var(--switch-transition-timing);
+    flex-shrink: 0;
+  }
+
+  .switch-slider::before {
+    position: absolute;
+    content: "";
+    width: calc(var(--switch-slider-size-base) * var(--switch-size));
+    height: calc(var(--switch-slider-size-base) * var(--switch-size));
+    left: var(--switch-slider-offset);
+    bottom: var(--switch-slider-offset);
+    background-color: var(--switch-slider-color);
+    border-radius: 50%;
+    transition: transform var(--switch-transition-duration) var(--switch-transition-timing);
+  }
+
+  .switch-container:hover input:not(:disabled):not(:checked) + .switch-slider {
+    background-color: var(--switch-bg-unchecked-hover);
+  }
+
+  .switch-container input:checked + .switch-slider {
+    background-color: var(--switch-bg-checked);
+  }
+
+  .switch-container input:checked + .switch-slider::before {
+    transform: translateX(calc((var(--switch-width-base) - var(--switch-slider-size-base) - var(--switch-slider-offset) * 2) * var(--switch-size)));
+  }
+
+  .switch-container input:focus-visible + .switch-slider {
+    outline: var(--switch-focus-ring-width) solid var(--switch-focus-ring-color);
+    outline-offset: var(--switch-focus-ring-offset);
+  }
+
+  .switch-container input:disabled + .switch-slider {
+    opacity: var(--switch-disabled-opacity);
+    cursor: not-allowed;
+  }
+
+  .switch-container:has(input:disabled) {
+    cursor: not-allowed;
+    opacity: var(--switch-disabled-opacity);
+  }
+
+  .switch-label {
+    color: inherit;
+    font-size: 1rem;
+    line-height: 1.5;
+    user-select: none;
+  }
+
+  /* Variant styles */
+  .switch-slider[data-variant="primary"] {
+    --switch-bg-checked: var(--switch-color-primary);
+  }
+
+  .switch-slider[data-variant="success"] {
+    --switch-bg-checked: var(--switch-color-success);
+  }
+
+  .switch-slider[data-variant="error"] {
+    --switch-bg-checked: var(--switch-color-error);
+  }
+
+  .switch-slider[data-variant="warning"] {
+    --switch-bg-checked: var(--switch-color-warning);
+  }
+</style>

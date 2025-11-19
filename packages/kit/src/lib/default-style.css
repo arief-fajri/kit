@@ -359,6 +359,44 @@
 }
 
 /* ============================================
+   SWITCH COMPONENT VARIABLES
+   ============================================ */
+
+:root {
+  /* === BASE DIMENSIONS === */
+  --switch-size: 1;
+  --switch-width-base: 32px;
+  --switch-height-base: 18px;
+  --switch-slider-size-base: 14px;
+  --switch-slider-offset: 2px;
+
+  /* === TRANSITIONS === */
+  --switch-transition-duration: 0.4s;
+  --switch-transition-timing: ease;
+
+  /* === COLORS === */
+  --switch-bg-unchecked: #888888;
+  --switch-bg-unchecked-hover: #4f4f4f;
+  --switch-bg-checked: #1b1c21;
+  --switch-slider-color: #ffffff;
+  --switch-disabled-opacity: 0.5;
+
+  /* === FOCUS === */
+  --switch-focus-ring-color: var(--color-primary);
+  --switch-focus-ring-width: 2px;
+  --switch-focus-ring-offset: 2px;
+
+  /* === LAYOUT === */
+  --switch-gap: var(--spacing-sm);
+
+  /* === VARIANT COLORS === */
+  --switch-color-primary: var(--color-primary);
+  --switch-color-success: var(--color-success);
+  --switch-color-error: var(--color-error);
+  --switch-color-warning: var(--color-warning);
+}
+
+/* ============================================
    TEXTAREA COMPONENT VARIABLES
    ============================================ */
 

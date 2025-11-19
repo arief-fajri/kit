@@ -6,6 +6,7 @@ export { default as Button } from './button/Button.svelte';
 export { default as InputText } from './input-fields/text/InputText.svelte';
 export { default as Radiobox } from './input-fields/radiobox/Radiobox.svelte';
 export { default as Checkbox } from './input-fields/checkbox/Checkbox.svelte';
+export { default as Switch } from './input-fields/switch/Switch.svelte';
 export { default as TextArea } from './input-fields/textarea/TextArea.svelte';
 export { default as SelectOption } from './input-fields/select-option/SelectOption.svelte';
 export { default as DropdownWrapper } from './wrapper/dropdown/DropdownWrapper.svelte';
@@ -64,3 +65,11 @@ export type {
   CheckboxEventDetail,
   FocusEventDetail
 } from './input-fields/checkbox/types.js';
+
+// Export Switch types
+export type {
+  SwitchProps,
+  SwitchVariant,
+  SwitchSize,
+  SwitchEventDetail
+} from './input-fields/switch/types.js';
