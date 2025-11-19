@@ -444,3 +444,76 @@ export interface SelectOptionProps {
 	/** Reference to trigger element */
 	triggerRef?: HTMLElement;
 }
+
+// Accordion component types
+export interface AccordionItem {
+	/** Accordion title */
+	title: string;
+	/** Optional subtitle */
+	subtitle?: string;
+	/** Content as HTML string */
+	content?: string;
+	/** Disabled state for this item */
+	disabled?: boolean;
+	/** Additional metadata */
+	metadata?: Record<string, any>;
+}
+
+export type AccordionSize = 'sm' | 'md' | 'lg';
+export type AccordionVariant = 'default' | 'filled' | 'outlined';
+
+export interface AccordionStyling {
+	/** Accordion size variant */
+	size?: AccordionSize;
+	/** Accordion style variant */
+	variant?: AccordionVariant;
+	/** Custom CSS class for root element */
+	className?: string;
+	/** Custom CSS class for header wrapper */
+	headerWrapperClass?: string;
+	/** Custom CSS class for header button */
+	headerButtonClass?: string;
+	/** Custom CSS class for content area */
+	contentClass?: string;
+	/** Custom CSS class for icon */
+	iconClass?: string;
+	/** Custom inline styles for wrapper */
+	wrapperStyle?: string;
+}
+
+export interface AccordionBehavior {
+	/** Disabled state */
+	disabled?: boolean;
+	/** Show icon */
+	showIcon?: boolean;
+	/** Icon position */
+	iconPosition?: 'left' | 'right';
+	/** Transition duration in milliseconds */
+	transitionDuration?: number;
+	/** Show border when expanded */
+	titleUnderline?: boolean;
+}
+
+export interface AccordionContent {
+	/** Accordion item data */
+	item?: AccordionItem;
+	/** Title (alternative to item.title) */
+	title?: string;
+	/** Subtitle (alternative to item.subtitle) */
+	subtitle?: string;
+	/** Content (alternative to item.content) */
+	content?: string;
+}
+
+export interface AccordionProps {
+	/** Expanded state - controlled mode */
+	expanded?: boolean;
+	/** Default expanded state - uncontrolled mode */
+	defaultExpanded?: boolean;
+	/** Styling configuration */
+	styling?: AccordionStyling;
+	/** Behavior configuration */
+	behavior?: AccordionBehavior;
+	/** Content configuration */
+	content?: AccordionContent;
+}
