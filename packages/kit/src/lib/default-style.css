@@ -501,6 +501,30 @@
 }
 
 /* ============================================
+   SIDEBAR WRAPPER COMPONENT VARIABLES
+   ============================================ */
+
+:root {
+  /* === SIDEBAR BASE === */
+  --sidebar-bg: var(--color-surface, #ffffff);
+  --sidebar-border-color: var(--color-border, #d1d5db);
+  --sidebar-transition-duration: 300ms;
+  
+  /* === DRAG HANDLE === */
+  --sidebar-drag-handle-width: 8px;
+  --sidebar-drag-handle-z-index: 10;
+  --sidebar-drag-handle-bg: #ffffff;
+  --sidebar-drag-handle-border: 1px solid var(--sidebar-drag-handle-border-color, rgba(59, 130, 246, 0.2));
+  --sidebar-drag-handle-border-color: rgba(59, 130, 246, 0.2);
+  --sidebar-drag-handle-line-color: rgba(59, 130, 246, 0.2);
+  --sidebar-drag-handle-transition: opacity 0.3s;
+  --sidebar-drag-handle-hover-opacity: 1;
+  
+  /* === DRAG OVERLAY === */
+  --sidebar-drag-overlay-z-index: 100;
+}
+
+/* ============================================
    DARK THEME OVERRIDES
    ============================================ */
 
@@ -581,5 +605,12 @@
   --page-content-padding: 0;
   --page-footer-bg: var(--color-surface-secondary);
   --page-footer-padding: 0;
+  
+  /* === SIDEBAR WRAPPER DARK THEME === */
+  --sidebar-bg: var(--color-surface);
+  --sidebar-border-color: var(--color-border);
+  --sidebar-drag-handle-bg: var(--color-surface);
+  --sidebar-drag-handle-border-color: rgba(59, 130, 246, 0.3);
+  --sidebar-drag-handle-line-color: rgba(59, 130, 246, 0.3);
 }
 

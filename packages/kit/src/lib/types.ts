@@ -311,3 +311,51 @@ export interface PageWrapperProps {
 	/** Reference to the footer DOM element */
 	footerElm?: HTMLElement;
 }
+
+// SidebarWrapper component types
+export type SidebarPosition = 'left' | 'right';
+
+export interface SidebarResizeEventDetail {
+	/** Current width in pixels */
+	width: number;
+	/** Current width as CSS value */
+	widthPx: string;
+}
+
+export interface SidebarDragEventDetail {
+	/** Initial width when drag started */
+	initialWidth: number;
+	/** Final width when drag ended */
+	finalWidth?: number;
+}
+
+export interface SidebarWrapperProps {
+	/** Collapsed state */
+	collapsed?: boolean;
+	/** Width when collapsed (CSS value) */
+	collapseWidth?: string;
+	/** Enable drag-to-resize functionality */
+	isDraggable?: boolean;
+	/** Default width in pixels */
+	defaultWidth?: number;
+	/** Drag handle position */
+	position?: SidebarPosition;
+	/** Minimum width in pixels */
+	minWidth?: number;
+	/** Maximum width (CSS value: px, %, etc.) */
+	maxWidth?: string;
+	/** Persist width to localStorage */
+	persistWidth?: boolean;
+	/** localStorage key for width persistence */
+	storageKey?: string;
+	/** Additional CSS classes for sidebar */
+	sidebarClassName?: string;
+	/** Inline styles for sidebar */
+	sidebarStyle?: string;
+	/** Custom CSS class (exported as class) */
+	class?: string;
+	/** ARIA label for accessibility */
+	ariaLabel?: string;
+	/** Reference to sidebar DOM element */
+	sidebarElm?: HTMLElement;
+}
