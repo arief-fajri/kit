@@ -274,3 +274,40 @@ export interface BaseLayoutWrapperProps {
 	/** Inline styles for the inner body container */
 	bodyStyle?: string;
 }
+
+// PageWrapper component types
+export interface PageWrapperScrollEventDetail {
+	/** Current scroll position from top */
+	scrollTop: number;
+	/** Current scroll position from left */
+	scrollLeft: number;
+	/** Total scrollable height */
+	scrollHeight: number;
+	/** Visible height of the scrollable area */
+	clientHeight: number;
+	/** The scrollable element */
+	target: HTMLElement;
+}
+
+export interface PageWrapperProps {
+	/** Center content vertically and horizontally */
+	center?: boolean;
+	/** Additional CSS classes for the page wrapper container */
+	wrapperClassName?: string;
+	/** Inline styles for the page wrapper container */
+	wrapperStyle?: string;
+	/** Additional CSS classes for the content container */
+	contentClassName?: string;
+	/** Inline styles for the content container */
+	contentStyle?: string;
+	/** Additional CSS classes for the footer container */
+	footerClassName?: string;
+	/** Inline styles for the footer container */
+	footerStyle?: string;
+	/** Reference to the page wrapper DOM element */
+	pageElm?: HTMLElement;
+	/** Reference to the content DOM element */
+	contentElm?: HTMLElement;
+	/** Reference to the footer DOM element */
+	footerElm?: HTMLElement;
+}

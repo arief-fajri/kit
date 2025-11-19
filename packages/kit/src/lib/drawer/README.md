@@ -17,7 +17,7 @@ A flexible, accessible drawer/sidebar component for Svelte applications. The Dra
 
 ```svelte
 <script>
-  import { Drawer } from '@your-org/kit';
+  import { Drawer } from '@rief/kit';
   
   let isOpen = false;
 </script>
@@ -197,7 +197,7 @@ The Drawer component includes:
 
 ```svelte
 <script>
-  import { Drawer, Button } from '@your-org/kit';
+  import { Drawer, Button } from '@rief/kit';
   
   let isOpen = false;
 </script>
@@ -260,6 +260,6 @@ import type {
   DrawerPosition,
   DrawerEventDetail,
   DrawerResizeEventDetail 
-} from '@your-org/kit';
+} from '@rief/kit';
 ```
 

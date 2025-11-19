@@ -44,7 +44,7 @@ The Button component follows a flexible layout hierarchy that adapts based on st
 
 ```svelte
 <script>
-  import { Button } from '@your-org/kit';
+  import { Button } from '@rief/kit';
 </script>
 
 <!-- Basic button -->
@@ -133,7 +133,7 @@ Use the `icon` slot to add icons to your buttons.
 
 ```svelte
 <script>
-  import { Button } from '@your-org/kit';
+  import { Button } from '@rief/kit';
   import Icon from './Icon.svelte';
 </script>
 
@@ -305,7 +305,7 @@ See the [Global Styling Guide](./STYLING.md) for comprehensive theming options.
 The component exports comprehensive TypeScript types:
 
 ```typescript
-import type { ButtonProps, ButtonVariant, ButtonSize, ButtonState } from '@your-org/kit';
+import type { ButtonProps, ButtonVariant, ButtonSize, ButtonState } from '@rief/kit';
 
 const buttonConfig: ButtonProps = {
   variant: 'filled',

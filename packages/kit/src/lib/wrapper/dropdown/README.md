@@ -43,7 +43,7 @@ The DropdownWrapper creates a floating container that positions itself relative 
 
 ```svelte
 <script>
-  import { DropdownWrapper } from '@your-org/kit';
+  import { DropdownWrapper } from '@rief/kit';
   
   let dropdownVisible = false;
   let buttonElement;
@@ -439,7 +439,7 @@ import type {
   Placement,
   Variant,
   Size 
-} from '@your-org/kit';
+} from '@rief/kit';
 
 const dropdownConfig: DropdownWrapperProps = {
   variant: 'elevated',

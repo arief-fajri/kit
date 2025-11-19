@@ -35,7 +35,7 @@ The BaseLayoutWrapper creates a two-layer container structure optimized for full
 
 ```svelte
 <script>
-  import { BaseLayoutWrapper } from '@your-org/kit';
+  import { BaseLayoutWrapper } from '@rief/kit';
 </script>
 
 <!-- Basic full-viewport layout -->
@@ -121,7 +121,7 @@ These are automatically updated when the window is resized.
 
 ```svelte
 <script>
-  import { BaseLayoutWrapper } from '@your-org/kit';
+  import { BaseLayoutWrapper } from '@rief/kit';
 </script>
 
 <BaseLayoutWrapper 
@@ -142,7 +142,7 @@ These are automatically updated when the window is resized.
 
 ```svelte
 <script>
-  import { BaseLayoutWrapper } from '@your-org/kit';
+  import { BaseLayoutWrapper } from '@rief/kit';
 </script>
 
 <BaseLayoutWrapper 
@@ -164,7 +164,7 @@ These are automatically updated when the window is resized.
 
 ```svelte
 <script>
-  import { BaseLayoutWrapper } from '@your-org/kit';
+  import { BaseLayoutWrapper } from '@rief/kit';
   
   $: isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 </script>
@@ -186,7 +186,7 @@ These are automatically updated when the window is resized.
 
 ```svelte
 <script>
-  import { BaseLayoutWrapper } from '@your-org/kit';
+  import { BaseLayoutWrapper } from '@rief/kit';
 </script>
 
 <BaseLayoutWrapper bodyStyle="display: flex; align-items: center; justify-content: center;">
@@ -204,7 +204,7 @@ These are automatically updated when the window is resized.
 
 ```svelte
 <script>
-  import { BaseLayoutWrapper } from '@your-org/kit';
+  import { BaseLayoutWrapper } from '@rief/kit';
   
   let darkMode = false;
   $: layoutBg = darkMode ? '#1a1a1a' : '#ffffff';
@@ -226,7 +226,7 @@ These are automatically updated when the window is resized.
 ```svelte
 <!-- app.html or +layout.svelte -->
 <script>
-  import { BaseLayoutWrapper } from '@your-org/kit';
+  import { BaseLayoutWrapper } from '@rief/kit';
 </script>
 
 <BaseLayoutWrapper>
@@ -238,7 +238,7 @@ These are automatically updated when the window is resized.
 
 ```svelte
 <script>
-  import { BaseLayoutWrapper } from '@your-org/kit';
+  import { BaseLayoutWrapper } from '@rief/kit';
   import { page } from '$app/stores';
 </script>
 
@@ -260,7 +260,7 @@ These are automatically updated when the window is resized.
 
 ```svelte
 <script>
-  import { BaseLayoutWrapper } from '@your-org/kit';
+  import { BaseLayoutWrapper } from '@rief/kit';
   import { writable } from 'svelte/store';
   
   const sidebarOpen = writable(false);
@@ -303,7 +303,7 @@ See the [Global Styling Guide](./STYLING.md) for comprehensive theming options u
 The component exports comprehensive TypeScript types:
 
 ```typescript
-import type { BaseLayoutWrapperProps } from '@your-org/kit';
+import type { BaseLayoutWrapperProps } from '@rief/kit';
 
 const layoutConfig: BaseLayoutWrapperProps = {
   layoutClassName: 'my-layout',

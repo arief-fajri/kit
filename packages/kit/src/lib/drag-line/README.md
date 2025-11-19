@@ -43,7 +43,7 @@ The DragLine component renders as a flexible wrapper container that detects drag
 
 ```svelte
 <script>
-  import { DragLine } from '@your-org/kit';
+  import { DragLine } from '@rief/kit';
   
   let drawerWidth = '400px';
   let initialWidth = 400;
@@ -187,7 +187,7 @@ The component includes ARIA attributes for accessibility:
 
 ```svelte
 <script>
-  import { DragLine } from '@your-org/kit';
+  import { DragLine } from '@rief/kit';
   
   let panelWidth = 400;
   let initialWidth = 400;
@@ -216,7 +216,7 @@ The component includes ARIA attributes for accessibility:
 
 ```svelte
 <script>
-  import { DragLine } from '@your-org/kit';
+  import { DragLine } from '@rief/kit';
   
   let leftWidth = 300;
   let initialWidth = 300;
@@ -251,7 +251,7 @@ The component includes ARIA attributes for accessibility:
 The component exports comprehensive TypeScript types:
 
 ```typescript
-import type { DragLineProps, DragLineEventDetail } from '@your-org/kit';
+import type { DragLineProps, DragLineEventDetail } from '@rief/kit';
 
 const dragLineConfig: DragLineProps = {
   tolerance: 5,

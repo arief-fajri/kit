@@ -44,7 +44,7 @@
 
 ```svelte
 <script>
-  import { [ComponentName] } from '@your-org/kit';
+  import { [ComponentName] } from '@rief/kit';
 </script>
 
 <!-- Basic [component] -->
@@ -126,7 +126,7 @@
 
 ```svelte
 <script>
-  import { [ComponentName] } from '@your-org/kit';
+  import { [ComponentName] } from '@rief/kit';
   import [IconComponent] from './[IconComponent].svelte';
 </script>
 
@@ -300,7 +300,7 @@ See the [Global Styling Guide](./STYLING.md) for comprehensive theming options.
 The component exports comprehensive TypeScript types:
 
 ```typescript
-import type { [ComponentName]Props, [ComponentName][Variant], [ComponentName][Size], [ComponentName][State] } from '@your-org/kit';
+import type { [ComponentName]Props, [ComponentName][Variant], [ComponentName][Size], [ComponentName][State] } from '@rief/kit';
 
 const [componentConfig]: [ComponentName]Props = {
   variant: '[variant]',

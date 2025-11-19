@@ -50,7 +50,7 @@ The InputText component follows a flexible, slot-based architecture that support
 
 ```svelte
 <script>
-  import { InputText } from '@your-org/kit';
+  import { InputText } from '@rief/kit';
 </script>
 
 <!-- Basic text input -->
@@ -254,7 +254,7 @@ Prominent border styling for emphasis or when inputs need to stand out.
 ### Prefix and Suffix Icons
 ```svelte
 <script>
-  import { InputText } from '@your-org/kit';
+  import { InputText } from '@rief/kit';
   import SearchIcon from './SearchIcon.svelte';
   import ClearIcon from './ClearIcon.svelte';
 </script>
@@ -532,7 +532,7 @@ import type {
   InputType,
   InputSize,
   InputVariant 
-} from '@your-org/kit';
+} from '@rief/kit';
 
 const inputConfig: InputTextProps = {
   type: 'email',

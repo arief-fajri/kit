@@ -9,6 +9,7 @@ export { default as Checkbox } from './input-fields/checkbox/Checkbox.svelte';
 export { default as TextArea } from './input-fields/textarea/TextArea.svelte';
 export { default as DropdownWrapper } from './wrapper/dropdown/DropdownWrapper.svelte';
 export { default as BaseLayoutWrapper } from './wrapper/base-layout/BaseLayoutWrapper.svelte';
+export { default as PageWrapper } from './wrapper/page/PageWrapper.svelte';
 export { default as DragLine } from './drag-line/DragLine.svelte';
 export { default as Drawer } from './drawer/Drawer.svelte';
 
@@ -37,7 +38,9 @@ export type {
   DrawerPosition,
   DrawerEventDetail,
   DrawerResizeEventDetail,
-  BaseLayoutWrapperProps
+  BaseLayoutWrapperProps,
+  PageWrapperProps,
+  PageWrapperScrollEventDetail
 } from './types.js';
 
 // Export Checkbox types

@@ -80,7 +80,7 @@ src/lib/[component-name]/
 
 ```svelte
 <script>
-  import { [ComponentName] } from '@your-org/kit';
+  import { [ComponentName] } from '@rief/kit';
 </script>
 
 <!-- Basic example -->
@@ -208,7 +208,7 @@ See the [Global Styling Guide](./STYLING.md) for comprehensive theming options.
 The component exports comprehensive TypeScript types:
 
 ```typescript
-import type { [ComponentName]Props, [Type1], [Type2] } from '@your-org/kit';
+import type { [ComponentName]Props, [Type1], [Type2] } from '@rief/kit';
 ```
 ```
 
@@ -428,7 +428,7 @@ Before publishing component documentation, verify:
 
 ```svelte
 <script>
-  import { [Component] } from '@your-org/kit';
+  import { [Component] } from '@rief/kit';
 </script>
 
 <[Component] [prop]="[value]" />
@@ -453,7 +453,7 @@ See the [Global Styling Guide](./STYLING.md) for comprehensive theming options.
 ## TypeScript
 
 ```typescript
-import type { [Component]Props } from '@your-org/kit';
+import type { [Component]Props } from '@rief/kit';
 ```
 ```
 

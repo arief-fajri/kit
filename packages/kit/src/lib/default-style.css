@@ -482,6 +482,25 @@
 }
 
 /* ============================================
+   PAGE WRAPPER COMPONENT VARIABLES
+   ============================================ */
+
+:root {
+  /* === PAGE WRAPPER === */
+  --page-wrapper-bg: var(--color-surface, transparent);
+  --page-wrapper-padding: 0;
+  --page-wrapper-scroll-behavior: smooth;
+  
+  /* === CONTENT AREA === */
+  --page-content-max-width: none;
+  --page-content-padding: 0;
+  
+  /* === FOOTER === */
+  --page-footer-bg: transparent;
+  --page-footer-padding: 0;
+}
+
+/* ============================================
    DARK THEME OVERRIDES
    ============================================ */
 
@@ -556,5 +575,11 @@
   --base-layout-text-color: var(--color-on-surface);
   --base-layout-bg: transparent;
   --base-layout-body-bg: transparent;
+  
+  /* === PAGE WRAPPER DARK THEME === */
+  --page-wrapper-bg: var(--color-surface);
+  --page-content-padding: 0;
+  --page-footer-bg: var(--color-surface-secondary);
+  --page-footer-padding: 0;
 }
 

@@ -41,7 +41,7 @@ The Checkbox component renders as a flexible container with customizable checkma
 
 ```svelte
 <script>
-  import { Checkbox } from '@your-org/kit';
+  import { Checkbox } from '@rief/kit';
 </script>
 
 <!-- Basic checkbox -->
@@ -134,7 +134,7 @@ The component supports both simple text labels and complex custom content throug
 
 ```svelte
 <script>
-  import { Checkbox } from '@your-org/kit';
+  import { Checkbox } from '@rief/kit';
 </script>
 
 <!-- Simple text label -->
@@ -351,7 +351,7 @@ import type {
   CheckboxVariant,
   CheckboxEventDetail,
   FocusEventDetail 
-} from '@your-org/kit';
+} from '@rief/kit';
 
 const checkboxConfig: CheckboxProps = {
   variant: 'primary',
