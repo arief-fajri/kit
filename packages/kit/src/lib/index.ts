@@ -9,6 +9,7 @@ export { default as Checkbox } from './input-fields/checkbox/Checkbox.svelte';
 export { default as Switch } from './input-fields/switch/Switch.svelte';
 export { default as TextArea } from './input-fields/textarea/TextArea.svelte';
 export { default as SelectOption } from './input-fields/select-option/SelectOption.svelte';
+export { default as DatePicker } from './input-fields/date-picker/DatePicker.svelte';
 export { default as DropdownWrapper } from './wrapper/dropdown/DropdownWrapper.svelte';
 export { default as BaseLayoutWrapper } from './wrapper/base-layout/BaseLayoutWrapper.svelte';
 export { default as PageWrapper } from './wrapper/page/PageWrapper.svelte';
@@ -73,3 +74,16 @@ export type {
   SwitchSize,
   SwitchEventDetail
 } from './input-fields/switch/types.js';
+
+// Export DatePicker types
+export type {
+  DatePickerProps,
+  DatePickerVariant,
+  DatePickerSize,
+  DatePickerMode,
+  DatePickerLabels,
+  DatePickerChangeEvent,
+  DateValue,
+  DateRangeValue,
+  DateMultipleValue
+} from './input-fields/date-picker/types.js';

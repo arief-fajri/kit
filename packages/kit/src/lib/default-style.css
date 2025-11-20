@@ -757,6 +757,74 @@
 }
 
 /* ============================================
+   DATEPICKER COMPONENT VARIABLES
+   ============================================ */
+
+:root {
+  /* === CORE COLORS === */
+  --dp-bg-default: var(--color-surface);
+  --dp-text-default: var(--color-text);
+  --dp-text-muted-default: var(--color-text-muted);
+  --dp-text-disabled-default: var(--color-text-muted);
+  --dp-border-default: var(--color-border);
+  
+  /* === PRIMARY COLORS === */
+  --dp-primary-default: var(--color-primary);
+  --dp-primary-hover-default: var(--color-primary-hover);
+  --dp-primary-text-default: #ffffff;
+  
+  /* === SECONDARY COLORS === */
+  --dp-secondary-default: var(--color-surface-secondary);
+  --dp-secondary-hover-default: var(--color-surface-hover);
+  
+  /* === CELL COLORS === */
+  --dp-cell-hover-bg: rgba(59, 130, 246, 0.1);
+  --dp-cell-hover-color: #1d4ed8;
+  --dp-range-bg: rgba(59, 130, 246, 0.1);
+  --dp-range-color: #1d4ed8;
+  --dp-today-color: var(--color-danger);
+  
+  /* === SIZES === */
+  /* Small */
+  --dp-padding-sm: 0.75rem;
+  --dp-gap-sm: 0.375rem;
+  --dp-cell-size-sm: 2rem;
+  --dp-font-size-sm: 0.875rem;
+  --dp-border-radius-sm: var(--radius-sm);
+  
+  /* Medium */
+  --dp-padding-md: 1rem;
+  --dp-gap-md: 0.5rem;
+  --dp-cell-size-md: 2.5rem;
+  --dp-font-size-md: 1rem;
+  --dp-border-radius-md: var(--radius-md);
+  
+  /* Large */
+  --dp-padding-lg: 1.25rem;
+  --dp-gap-lg: 0.75rem;
+  --dp-cell-size-lg: 3rem;
+  --dp-font-size-lg: 1.125rem;
+  --dp-border-radius-lg: var(--radius-lg);
+  
+  /* === FOCUS === */
+  --dp-focus-ring-default: var(--color-primary);
+  --dp-focus-ring-width: 2px;
+  --dp-focus-ring-offset: 2px;
+  
+  /* === TYPOGRAPHY === */
+  --dp-font-family: var(--font-family-base);
+  --dp-font-weight-normal: 400;
+  --dp-font-weight-medium: var(--font-weight-medium);
+  --dp-line-height: 1.5;
+  
+  /* === DISABLED STATE === */
+  --dp-disabled-opacity: 0.5;
+  
+  /* === TRANSITIONS === */
+  --dp-transition: all 0.2s ease-in-out;
+}
+
+/* ============================================
    DARK THEME OVERRIDES
    ============================================ */
 
@@ -897,5 +965,18 @@
   --tags-dropdown-bg: var(--color-surface);
   --tags-dropdown-border: var(--color-border);
   --tags-dropdown-item-hover: rgba(59, 130, 246, 0.15);
+  
+  /* === DATEPICKER DARK THEME === */
+  --dp-bg-default: var(--color-surface);
+  --dp-text-default: var(--color-text);
+  --dp-text-muted-default: var(--color-text-muted);
+  --dp-text-disabled-default: var(--color-text-muted);
+  --dp-border-default: var(--color-border);
+  --dp-secondary-default: var(--color-surface-secondary);
+  --dp-secondary-hover-default: var(--color-surface-hover);
+  --dp-cell-hover-bg: rgba(59, 130, 246, 0.15);
+  --dp-cell-hover-color: #60a5fa;
+  --dp-range-bg: rgba(59, 130, 246, 0.15);
+  --dp-range-color: #60a5fa;
 }
 
