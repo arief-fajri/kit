@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import { slide } from "svelte/transition";
   import type { AccordionStyling, AccordionBehavior, AccordionContent } from "../types.js";
 
@@ -19,8 +19,27 @@
 
   // Internal state for uncontrolled mode
   let internalExpanded = defaultExpanded;
-  let contentId = `accordion-content-${Math.random().toString(36).substring(2, 11)}`;
-  let buttonId = `accordion-button-${Math.random().toString(36).substring(2, 11)}`;
+  
+  // Generate SSR-safe IDs
+  let contentId: string;
+  let buttonId: string;
+  
+  // Initialize IDs in onMount to avoid SSR hydration issues
+  
+  onMount(() => {
+    if (!contentId) {
+      contentId = `accordion-content-${Math.random().toString(36).substring(2, 11)}`;
+    }
+    if (!buttonId) {
+      buttonId = `accordion-button-${Math.random().toString(36).substring(2, 11)}`;
+    }
+  });
+  
+  // Fallback IDs for SSR
+  $: if (typeof window === 'undefined') {
+    contentId = 'accordion-content-ssr';
+    buttonId = 'accordion-button-ssr';
+  }
 
   // Computed props with defaults
   $: computedStyling = {

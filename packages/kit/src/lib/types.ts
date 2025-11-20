@@ -45,14 +45,6 @@ export interface ButtonProps {
 	onclick?: (event: MouseEvent) => void;
 }
 
-// Card component types
-export interface CardProps {
-	/** Card title */
-	title?: string;
-	/** Card subtitle */
-	subtitle?: string;
-}
-
 // InputText component types
 export type InputType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search';
 export type InputSize = 'sm' | 'md' | 'lg';

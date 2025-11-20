@@ -1,8 +1,29 @@
-<script>
-  // @ts-nocheck
-  import { createEventDispatcher } from "svelte";
+<script lang="ts">
+  import { createEventDispatcher, onMount } from "svelte";
 
-  const dispatch = createEventDispatcher();
+  // Types
+  interface TagItem {
+    id?: string | number;
+    name?: string;
+    [key: string]: any;
+  }
+
+  interface AutoCompleteItem {
+    [key: string]: any;
+  }
+
+  type TagsArray = (string | TagItem)[];
+  type AutoCompleteArray = AutoCompleteItem[];
+
+  const dispatch = createEventDispatcher<{
+    tags: { tags: TagsArray };
+    input: { value: string };
+    focus: { event: FocusEvent };
+    blur: { event: FocusEvent };
+    keydown: { event: KeyboardEvent };
+    paste: { event: ClipboardEvent };
+    drop: { event: DragEvent };
+  }>();
 
   // Constants
   const KEY_CODES = {
@@ -21,70 +42,79 @@
     NUMPAD_9: 105,
     DECIMAL: 190,
     NUMPAD_DECIMAL: 110
-  };
+  } as const;
 
   const DEFAULT_DEBOUNCE_MS = 500;
 
   // Props
-  export let tags = [];
-  export let isError = false;
-  export let addKeys = [KEY_CODES.ENTER];
-  export let maxTags = false;
-  export let onlyUnique = false;
-  export let removeKeys = [KEY_CODES.BACKSPACE];
-  export let placeholder = "";
-  export let allowPaste = false;
-  export let allowDrop = false;
-  export let splitWith = ",";
-  export let autoComplete = false;
-  export let autoCompleteKey = false;
-  export let autoCompleteMarkupKey = false;
-  export let name = "svelte-tags-input";
-  export let id = "";
-  export let allowBlur = false;
-  export let disable = false;
-  export let minChars = 0;
-  export let onlyAutocomplete = false;
-  export let readonly = false;
-  export let onTagClick = () => {};
-  export let autoCompleteShowKey = false;
-  export let label = "";
-  export let labelClass = "";
-  export let required = false;
-  export let wrapperClass = "";
-  export let numberOnly = false;
-  export let allowDecimal = false;
-  export let debounceMs = DEFAULT_DEBOUNCE_MS;
+  export let tags: TagsArray = [];
+  export let isError: boolean = false;
+  export let addKeys: number[] = [KEY_CODES.ENTER];
+  export let maxTags: number | false = false;
+  export let onlyUnique: boolean = false;
+  export let removeKeys: number[] = [KEY_CODES.BACKSPACE];
+  export let placeholder: string = "";
+  export let allowPaste: boolean = false;
+  export let allowDrop: boolean = false;
+  export let splitWith: string = ",";
+  export let autoComplete: AutoCompleteArray | ((value: string, signal?: AbortSignal) => AutoCompleteArray | Promise<AutoCompleteArray>) | false = false;
+  export let autoCompleteKey: string | false = false;
+  export let autoCompleteMarkupKey: string | false = false;
+  export let name: string = "svelte-tags-input";
+  export let id: string = "";
+  export let allowBlur: boolean = false;
+  export let disable: boolean = false;
+  export let minChars: number = 0;
+  export let onlyAutocomplete: boolean = false;
+  export let readonly: boolean = false;
+  export let onTagClick: (tag: string | TagItem) => void = () => {};
+  export let autoCompleteShowKey: string | false = false;
+  export let label: string = "";
+  export let labelClass: string = "";
+  export let required: boolean = false;
+  export let wrapperClass: string = "";
+  export let numberOnly: boolean = false;
+  export let allowDecimal: boolean = false;
+  export let debounceMs: number = DEFAULT_DEBOUNCE_MS;
 
   // Internal state
-  let tag = "";
-  let arrelementsmatch = [];
-  let autoCompleteIndex = -1;
-  let layoutElement;
-  let inputElement;
-  let dropdownElement;
-  let storePlaceholder = placeholder;
-  let isLoading = false;
-  let searchInput = "";
-  let debounceSearch;
-  let controller = null;
+  let tag: string = "";
+  let arrelementsmatch: AutoCompleteArray = [];
+  let autoCompleteIndex: number = -1;
+  let layoutElement: HTMLElement;
+  let inputElement: HTMLInputElement;
+  let dropdownElement: HTMLElement;
+  let storePlaceholder: string = placeholder;
+  let isLoading: boolean = false;
+  let searchInput: string = "";
+  let debounceSearch: ReturnType<typeof setTimeout> | null = null;
+  let controller: AbortController | null = null;
 
-  // Generate unique ID if not provided
-  function uniqueID() {
-    return "sti_" + Math.random().toString(36).substring(2, 11);
+  // Generate unique ID if not provided - SSR safe
+  let uniqueId: string = "";
+  
+  onMount(() => {
+    if (!uniqueId) {
+      uniqueId = "sti_" + Math.random().toString(36).substring(2, 11);
+    }
+  });
+  
+  // Fallback ID for SSR
+  $: if (typeof window === 'undefined' && !uniqueId) {
+    uniqueId = 'sti_ssr';
   }
 
   $: tags = tags || [];
-  $: id = id || uniqueID();
+  $: id = id || uniqueId;
   $: autoCompleteShowKey = autoCompleteShowKey || autoCompleteKey;
 
   // Utility functions
-  function regExpEscape(s) {
+  function regExpEscape(s: string): string {
     return s.replace(/[-\\^$*+?.()|[\]{}]/g, "\\$&");
   }
 
-  function escapeHTML(string) {
-    const htmlEscapes = {
+  function escapeHTML(string: string): string {
+    const htmlEscapes: Record<string, string> = {
       "&": "&amp;",
       "<": "&lt;",
       ">": "&gt;",
@@ -95,13 +125,13 @@
     return ("" + string).replace(/[&<>"'\/]/g, (match) => htmlEscapes[match]);
   }
 
-  function buildMatchMarkup(search, value) {
+  function buildMatchMarkup(search: string, value: string): string {
     return escapeHTML(value).replace(RegExp(regExpEscape(search.toLowerCase()), "i"), "<strong>$&</strong>");
   }
 
-  function getClipboardData(e) {
-    if (window.clipboardData) {
-      return window.clipboardData.getData("Text");
+  function getClipboardData(e: ClipboardEvent): string {
+    if ((window as any).clipboardData) {
+      return (window as any).clipboardData.getData("Text");
     }
     if (e.clipboardData) {
       return e.clipboardData.getData("text/plain");
@@ -109,11 +139,11 @@
     return "";
   }
 
-  function splitTags(data) {
+  function splitTags(data: string): string[] {
     return data.split(splitWith).map((tag) => tag.trim());
   }
 
-  function sanitizeNumberInput(data, allowDecimal) {
+  function sanitizeNumberInput(data: string, allowDecimal: boolean): string {
     if (allowDecimal) {
       data = data.replace(/[^0-9.]/g, "");
       const parts = data.split(".");
@@ -126,7 +156,7 @@
     return data;
   }
 
-  function validateNumberInput(e) {
+  function validateNumberInput(e: KeyboardEvent): boolean {
     if (!numberOnly) return true;
 
     const isNumberKey = (e.keyCode >= KEY_CODES.NUM_0 && e.keyCode <= KEY_CODES.NUM_9) ||
@@ -138,7 +168,7 @@
       KEY_CODES.ARROW_LEFT,
       KEY_CODES.ARROW_RIGHT,
       KEY_CODES.DELETE
-    ].includes(e.keyCode);
+    ].includes(e.keyCode as any);
     const isDecimal = allowDecimal && (e.key === "." || e.keyCode === KEY_CODES.DECIMAL || e.keyCode === KEY_CODES.NUMPAD_DECIMAL);
 
     if (!(isNumberKey || isAllowedKey || isDecimal)) {
@@ -146,7 +176,7 @@
       return false;
     }
 
-    if (isDecimal && e.target.value.includes(".")) {
+    if (isDecimal && (e.target as HTMLInputElement).value.includes(".")) {
       e.preventDefault();
       return false;
     }
@@ -155,11 +185,11 @@
   }
 
   // Tag management
-  function addTag(currentTag) {
+  function addTag(currentTag: string | TagItem): void {
     if (!currentTag) return;
-    if (numberOnly && !new RegExp(allowDecimal ? /^\d*(\.\d+)?$/ : /^\d+$/).test(currentTag)) return;
+    if (numberOnly && typeof currentTag === 'string' && !new RegExp(allowDecimal ? /^\d*(\.\d+)?$/ : /^\d+$/).test(currentTag)) return;
 
-    let currentObjTags;
+    let currentObjTags: TagItem | undefined;
     if (typeof currentTag === "object" && currentTag !== null) {
       if (!autoCompleteKey) {
         console.error("'autoCompleteKey' is necessary if 'autoComplete' result is an array of objects");
@@ -167,15 +197,16 @@
       }
 
       if (onlyUnique) {
-        let found = tags?.find((elem) => elem[autoCompleteKey] === currentTag[autoCompleteKey]);
+        let found = tags?.find((elem) => 
+          typeof elem === 'object' && elem !== null && 
+          autoCompleteKey && (elem as any)[autoCompleteKey] === (currentTag as any)[autoCompleteKey]
+        );
         if (found) return;
       }
 
       currentObjTags = currentTag;
-      currentTag =
-        typeof currentTag[autoCompleteKey] === "string"
-          ? currentTag[autoCompleteKey].trim()
-          : currentTag[autoCompleteKey];
+      const tagValue = autoCompleteKey ? currentTag[autoCompleteKey] : '';
+      currentTag = typeof tagValue === "string" ? tagValue.trim() : String(tagValue);
     } else if (typeof currentTag === "string") {
       currentTag = currentTag.trim();
     }
@@ -203,14 +234,14 @@
       placeholder = "";
     }
 
-    dispatch("tags", tags);
+    dispatch("tags", { tags });
   }
 
-  function removeTag(i) {
+  function removeTag(i: number): void {
     tags.splice(i, 1);
     tags = tags;
 
-    dispatch("tags", tags);
+    dispatch("tags", { tags });
     arrelementsmatch = [];
     
     if (inputElement) {
@@ -221,10 +252,10 @@
   }
 
   // Keyboard handling
-  function setTag(e) {
+  function setTag(e: KeyboardEvent): void {
     if (!validateNumberInput(e)) return;
 
-    const currentTag = e.target.value;
+    const currentTag = (e.target as HTMLInputElement).value;
 
     if (addKeys) {
       addKeys.forEach(function (key) {
@@ -249,7 +280,7 @@
         if (key === e.keyCode && tag === "") {
           tags.pop();
           tags = tags;
-          dispatch("tags", tags);
+          dispatch("tags", { tags });
           arrelementsmatch = [];
           
           if (inputElement) {
@@ -276,7 +307,7 @@
   }
 
   // Paste and drop handlers
-  function onPaste(e) {
+  function onPaste(e: ClipboardEvent): void {
     if (!allowPaste) return;
     e.preventDefault();
 
@@ -287,11 +318,11 @@
     splitTags(data).map((tag) => addTag(tag));
   }
 
-  function onDrop(e) {
+  function onDrop(e: DragEvent): void {
     if (!allowDrop) return;
     e.preventDefault();
 
-    let data = e.dataTransfer.getData("Text");
+    let data = e.dataTransfer?.getData("Text") || "";
     if (numberOnly) {
       data = sanitizeNumberInput(data, allowDecimal);
     }
@@ -299,13 +330,13 @@
   }
 
   // Focus handlers
-  function onFocus() {
+  function onFocus(): void {
     if (layoutElement) {
       layoutElement.classList.add("focus");
     }
   }
 
-  function onBlur(e, tag) {
+  function onBlur(e: FocusEvent, tag: string): void {
     if (layoutElement) {
       layoutElement.classList.remove("focus");
     }
@@ -324,11 +355,11 @@
   }
 
   // Autocomplete
-  async function getMatchElements(value) {
+  async function getMatchElements(value: string): Promise<void> {
     if (!autoComplete) return;
     if (maxTags && tags.length >= maxTags) return;
 
-    dispatch("keyup", value);
+    dispatch("input", { value });
     searchInput = value;
 
     if (value.length < minChars) {
@@ -339,17 +370,17 @@
 
     isLoading = true;
 
-    let autoCompleteValues = [];
+    let autoCompleteValues: AutoCompleteArray = [];
     if (Array.isArray(autoComplete)) {
       autoCompleteValues = autoComplete;
     } else if (typeof autoComplete === "function") {
       try {
-        if (autoComplete.constructor.name === "AsyncFunction") {
+        if ((autoComplete as any).constructor.name === "AsyncFunction") {
           if (controller) controller.abort();
           controller = new AbortController();
           autoCompleteValues = await autoComplete(value, controller.signal);
         } else {
-          autoCompleteValues = autoComplete(value);
+          autoCompleteValues = autoComplete(value) as AutoCompleteArray;
         }
       } catch (error) {
         console.error("Error in autocomplete function:", error);
@@ -388,7 +419,7 @@
       matchs = matchs.map((matchTag) => {
         return {
           label: matchTag,
-          search: buildMatchMarkup(value, matchTag)
+          search: buildMatchMarkup(value, String(matchTag))
         };
       });
     }
@@ -399,7 +430,12 @@
     arrelementsmatch = matchs;
   }
 
-  const watchSearchInput = (eventValue, isKeyUp) => {
+  const handleKeyUp = (e: KeyboardEvent) => {
+    const target = e.target as HTMLInputElement;
+    watchSearchInput(target?.value || '', true);
+  };
+
+  const watchSearchInput = (eventValue: string, isKeyUp: boolean) => {
     let valToSearch = "";
     if (!eventValue) {
       if (isKeyUp) {
@@ -427,7 +463,7 @@
   };
 
   // Dropdown positioning
-  const checkPosition = (node) => {
+  const checkPosition = (node: HTMLElement) => {
     const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
     const rect = node.getBoundingClientRect();
     const parentNode = node.parentNode;
@@ -436,8 +472,8 @@
     let origin = [];
     const gap = 4;
 
-    if (parentNode) {
-      const parentRect = parentNode.getBoundingClientRect();
+    if (parentNode && 'getBoundingClientRect' in parentNode) {
+      const parentRect = (parentNode as HTMLElement).getBoundingClientRect();
       parentHeight = parentRect.height;
     }
 
@@ -493,7 +529,7 @@
                 {#if typeof tagItem === "string" || typeof tagItem === "number"}
                   {tagItem}
                 {:else if typeof tagItem === "object"}
-                  {tagItem[autoCompleteShowKey]}
+                  {autoCompleteShowKey && tagItem && typeof tagItem === 'object' ? tagItem[autoCompleteShowKey] : ''}
                 {/if}
               </slot>
 
@@ -514,9 +550,7 @@
           bind:this={inputElement}
           bind:value={tag}
           on:keydown={setTag}
-          on:keyup={(e) => {
-            watchSearchInput(e.target.value, true);
-          }}
+          on:keyup={handleKeyUp}
           on:paste={onPaste}
           on:drop={onDrop}
           on:focus={onFocus}
