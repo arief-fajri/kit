@@ -10,6 +10,8 @@ export { default as Switch } from './input-fields/switch/Switch.svelte';
 export { default as TextArea } from './input-fields/textarea/TextArea.svelte';
 export { default as SelectOption } from './input-fields/select-option/SelectOption.svelte';
 export { default as DatePicker } from './input-fields/date-picker/DatePicker.svelte';
+export { default as Tags } from './input-fields/tags/Tags.svelte';
+export { default as Accordion } from './accordion/Accordion.svelte';
 export { default as DropdownWrapper } from './wrapper/dropdown/DropdownWrapper.svelte';
 export { default as BaseLayoutWrapper } from './wrapper/base-layout/BaseLayoutWrapper.svelte';
 export { default as PageWrapper } from './wrapper/page/PageWrapper.svelte';
@@ -55,7 +57,12 @@ export type {
   SidebarWrapperProps,
   SidebarPosition,
   SidebarResizeEventDetail,
-  SidebarDragEventDetail
+  SidebarDragEventDetail,
+  AccordionProps,
+  AccordionItem,
+  AccordionStyling,
+  AccordionBehavior,
+  AccordionContent
 } from './types.js';
 
 // Export Checkbox types
