@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI Kit Theme Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            font-size: 1.125rem;
+            color: #64748b;
+        }
+
+        .generator-layout {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .controls-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 2rem;
+        }
+
+        .preview-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            min-height: 600px;
+        }
+
+        .color-group {
+            margin-bottom: 2rem;
+        }
+
+        .color-group h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+
+        .color-input-group {
+            margin-bottom: 1rem;
+        }
+
+        .color-input-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #6b7280;
+            margin-bottom: 0.25rem;
+        }
+
+        .color-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .color-input {
+            width: 50px;
+            height: 40px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .color-input:hover {
+            border-color: #3b82f6;
+        }
+
+        .color-value {
+            flex: 1;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.875rem;
+            background: #f9fafb;
+        }
+
+        .preset-themes {
+            margin-bottom: 2rem;
+        }
+
+        .preset-themes h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #374151;
+        }
+
+        .preset-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .preset-button {
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .preset-button:hover {
+            border-color: #3b82f6;
+            background: #f0f9ff;
+        }
+
+        .preset-button.active {
+            border-color: #3b82f6;
+            background: #3b82f6;
+            color: white;
+        }
+
+        .export-section {
+            border-top: 1px solid #e5e7eb;
+            padding-top: 1.5rem;
+        }
+
+        .export-button {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-bottom: 0.75rem;
+        }
+
+        .export-button:hover {
+            background: #2563eb;
+        }
+
+        .copy-button {
+            width: 100%;
+            padding: 0.5rem 1rem;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .copy-button:hover {
+            background: #059669;
+        }
+
+        .preview-components {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .component-demo {
+            padding: 1.5rem;
+            border: 1px solid var(--color-border, #e5e7eb);
+            border-radius: 8px;
+            background: var(--color-surface, white);
+        }
+
+        .component-demo h4 {
+            margin-bottom: 1rem;
+            color: var(--color-text, #1e293b);
+        }
+
+        /* Component Styles */
+        .demo-button {
+            padding: 0.5rem 1rem;
+            background: var(--color-primary, #3b82f6);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-right: 0.75rem;
+            margin-bottom: 0.5rem;
+            transition: background 0.2s;
+        }
+
+        .demo-button:hover {
+            background: var(--color-primary-hover, #2563eb);
+        }
+
+        .demo-button.secondary {
+            background: transparent;
+            color: var(--color-primary, #3b82f6);
+            border: 2px solid var(--color-primary, #3b82f6);
+        }
+
+        .demo-button.secondary:hover {
+            background: var(--color-primary, #3b82f6);
+            color: white;
+        }
+
+        .demo-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--color-border, #e5e7eb);
+            border-radius: 6px;
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+            background: var(--color-surface, white);
+            color: var(--color-text, #1e293b);
+        }
+
+        .demo-input:focus {
+            outline: none;
+            border-color: var(--color-primary, #3b82f6);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .demo-card {
+            background: var(--color-surface-secondary, #f8fafc);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--color-border, #e5e7eb);
+        }
+
+        .demo-alert {
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 0.75rem;
+        }
+
+        .demo-alert.success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--color-success, #10b981);
+            color: var(--color-success, #10b981);
+        }
+
+        .demo-alert.warning {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--color-warning, #f59e0b);
+            color: var(--color-warning, #f59e0b);
+        }
+
+        .demo-alert.error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--color-error, #ef4444);
+            color: var(--color-error, #ef4444);
+        }
+
+        .css-output {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 6px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.875rem;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 0.75rem;
+            display: none;
+        }
+
+        @media (max-width: 1024px) {
+            .generator-layout {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .controls-panel {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>UI Kit Theme Generator</h1>
+            <p>Create custom themes for your UI components with visual preview</p>
+        </div>
+
+        <div class="generator-layout">
+            <div class="controls-panel">
+                <div class="preset-themes">
+                    <h3>Preset Themes</h3>
+                    <div class="preset-grid">
+                        <button class="preset-button active" data-preset="default">Default</button>
+                        <button class="preset-button" data-preset="dark">Dark</button>
+                        <button class="preset-button" data-preset="corporate">Corporate</button>
+                        <button class="preset-button" data-preset="nature">Nature</button>
+                    </div>
+                </div>
+
+                <div class="color-group">
+                    <h3>Brand Colors</h3>
+                    <div class="color-input-group">
+                        <label>Primary Color</label>
+                        <div class="color-input-wrapper">
+                            <input type="color" class="color-input" id="primary" value="#3b82f6">
+                            <input type="text" class="color-value" id="primary-value" value="#3b82f6">
+                        </div>
+                    </div>
+                    <div class="color-input-group">
+                        <label>Primary Hover</label>
+                        <div class="color-input-wrapper">
+                            <input type="color" class="color-input" id="primary-hover" value="#2563eb">
+                            <input type="text" class="color-value" id="primary-hover-value" value="#2563eb">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="color-group">
+                    <h3>Surface Colors</h3>
+                    <div class="color-input-group">
+                        <label>Background</label>
+                        <div class="color-input-wrapper">
+                            <input type="color" class="color-input" id="surface" value="#ffffff">
+                            <input type="text" class="color-value" id="surface-value" value="#ffffff">
+                        </div>
+                    </div>
+                    <div class="color-input-group">
+                        <label>Secondary Background</label>
+                        <div class="color-input-wrapper">
+                            <input type="color" class="color-input" id="surface-secondary" value="#f9fafb">
+                            <input type="text" class="color-value" id="surface-secondary-value" value="#f9fafb">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="color-group">
+                    <h3>Text & Border</h3>
+                    <div class="color-input-group">
+                        <label>Text Color</label>
+                        <div class="color-input-wrapper">
+                            <input type="color" class="color-input" id="text" value="#111827">
+                            <input type="text" class="color-value" id="text-value" value="#111827">
+                        </div>
+                    </div>
+                    <div class="color-input-group">
+                        <label>Border Color</label>
+                        <div class="color-input-wrapper">
+                            <input type="color" class="color-input" id="border" value="#d1d5db">
+                            <input type="text" class="color-value" id="border-value" value="#d1d5db">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="color-group">
+                    <h3>Semantic Colors</h3>
+                    <div class="color-input-group">
+                        <label>Success</label>
+                        <div class="color-input-wrapper">
+                            <input type="color" class="color-input" id="success" value="#10b981">
+                            <input type="text" class="color-value" id="success-value" value="#10b981">
+                        </div>
+                    </div>
+                    <div class="color-input-group">
+                        <label>Warning</label>
+                        <div class="color-input-wrapper">
+                            <input type="color" class="color-input" id="warning" value="#f59e0b">
+                            <input type="text" class="color-value" id="warning-value" value="#f59e0b">
+                        </div>
+                    </div>
+                    <div class="color-input-group">
+                        <label>Error</label>
+                        <div class="color-input-wrapper">
+                            <input type="color" class="color-input" id="error" value="#ef4444">
+                            <input type="text" class="color-value" id="error-value" value="#ef4444">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="export-section">
+                    <button class="export-button" onclick="generateCSS()">Generate CSS Code</button>
+                    <button class="copy-button" onclick="copyCSS()" style="display: none;" id="copy-btn">Copy to Clipboard</button>
+                    <div class="css-output" id="css-output"></div>
+                </div>
+            </div>
+
+            <div class="preview-panel">
+                <div class="preview-components">
+                    <div class="component-demo">
+                        <h4>Buttons</h4>
+                        <button class="demo-button">Primary Button</button>
+                        <button class="demo-button secondary">Secondary Button</button>
+                    </div>
+
+                    <div class="component-demo">
+                        <h4>Form Elements</h4>
+                        <input type="text" class="demo-input" placeholder="Enter your text here...">
+                        <input type="email" class="demo-input" placeholder="your@email.com">
+                    </div>
+
+                    <div class="component-demo">
+                        <h4>Card Component</h4>
+                        <div class="demo-card">
+                            <h5 style="margin-bottom: 0.5rem; color: var(--color-text, #1e293b);">Card Title</h5>
+                            <p style="color: var(--color-text, #1e293b); opacity: 0.8;">This is a sample card component showing how your theme colors will look in practice.</p>
+                        </div>
+                    </div>
+
+                    <div class="component-demo">
+                        <h4>Alert Messages</h4>
+                        <div class="demo-alert success">✓ Success: Your changes have been saved successfully!</div>
+                        <div class="demo-alert warning">⚠ Warning: Please review your input before proceeding.</div>
+                        <div class="demo-alert error">✗ Error: Something went wrong. Please try again.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme presets
+        const presets = {
+            default: {
+                primary: '#3b82f6',
+                'primary-hover': '#2563eb',
+                surface: '#ffffff',
+                'surface-secondary': '#f9fafb',
+                text: '#111827',
+                border: '#d1d5db',
+                success: '#10b981',
+                warning: '#f59e0b',
+                error: '#ef4444'
+            },
+            dark: {
+                primary: '#60a5fa',
+                'primary-hover': '#3b82f6',
+                surface: '#1f2937',
+                'surface-secondary': '#374151',
+                text: '#f9fafb',
+                border: '#4b5563',
+                success: '#34d399',
+                warning: '#fbbf24',
+                error: '#f87171'
+            },
+            corporate: {
+                primary: '#1e40af',
+                'primary-hover': '#1e3a8a',
+                surface: '#f8fafc',
+                'surface-secondary': '#f1f5f9',
+                text: '#0f172a',
+                border: '#cbd5e1',
+                success: '#059669',
+                warning: '#d97706',
+                error: '#dc2626'
+            },
+            nature: {
+                primary: '#059669',
+                'primary-hover': '#047857',
+                surface: '#f0fdf4',
+                'surface-secondary': '#dcfce7',
+                text: '#14532d',
+                border: '#bbf7d0',
+                success: '#10b981',
+                warning: '#ca8a04',
+                error: '#dc2626'
+            }
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            setupColorInputs();
+            setupPresetButtons();
+            applyTheme();
+        });
+
+        function setupColorInputs() {
+            const colorInputs = document.querySelectorAll('.color-input');
+            colorInputs.forEach(input => {
+                const valueInput = document.getElementById(input.id + '-value');
+                
+                input.addEventListener('input', function() {
+                    valueInput.value = this.value;
+                    applyTheme();
+                });
+
+                valueInput.addEventListener('input', function() {
+                    if (isValidHex(this.value)) {
+                        input.value = this.value;
+                        applyTheme();
+                    }
+                });
+            });
+        }
+
+        function setupPresetButtons() {
+            const presetButtons = document.querySelectorAll('.preset-button');
+            presetButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    presetButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const preset = presets[this.dataset.preset];
+                    applyPreset(preset);
+                });
+            });
+        }
+
+        function applyPreset(preset) {
+            Object.keys(preset).forEach(key => {
+                const colorInput = document.getElementById(key);
+                const valueInput = document.getElementById(key + '-value');
+                if (colorInput && valueInput) {
+                    colorInput.value = preset[key];
+                    valueInput.value = preset[key];
+                }
+            });
+            applyTheme();
+        }
+
+        function applyTheme() {
+            const root = document.documentElement;
+            
+            // Get current values
+            const colors = {
+                'color-primary': document.getElementById('primary').value,
+                'color-primary-hover': document.getElementById('primary-hover').value,
+                'color-surface': document.getElementById('surface').value,
+                'color-surface-secondary': document.getElementById('surface-secondary').value,
+                'color-text': document.getElementById('text').value,
+                'color-border': document.getElementById('border').value,
+                'color-success': document.getElementById('success').value,
+                'color-warning': document.getElementById('warning').value,
+                'color-error': document.getElementById('error').value
+            };
+
+            // Apply CSS variables
+            Object.keys(colors).forEach(key => {
+                root.style.setProperty('--' + key, colors[key]);
+            });
+        }
+
+        function generateCSS() {
+            const colors = {
+                'color-primary': document.getElementById('primary').value,
+                'color-primary-hover': document.getElementById('primary-hover').value,
+                'color-surface': document.getElementById('surface').value,
+                'color-surface-secondary': document.getElementById('surface-secondary').value,
+                'color-text': document.getElementById('text').value,
+                'color-border': document.getElementById('border').value,
+                'color-success': document.getElementById('success').value,
+                'color-warning': document.getElementById('warning').value,
+                'color-error': document.getElementById('error').value
+            };
+
+            let css = `/* Generated Custom Theme */\n:root {\n`;
+            Object.keys(colors).forEach(key => {
+                css += `  --${key}: ${colors[key]};\n`;
+            });
+            css += `}`;
+
+            const output = document.getElementById('css-output');
+            const copyBtn = document.getElementById('copy-btn');
+            
+            output.textContent = css;
+            output.style.display = 'block';
+            copyBtn.style.display = 'block';
+        }
+
+        function copyCSS() {
+            const output = document.getElementById('css-output');
+            navigator.clipboard.writeText(output.textContent).then(() => {
+                const copyBtn = document.getElementById('copy-btn');
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = 'Copied!';
+                copyBtn.style.background = '#059669';
+                
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                    copyBtn.style.background = '#10b981';
+                }, 2000);
+            });
+        }
+
+        function isValidHex(hex) {
+            return /^#[0-9A-F]{6}$/i.test(hex);
+        }
+    </script>
+</body>
+</html>

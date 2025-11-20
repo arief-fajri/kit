@@ -1,13 +1,69 @@
 /**
- * Default Style Configuration
+ * Default Style Configuration & Theming System
  * 
  * This file contains all CSS custom properties (CSS variables) used across
- * all components in the kit library. These can be overridden globally or
- * per-component for theming and customization.
+ * all components in the kit library. The system is designed for easy production
+ * theming and brand customization.
+ * 
+ * THEMING GUIDE:
+ * ==============
+ * 
+ * 1. GLOBAL THEME OVERRIDE:
+ *    :root {
+ *      --color-primary: #your-brand-color;
+ *      --color-primary-hover: #your-hover-color;
+ *    }
+ * 
+ * 2. CUSTOM THEME CREATION:
+ *    [data-theme="corporate"] {
+ *      --color-primary: #1e40af;
+ *      --color-surface: #f8fafc;
+ *    }
+ * 
+ * 3. COMPONENT-SPECIFIC OVERRIDE:
+ *    .custom-button {
+ *      --btn-bg-filled: #custom-color;
+ *    }
+ * 
+ * 4. RUNTIME THEME SWITCHING:
+ *    document.documentElement.setAttribute('data-theme', 'dark');
+ * 
+ * ARCHITECTURE:
+ * =============
+ * - Global colors (--color-*) define the base palette
+ * - Component colors reference global colors for consistency
+ * - Dark theme overrides are automatically applied via [data-theme="dark"]
+ * - All components inherit theme changes without modification
+ * 
+ * NAMING CONVENTION:
+ * ==================
+ * --component-property-variant-state
+ * Examples: --btn-bg-filled-hover, --input-text-border-focus
  */
 
 /* ============================================
    SHARED / GLOBAL VARIABLES
+   ============================================
+   
+   These are the foundation colors that all components reference.
+   Override these for global theme changes:
+   
+   BRAND COLORS:
+   - --color-primary: Main brand color (buttons, links, focus states)
+   - --color-primary-hover: Hover state for primary elements
+   - --color-primary-active: Active/pressed state for primary elements
+   
+   SEMANTIC COLORS:
+   - --color-success: Success states, confirmations
+   - --color-warning: Warning states, cautions  
+   - --color-danger/error: Error states, destructive actions
+   
+   SURFACE COLORS:
+   - --color-surface: Main background color
+   - --color-surface-secondary: Secondary background (cards, panels)
+   - --color-surface-hover: Hover background for interactive elements
+   - --color-on-surface: Text color on surface backgrounds
+   
    ============================================ */
 
 :root {
@@ -826,6 +882,25 @@
 
 /* ============================================
    DARK THEME OVERRIDES
+   ============================================
+   
+   Automatic dark theme implementation. Apply via:
+   
+   HTML: <html data-theme="dark">
+   JS:   document.documentElement.setAttribute('data-theme', 'dark');
+   
+   CUSTOM THEMES:
+   Create additional themes by following this pattern:
+   
+   [data-theme="your-theme"] {
+     --color-primary: #your-color;
+     --color-surface: #your-bg;
+   }
+   
+   PRODUCTION TIP:
+   Store theme preference in localStorage and apply on page load
+   to prevent flash of unstyled content (FOUC).
+   
    ============================================ */
 
 [data-theme="dark"] {
@@ -980,3 +1055,34 @@
   --dp-range-color: #60a5fa;
 }
 
+/* ============================================
+   PRODUCTION THEMING EXAMPLES
+   ============================================
+   
+   Uncomment and customize these examples for quick theme implementation:
+   
+   CORPORATE THEME:
+   [data-theme="corporate"] {
+     --color-primary: #1e40af;
+     --color-primary-hover: #1e3a8a;
+     --color-surface: #f8fafc;
+     --color-surface-secondary: #f1f5f9;
+   }
+   
+   NATURE THEME:
+   [data-theme="nature"] {
+     --color-primary: #059669;
+     --color-primary-hover: #047857;
+     --color-success: #10b981;
+     --color-surface: #f0fdf4;
+   }
+   
+   HIGH CONTRAST THEME:
+   [data-theme="high-contrast"] {
+     --color-primary: #000000;
+     --color-surface: #ffffff;
+     --color-text: #000000;
+     --color-border: #000000;
+   }
+   
+   ============================================ */
