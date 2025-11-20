@@ -39,7 +39,7 @@
 		<div class="demo-panel">
 			<BaseLayoutWrapper
 				layoutClassName="base-layout-demo"
-				layoutStyle={`position:relative; height:${height}px; border-radius:1rem; overflow:hidden; --base-layout-bg:${background};`}
+				layoutStyle={`position:relative; height:${height}px; width: 100%; border-radius:1rem; overflow:hidden; --base-layout-bg:${background};`}
 				bodyStyle={`background:${contentBackground}; padding:${bodyPadding};`}
 			>
 				<div class="layout-columns">

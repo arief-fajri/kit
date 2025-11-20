@@ -40,19 +40,19 @@
 				{ title: 'BaseLayoutWrapper', href: '/components/base-layout-wrapper' }
 			]
 		},
-		{
-			title: 'Playground',
-			items: [
-				{ title: 'Interactive Demo', href: '/playground' }
-			]
-		}
+		// {
+		// 	title: 'Playground',
+		// 	items: [
+		// 		{ title: 'Interactive Demo', href: '/playground' }
+		// 	]
+		// }
 	];
 	
 	let sidebarCollapsed = false;
 </script>
 
 <BaseLayoutWrapper layoutClassName="docs-layout">
-	<nav class="navbar">
+	<!-- <nav class="navbar">
 		<div class="nav-container">
 			<a href="/" class="nav-logo">@rief/kit</a>
 			<div class="nav-actions">
@@ -65,7 +65,7 @@
 				</Button>
 			</div>
 		</div>
-	</nav>
+	</nav> -->
 	
 	<div class="layout-grid">
 		<SidebarWrapper 
@@ -122,6 +122,7 @@
 	.layout-grid {
 		display: flex;
 		min-height: calc(100vh - 73px);
+		width: 100%;
 	}
 
 	.navbar {
