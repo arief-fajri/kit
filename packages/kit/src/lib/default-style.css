@@ -727,6 +727,36 @@
 }
 
 /* ============================================
+   TAGS COMPONENT VARIABLES
+   ============================================ */
+
+:root {
+  --tags-bg: var(--color-surface);
+  --tags-border: var(--color-border);
+  --tags-border-focus: var(--color-primary);
+  --tags-border-error: var(--color-error);
+  --tags-text: var(--color-text);
+  --tags-text-placeholder: var(--color-text-muted);
+  --tags-label: var(--color-text-secondary);
+  --tags-error-text: var(--color-error);
+  --tags-radius: var(--radius-md);
+  --tags-shadow-focus: var(--shadow-focus);
+  --tags-tag-bg: rgba(59, 130, 246, 0.1);
+  --tags-tag-bg-hover: rgba(59, 130, 246, 0.15);
+  --tags-tag-text: var(--color-primary);
+  --tags-tag-radius: var(--radius-sm);
+  --tags-tag-padding-x: 0.5rem;
+  --tags-tag-padding-y: 0.25rem;
+  --tags-tag-gap: 0.3125rem;
+  --tags-dropdown-bg: var(--color-surface);
+  --tags-dropdown-border: var(--color-border);
+  --tags-dropdown-item-hover: rgba(59, 130, 246, 0.1);
+  --tags-dropdown-max-height: 240px;
+  --tags-disabled-opacity: 0.5;
+  --tags-disabled-bg: var(--color-surface-disabled);
+}
+
+/* ============================================
    DARK THEME OVERRIDES
    ============================================ */
 
@@ -853,5 +883,19 @@
   --accordion-icon-color: var(--color-text);
   --accordion-icon-color-hover: var(--color-primary);
   --accordion-outlined-border-color: var(--color-border);
+  
+  /* === TAGS DARK THEME === */
+  --tags-bg: var(--color-surface);
+  --tags-border: var(--color-border);
+  --tags-text: var(--color-text);
+  --tags-text-placeholder: var(--color-text-muted);
+  --tags-label: var(--color-text-secondary);
+  --tags-disabled-bg: var(--color-surface-disabled);
+  --tags-tag-bg: rgba(59, 130, 246, 0.15);
+  --tags-tag-bg-hover: rgba(59, 130, 246, 0.2);
+  --tags-tag-text: #60a5fa;
+  --tags-dropdown-bg: var(--color-surface);
+  --tags-dropdown-border: var(--color-border);
+  --tags-dropdown-item-hover: rgba(59, 130, 246, 0.15);
 }
 
