@@ -14,7 +14,7 @@
   export let collapseWidth: SidebarWrapperProps['collapseWidth'] = "0";
   export let isDraggable: SidebarWrapperProps['isDraggable'] = false;
   export let defaultWidth: SidebarWrapperProps['defaultWidth'] = 321;
-  export let position: SidebarWrapperProps['position'] = "left";
+  export let draglinePosition: SidebarWrapperProps['draglinePosition'] = "left";
   export let minWidth: SidebarWrapperProps['minWidth'] = 320;
   export let maxWidth: SidebarWrapperProps['maxWidth'] = "25%";
   export let persistWidth: SidebarWrapperProps['persistWidth'] = false;
@@ -27,7 +27,7 @@
   // Ensure minWidth has a value
   $: minWidthValue = minWidth ?? 320;
 
-  let classes: string = "border-r";
+  let classes: string = "";
   export { classes as class };
 
   // Internal state
@@ -92,7 +92,7 @@
 
   // Reactive width update
   $: if (sidebarWidth && sidebarElem) {
-    const pos = position ?? "left";
+    const pos = draglinePosition ?? "left";
     if (["left", "right"].includes(pos)) {
       const widthStr = sidebarWidth.replace("px", "");
       const widthNum = Number(widthStr);
@@ -112,7 +112,7 @@
   // Handle drag start
   function handleDragStart(): void {
     isDragging = true;
-    const pos = position ?? "left";
+    const pos = draglinePosition ?? "left";
     if (["left", "right"].includes(pos) && sidebarElem) {
       initialWidth = sidebarElem.offsetWidth;
       dispatch("dragstart", { initialWidth });
@@ -121,7 +121,7 @@
 
   // Handle dragging
   function handleDragging(e: CustomEvent<{ diffX: number; diffY: number }>): void {
-    const pos = position ?? "left";
+    const pos = draglinePosition ?? "left";
     if (pos === "left") {
       sidebarWidth = initialWidth - e.detail.diffX + "px";
     } else if (pos === "right") {
@@ -167,7 +167,7 @@
   {/if}
 
   {#if isDraggable && !collapsed}
-    <div class="sidebar__drag-handle sidebar__drag-handle--{position}">
+    <div class="sidebar__drag-handle sidebar__drag-handle--{draglinePosition}">
       <DragLine
         on:dragstart={handleDragStart}
         on:dragging={handleDragging}
@@ -175,7 +175,7 @@
       >
         <div
           class="sidebar__drag-handle-indicator"
-          style={position === "left" ? "left: calc(50% - 4px);" : "right: calc(-50% - 4px);"}
+          style={draglinePosition === "left" ? "left: calc(50% - 4px);" : "right: calc(-50% - 4px);"}
         >
           <div class="sidebar__drag-handle-visual">
             <div class="sidebar__drag-handle-line" />
@@ -186,12 +186,17 @@
   {/if}
 </aside>
 
-<style lang="postcss">
+<style>
   .sidebar {
-    @apply flex flex-col shrink-0 grow-0 relative;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    flex-grow: 0;
+    flex: none;
+    position: relative;
     transition: width var(--sidebar-transition-duration, 300ms);
     background: var(--sidebar-bg, var(--color-surface, #ffffff));
-    border-color: var(--sidebar-border-color, var(--color-border, #d1d5db));
+    border-right: 1px solid var(--sidebar-border-color, var(--color-border, #d1d5db));
   }
 
   .sidebar--collapsed {
@@ -199,7 +204,13 @@
   }
 
   .sidebar__drag-overlay {
-    @apply w-full h-full absolute top-0 left-0 right-0 bottom-0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     z-index: var(--sidebar-drag-overlay-z-index, 100);
   }
 
@@ -226,17 +237,25 @@
   }
 
   .sidebar__drag-handle-indicator {
-    @apply absolute top-1/2 -translate-x-1/2 -translate-y-1/2;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
   }
 
   .sidebar__drag-handle-visual {
-    @apply px-[2.5px] py-1.5 rounded relative;
+    padding-left: 2.5px;
+    padding-right: 2.5px;
+    padding-top: 0.375rem;
+    padding-bottom: 0.375rem;
+    border-radius: 0.25rem;
+    position: relative;
     background: var(--sidebar-drag-handle-bg, #ffffff);
     border: var(--sidebar-drag-handle-border, 1px solid var(--sidebar-drag-handle-border-color, var(--color-primary-200, rgba(59, 130, 246, 0.2))));
   }
 
   .sidebar__drag-handle-line {
-    @apply w-[1px] h-[28px];
+    width: 1px;
+    height: 28px;
     background: var(--sidebar-drag-handle-line-color, var(--color-primary-200, rgba(59, 130, 246, 0.2)));
   }
 </style>

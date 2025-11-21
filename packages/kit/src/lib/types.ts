@@ -331,7 +331,7 @@ export interface SidebarWrapperProps {
 	/** Default width in pixels */
 	defaultWidth?: number;
 	/** Drag handle position */
-	position?: SidebarPosition;
+	draglinePosition?: SidebarPosition;
 	/** Minimum width in pixels */
 	minWidth?: number;
 	/** Maximum width (CSS value: px, %, etc.) */
