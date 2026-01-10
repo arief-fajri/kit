@@ -8,16 +8,16 @@
 	<title>Accordion - @rief/kit</title>
 </svelte:head>
 
-<div class="space-y-8">
+<div class="space-y-6 md:space-y-8">
 	<div>
-		<h1 class="text-4xl font-bold mb-4">Accordion</h1>
-		<p class="text-lg text-gray-600 dark:text-gray-400">
+		<h1 class="text-2xl md:text-4xl font-bold mb-3 md:mb-4">Accordion</h1>
+		<p class="text-base md:text-lg text-gray-600 dark:text-gray-400">
 			Collapsible content sections for organizing information.
 		</p>
 	</div>
 
 	<section>
-		<h2 class="text-2xl font-semibold mb-4">Features</h2>
+		<h2 class="text-xl md:text-2xl font-semibold mb-3 md:mb-4">Features</h2>
 		<ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
 			<li>Flexible content with props or slots</li>
 			<li>Controlled and uncontrolled modes</li>
@@ -27,9 +27,9 @@
 	</section>
 
 	<section>
-		<h2 class="text-2xl font-semibold mb-4">Examples</h2>
+		<h2 class="text-xl md:text-2xl font-semibold mb-3 md:mb-4">Examples</h2>
 
-		<div class="space-y-6">
+		<div class="space-y-4 md:space-y-6">
 			<div>
 				<h3 class="text-xl font-semibold mb-3">Basic</h3>
 				<Card styling={{ padding: 'md' }}>

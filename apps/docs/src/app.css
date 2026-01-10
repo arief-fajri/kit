@@ -9,8 +9,24 @@
 		sans-serif;
 }
 
+html {
+	-webkit-text-size-adjust: 100%;
+	-moz-text-size-adjust: 100%;
+	text-size-adjust: 100%;
+}
+
 body {
 	@apply bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100;
+	overflow-x: hidden;
+}
+
+/* Better touch targets on mobile */
+@media (max-width: 768px) {
+	button,
+	a {
+		min-height: 44px;
+		min-width: 44px;
+	}
 }
 
 pre {

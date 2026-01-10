@@ -7,11 +7,11 @@
 	<title>Installation - @rief/kit</title>
 </svelte:head>
 
-<div class="space-y-8">
-	<h1 class="text-4xl font-bold">Installation</h1>
+<div class="space-y-6 md:space-y-8">
+	<h1 class="text-2xl md:text-4xl font-bold">Installation</h1>
 
 	<section>
-		<h2 class="text-2xl font-semibold mb-4">Install Package</h2>
+		<h2 class="text-xl md:text-2xl font-semibold mb-3 md:mb-4">Install Package</h2>
 		<p class="mb-4 text-gray-700 dark:text-gray-300">
 			Install @rief/kit using your preferred package manager:
 		</p>
@@ -19,7 +19,7 @@
 	</section>
 
 	<section>
-		<h2 class="text-2xl font-semibold mb-4">Peer Dependencies</h2>
+		<h2 class="text-xl md:text-2xl font-semibold mb-3 md:mb-4">Peer Dependencies</h2>
 		<p class="mb-4 text-gray-700 dark:text-gray-300">
 			Make sure you have Svelte 4.0.0 or higher installed:
 		</p>
@@ -27,7 +27,7 @@
 	</section>
 
 	<section>
-		<h2 class="text-2xl font-semibold mb-4">Basic Usage</h2>
+		<h2 class="text-xl md:text-2xl font-semibold mb-3 md:mb-4">Basic Usage</h2>
 		<p class="mb-4 text-gray-700 dark:text-gray-300">Import and use components:</p>
 		<CodeBlock code={codeExamples.installation.usage} language="svelte" />
 	</section>

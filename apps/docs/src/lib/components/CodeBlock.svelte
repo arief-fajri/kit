@@ -1,17 +1,18 @@
 <script lang="ts">
-	import { Button } from '@rief/kit';
-	import { onMount } from 'svelte';
-	import { browser } from '$app/environment';
-	import { getHighlighter, type Highlighter } from 'shiki';
-	import { theme } from '../stores/theme';
+	import { Button } from "@rief/kit";
+	import { onMount } from "svelte";
+	import { browser } from "$app/environment";
+	import { getHighlighter, type Highlighter } from "shiki";
+	import { theme } from "../stores/theme";
 
-	export let code: string = '';
-	export let language: string = 'text';
+	export let code: string = "";
+	export let language: string = "text";
 	export let showCopyButton: boolean = true;
 	export let showLineNumbers: boolean = false;
 	export let maxHeight: string | undefined = undefined;
+	export let className: string = "rounded-lg";
 
-	let highlightedCode = '';
+	let highlightedCode = "";
 	let copied = false;
 	let loading = true;
 	let error: string | null = null;
@@ -19,34 +20,32 @@
 
 	// Supported languages
 	const supportedLanguages = [
-		'svelte',
-		'typescript',
-		'javascript',
-		'css',
-		'json',
-		'bash',
-		'shell',
-		'html',
-		'markdown',
-		'yaml',
-		'text'
+		"svelte",
+		"typescript",
+		"javascript",
+		"css",
+		"json",
+		"bash",
+		"shell",
+		"html",
+		"markdown",
+		"yaml",
+		"text"
 	] as const;
 
 	// Normalize language
-	$: normalizedLanguage = supportedLanguages.includes(language as any)
-		? language
-		: 'text';
+	$: normalizedLanguage = supportedLanguages.includes(language as any) ? language : "text";
 
 	// Get theme based on current theme state
-	function getTheme(): 'github-light' | 'github-dark' {
-		if (!browser) return 'github-light';
-		if ($theme === 'dark') return 'github-dark';
-		if ($theme === 'system') {
-			return window.matchMedia('(prefers-color-scheme: dark)').matches
-				? 'github-dark'
-				: 'github-light';
+	function getTheme(): "github-light" | "github-dark" {
+		if (!browser) return "github-light";
+		if ($theme === "dark") return "github-dark";
+		if ($theme === "system") {
+			return window.matchMedia("(prefers-color-scheme: dark)").matches
+				? "github-dark"
+				: "github-light";
 		}
-		return 'github-light';
+		return "github-light";
 	}
 
 	// Initialize highlighter
@@ -61,15 +60,15 @@
 			error = null;
 
 			highlighter = await getHighlighter({
-				themes: ['github-light', 'github-dark'],
+				themes: ["github-light", "github-dark"],
 				langs: supportedLanguages as any
 			});
 
 			updateHighlight();
 			loading = false;
 		} catch (err) {
-			console.error('Failed to initialize code highlighter:', err);
-			error = 'Failed to load syntax highlighter';
+			console.error("Failed to initialize code highlighter:", err);
+			error = "Failed to load syntax highlighter";
 			loading = false;
 		}
 	}
@@ -77,7 +76,7 @@
 	// Update highlighted code
 	function updateHighlight() {
 		if (!highlighter || !code) {
-			highlightedCode = '';
+			highlightedCode = "";
 			return;
 		}
 
@@ -88,15 +87,15 @@
 				theme: currentTheme
 			});
 		} catch (err) {
-			console.error('Failed to highlight code:', err);
-			error = 'Failed to highlight code';
+			console.error("Failed to highlight code:", err);
+			error = "Failed to highlight code";
 			highlightedCode = escapeHtml(code);
 		}
 	}
 
 	// Escape HTML for fallback
 	function escapeHtml(text: string): string {
-		const div = document.createElement('div');
+		const div = document.createElement("div");
 		div.textContent = text;
 		return div.innerHTML;
 	}
@@ -112,8 +111,8 @@
 				copied = false;
 			}, 2000);
 		} catch (err) {
-			console.error('Failed to copy code:', err);
-			error = 'Failed to copy to clipboard';
+			console.error("Failed to copy code:", err);
+			error = "Failed to copy to clipboard";
 		}
 	}
 
@@ -131,18 +130,18 @@
 
 		// Set up media query listener for system theme
 		if (browser) {
-			mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+			mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 			mediaQueryHandler = () => {
-				if ($theme === 'system' && highlighter) {
+				if ($theme === "system" && highlighter) {
 					updateHighlight();
 				}
 			};
-			mediaQuery.addEventListener('change', mediaQueryHandler);
+			mediaQuery.addEventListener("change", mediaQueryHandler);
 		}
 
 		return () => {
 			if (mediaQuery && mediaQueryHandler) {
-				mediaQuery.removeEventListener('change', mediaQueryHandler);
+				mediaQuery.removeEventListener("change", mediaQueryHandler);
 			}
 		};
 	});
@@ -155,32 +154,35 @@
 
 <div class="relative group code-block">
 	{#if showCopyButton && browser}
-		<div class="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+		<div
+			class="absolute top-2 right-2 z-10 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
+		>
 			<Button
-				label={copied ? 'Copied!' : 'Copy'}
-				styling={{ variant: 'text', size: 'sm' }}
+				label={copied ? "Copied!" : "Copy"}
+				styling={{ variant: "text", size: "sm" }}
 				behavior={{ disabled: loading || !!error }}
 				on:click={copyCode}
-				ariaLabel={copied ? 'Code copied to clipboard' : 'Copy code to clipboard'}
+				ariaLabel={copied ? "Code copied to clipboard" : "Copy code to clipboard"}
 			/>
 		</div>
 	{/if}
 
 	<div
-		class="code-block__container overflow-x-auto rounded-lg bg-gray-100 dark:bg-gray-800 p-4 {error
+		class="code-block__container overflow-x-auto bg-gray-100 dark:bg-gray-800 p-3 md:p-4 {error
 			? 'border border-red-300 dark:border-red-700'
-			: ''}"
-		style={maxHeight ? `max-height: ${maxHeight}; overflow-y: auto;` : ''}
+			: ''} {className}"
+		style={maxHeight ? `max-height: ${maxHeight}; overflow-y: auto;` : ""}
 	>
 		{#if loading && browser}
 			<div class="text-sm text-gray-500 dark:text-gray-400">Loading...</div>
 		{:else if error}
 			<div class="text-sm text-red-600 dark:text-red-400 mb-2">{error}</div>
-			<pre class="m-0"><code class="text-sm">{code || '(empty)'}</code></pre>
+			<pre class="m-0"><code class="text-sm">{code || "(empty)"}</code></pre>
 		{:else if highlightedCode}
 			{@html highlightedCode}
 		{:else}
-			<pre class="m-0"><code class="text-sm language-{normalizedLanguage}">{code || '(empty)'}</code></pre>
+			<pre class="m-0"><code class="text-sm language-{normalizedLanguage}">{code || "(empty)"}</code
+				></pre>
 		{/if}
 	</div>
 
@@ -189,7 +191,7 @@
 	{/if}
 </div>
 
-<style>
+<style lang="postcss">
 	:global(.code-block pre) {
 		@apply m-0;
 		background: transparent !important;
@@ -197,7 +199,7 @@
 
 	:global(.code-block code) {
 		@apply text-sm;
-		font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+		font-family: "Fira Code", "Consolas", "Monaco", "Courier New", monospace;
 	}
 
 	:global(.code-block .shiki) {

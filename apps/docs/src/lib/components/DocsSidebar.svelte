@@ -13,10 +13,11 @@
 		if (!items) return false;
 		return items.some((item) => isActive(item.href) || hasActiveChild(item.items));
 	}
-
 </script>
 
-<aside class="w-64 border-r border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 p-4 overflow-y-auto">
+<aside
+	class="w-full md:w-64 border-r border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 p-3 md:p-4 overflow-y-auto h-full"
+>
 	<nav class="space-y-2">
 		{#each navigation as section}
 			{#if section.items}

@@ -6,13 +6,13 @@
 	<title>@rief/kit - Svelte Component Library</title>
 </svelte:head>
 
-<div class="space-y-8">
-	<div class="text-center py-12">
-		<h1 class="text-5xl font-bold mb-4">@rief/kit</h1>
-		<p class="text-xl text-gray-600 dark:text-gray-400 mb-8">
+<div class="space-y-6 md:space-y-8">
+	<div class="text-center py-8 md:py-12">
+		<h1 class="text-3xl md:text-5xl font-bold mb-4">@rief/kit</h1>
+		<p class="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-6 md:mb-8">
 			A modern Svelte component library built with TypeScript
 		</p>
-		<div class="flex gap-4 justify-center">
+		<div class="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center">
 			<Button
 				label="Get Started"
 				styling={{ variant: 'filled', size: 'lg' }}
@@ -26,7 +26,7 @@
 		</div>
 	</div>
 
-	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
 		<Card styling={{ variant: 'default', padding: 'md' }}>
 			<h3 class="text-xl font-semibold mb-2">🎨 Beautiful Components</h3>
 			<p class="text-gray-600 dark:text-gray-400">
