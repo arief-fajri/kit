@@ -1,7 +1,16 @@
 <script lang="ts">
   import { createEventDispatcher, onMount, onDestroy } from "svelte";
   import { slide } from "svelte/transition";
-  import { uniqueId } from "@rief/utils";
+  import { safeUniqueId, formatNumberLocale } from "@rief/utils";
+  import {
+    applyMask,
+    removeMask,
+    getPatternLength,
+    getPatternSeparators,
+    sanitizeNumericInput,
+    shouldPreventInput,
+    parseAndFormatNumber
+  } from "@rief/utils";
   import type {
     InputTextProps,
     InputTextStyling,
@@ -9,16 +18,6 @@
     InputTextBehavior,
     InputType
   } from "../../types.js";
-  import {
-    applyMask,
-    removeMask,
-    getPatternLength,
-    getPatternSeparators,
-    formatNumber,
-    sanitizeNumericInput,
-    shouldPreventInput,
-    parseAndFormatNumber
-  } from "./utils.js";
 
   // Core props
   export let type: InputType = "text";
@@ -30,34 +29,29 @@
   export let inputRef: HTMLInputElement | undefined = undefined;
 
   // Generate unique ID if not provided (SSR-safe)
-  let inputId: string = id || (typeof window !== "undefined" ? uniqueId("input-") : "");
-  onMount(() => {
-    if (!id && !inputId) {
-      inputId = uniqueId("input-");
-    }
-  });
+  let inputId: string = id || safeUniqueId("input-");
 
   // Grouped props
   export let styling: InputTextStyling = {};
   export let validation: InputTextValidation = {};
   export let behavior: InputTextBehavior = {};
 
-  // Computed props with defaults
+  // Computed props with defaults (using ?? for proper nullish coalescing)
   $: computedStyling = {
-    size: styling.size || "md",
-    variant: styling.variant || "default",
-    inputClass: styling.inputClass || "",
-    wrapperClass: styling.wrapperClass || "",
-    labelClass: styling.labelClass || "",
-    wrapperStyle: styling.wrapperStyle || ""
+    size: styling.size ?? "md",
+    variant: styling.variant ?? "default",
+    inputClass: styling.inputClass ?? "",
+    wrapperClass: styling.wrapperClass ?? "",
+    labelClass: styling.labelClass ?? "",
+    wrapperStyle: styling.wrapperStyle ?? ""
   };
 
   $: computedValidation = {
     required: validation.required ?? false,
     isError: validation.isError ?? false,
-    errorMessage: validation.errorMessage || "",
+    errorMessage: validation.errorMessage ?? "",
     maxLength: validation.maxLength ?? null,
-    pattern: validation.pattern || "",
+    pattern: validation.pattern ?? "",
     showMaxLengthCounter: validation.showMaxLengthCounter ?? false
   };
 
@@ -68,7 +62,7 @@
     clearable: behavior.clearable ?? false,
     useKeyup: behavior.useKeyup ?? true,
     useNumberFormat: behavior.useNumberFormat ?? true,
-    autocomplete: behavior.autocomplete || ""
+    autocomplete: behavior.autocomplete ?? ""
   };
 
   // Internal state
@@ -113,7 +107,7 @@
   $: if (value && !firstLoad) {
     firstLoad = true;
     if (type === "number" && computedBehavior.useNumberFormat) {
-      value = formatNumber(value, "id-ID", true);
+      value = formatNumberLocale(value, "id-ID", true);
     }
   }
 

@@ -16,6 +16,32 @@ export interface FocusEventDetail {
 	originalEvent: FocusEvent;
 }
 
+export interface CheckboxStyling {
+	/** Checkbox size variant */
+	size?: CheckboxSize;
+	/** Checkbox visual variant */
+	variant?: CheckboxVariant;
+	/** Custom CSS class for wrapper */
+	wrapperClass?: string;
+	/** Custom CSS class for label */
+	labelClass?: string;
+	/** Custom CSS class for checkbox input */
+	inputClass?: string;
+	/** Custom inline styles for wrapper */
+	wrapperStyle?: string;
+}
+
+export interface CheckboxBehavior {
+	/** Disabled state */
+	disabled?: boolean;
+	/** Readonly state */
+	readonly?: boolean;
+	/** Required field indicator */
+	required?: boolean;
+	/** Stop click event propagation */
+	stopPropagation?: boolean;
+}
+
 export interface CheckboxProps {
 	/** Unique identifier for the checkbox input */
 	id?: string;
@@ -23,28 +49,14 @@ export interface CheckboxProps {
 	name?: string;
 	/** Controls the checked state of the checkbox */
 	checked?: boolean;
-	/** Disables the checkbox interaction */
-	disabled?: boolean;
-	/** Marks the checkbox as required for form validation */
-	required?: boolean;
-	/** Makes the checkbox read-only (visually interactive but unchangeable) */
-	readonly?: boolean;
 	/** Value associated with the checkbox for form submission */
 	value?: any;
 	/** Text label displayed next to the checkbox */
 	label?: string;
-	/** Size variant of the checkbox */
-	size?: CheckboxSize;
-	/** Visual variant with semantic colors */
-	variant?: CheckboxVariant;
-	/** Additional CSS classes for custom styling */
-	class?: string;
-	/** Prevents click event bubbling when enabled */
-	stopPropagation?: boolean;
-	/** Change event handler */
-	onChange?: (event: CustomEvent<CheckboxEventDetail>) => void;
-	/** Focus event handler */
-	onFocus?: (event: CustomEvent<FocusEventDetail>) => void;
-	/** Blur event handler */
-	onBlur?: (event: CustomEvent<FocusEventDetail>) => void;
+	/** Styling configuration */
+	styling?: CheckboxStyling;
+	/** Behavior configuration */
+	behavior?: CheckboxBehavior;
+	/** Reference to checkbox DOM element */
+	checkboxRef?: HTMLInputElement;
 }

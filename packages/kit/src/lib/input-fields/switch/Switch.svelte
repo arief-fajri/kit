@@ -1,27 +1,38 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
-  import type { SwitchSize, SwitchVariant, SwitchEventDetail, FocusEventDetail } from "./types";
+  import { safeUniqueId } from "@rief/utils";
+  import type { SwitchProps, SwitchStyling, SwitchBehavior, SwitchEventDetail, FocusEventDetail } from "./types.js";
 
   // Core props
   export let id: string | undefined = undefined;
   export let name: string = "switch";
   export let checked: boolean = false;
-  export let disabled: boolean = false;
-  export let required: boolean = false;
   export let value: any = undefined;
-
-  // Content props
   export let label: string = "";
+  export let switchRef: HTMLInputElement | undefined = undefined;
 
-  // Layout props
-  export let size: SwitchSize = "md";
-  export let variant: SwitchVariant = "default";
+  // Generate unique ID if not provided (SSR-safe)
+  let switchId: string = id || safeUniqueId("switch-");
 
-  // Styling props
-  export let className: string = "";
+  // Grouped props
+  export let styling: SwitchStyling = {};
+  export let behavior: SwitchBehavior = {};
 
-  // Behavior props
-  export let stopPropagation: boolean = false;
+  // Computed props with defaults
+  $: computedStyling = {
+    size: styling.size ?? "md",
+    variant: styling.variant ?? "default",
+    wrapperClass: styling.wrapperClass ?? "",
+    labelClass: styling.labelClass ?? "",
+    inputClass: styling.inputClass ?? "",
+    wrapperStyle: styling.wrapperStyle ?? ""
+  };
+
+  $: computedBehavior = {
+    disabled: behavior.disabled ?? false,
+    required: behavior.required ?? false,
+    stopPropagation: behavior.stopPropagation ?? false
+  };
 
   // Constants
   const dispatch = createEventDispatcher<{
@@ -30,7 +41,7 @@
     blur: FocusEventDetail;
   }>();
 
-  const sizeValues: Record<SwitchSize, string> = {
+  const sizeValues: Record<typeof computedStyling.size, string> = {
     xs: "0.75",
     sm: "0.875",
     md: "1",
@@ -40,7 +51,8 @@
 
   // Event handlers
   const handleChange = (event: Event) => {
-    if (disabled) return;
+    if (computedBehavior.disabled) return;
+    if (computedBehavior.stopPropagation) event.stopPropagation();
 
     dispatch("change", {
       checked,
@@ -59,31 +71,33 @@
 </script>
 
 <div
-  class="switch-wrapper {className}"
-  style="--switch-size: {sizeValues[size]};"
+  class="switch-wrapper {computedStyling.wrapperClass}"
+  style="--switch-size: {sizeValues[computedStyling.size]}; {computedStyling.wrapperStyle}"
   on:click={(e) => {
-    if (stopPropagation) e.stopPropagation();
+    if (computedBehavior.stopPropagation) e.stopPropagation();
   }}
   role="presentation"
 >
-  <label class="switch-container" for={id}>
+  <label class="switch-container {computedStyling.labelClass}" for={switchId}>
     <input
       type="checkbox"
       role="switch"
-      {id}
+      class="{computedStyling.inputClass}"
+      id={switchId}
+      bind:this={switchRef}
       {name}
       bind:checked
-      {disabled}
-      {required}
+      disabled={computedBehavior.disabled}
+      required={computedBehavior.required}
       {value}
       aria-checked={checked}
-      aria-disabled={disabled}
+      aria-disabled={computedBehavior.disabled}
       on:change={handleChange}
       on:focus={handleFocus}
       on:blur={handleBlur}
       {...$$restProps}
     />
-    <span class="switch-slider" data-variant={variant} />
+    <span class="switch-slider" data-variant={computedStyling.variant} />
     <slot name="label">
       {#if label}
         <span class="switch-label">{label}</span>

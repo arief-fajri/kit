@@ -84,6 +84,7 @@ export type {
   TableProps,
   TableData,
   TableEvents,
+  TableListingProps,
   SortOrder,
   SortConfig,
   DataLoadParams,
@@ -97,6 +98,8 @@ export type {
   CheckboxVariant,
   CheckboxSize,
   CheckboxEventDetail,
+  CheckboxStyling,
+  CheckboxBehavior,
   FocusEventDetail
 } from './input-fields/checkbox/types.js';
 
@@ -105,8 +108,21 @@ export type {
   SwitchProps,
   SwitchVariant,
   SwitchSize,
-  SwitchEventDetail
+  SwitchEventDetail,
+  SwitchStyling,
+  SwitchBehavior
 } from './input-fields/switch/types.js';
+
+// Export Radiobox types
+export type {
+  RadioboxProps,
+  RadioboxSize,
+  RadioboxVariant,
+  RadioboxColor,
+  RadioboxEventDetail,
+  RadioboxStyling,
+  RadioboxBehavior
+} from './input-fields/radiobox/types.js';
 
 // Export DatePicker types
 export type {
@@ -132,3 +148,12 @@ export {
   validateRequiredFields,
   getFormErrors
 } from '@rief/utils';
+
+// Export helper utilities
+export {
+  validateRequiredProp,
+  validateEnumProp,
+  getAriaDescribedBy,
+  getErrorId,
+  getHelperId
+} from './helpers/index.js';

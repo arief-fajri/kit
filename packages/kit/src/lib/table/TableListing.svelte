@@ -2,80 +2,11 @@
   import SortHeader from "./SortHeader.svelte";
   import Pagination from "../pagination/Pagination.svelte";
   import { createEventDispatcher } from "svelte";
-  import { uniqueId } from "@rief/utils";
-  import type { TableColumn, TableRow } from "../../types.js";
+  import { safeUniqueId, normalizeTableColumn, compareValues } from "@rief/utils";
+  import type { TableColumn, TableRow, TableListingProps } from "../types";
 
-  /**
-   * Props interface for TableListing component
-   */
-  interface TableListingProps<T = Record<string, unknown>> {
-    /** Column definitions */
-    columns: TableColumn<T>[];
-    /** Data rows */
-    data: TableRow<T>[];
-    /** Current sort string (e.g., "-created_at" for descending, "+name" for ascending) */
-    sort?: string;
-    /** Current offset for pagination (0-based) */
-    currentOffset?: number;
-    /** Items per page */
-    limit?: number;
-    /** Empty state message */
-    emptyMessage?: string;
-    /** Custom CSS class for table wrapper */
-    tableContainerClass?: string;
-    /** Custom CSS class for header */
-    headerClass?: string;
-    /** Custom CSS class for rows (string or function) */
-    rowClass?: string | ((row: TableRow<T>, index: number) => string);
-    /** Custom CSS class for cells (string or function) */
-    cellClass?: string | ((column: TableColumn<T>, row: TableRow<T>) => string);
-    /** Show pagination component */
-    showPagination?: boolean;
-    /** Pagination size */
-    paginationSize?: "sm" | "md" | "lg";
-    /** Pagination variant */
-    paginationVariant?: "default" | "minimal";
-    /** Show first/last page buttons in pagination */
-    paginationShowFirstLast?: boolean;
-    /** Show page info in pagination */
-    paginationShowPageInfo?: boolean;
-    /** Auto reset offset when sort changes */
-    autoResetOffsetOnSort?: boolean;
-    /** Scroll to top on page change */
-    scrollToTopOnPageChange?: boolean;
-    /** Custom sort function */
-    customSortFn?: (data: TableRow<T>[], sortKey: string, isDescending: boolean) => TableRow<T>[];
-    /** Enable row click handling */
-    rowClickable?: boolean;
-    /** Loading state */
-    loading?: boolean;
-    /** Enable row selection */
-    selectable?: boolean;
-    /** Selected row IDs/indices */
-    selectedRows?: (string | number)[];
-    /** Custom CSS variables for theming */
-    cssVariables?: Record<string, string>;
-    /** Enable hover effect on rows */
-    enableHover?: boolean;
-    /** Custom hover background color */
-    hoverColor?: string;
-    /** Table ID for accessibility */
-    tableId?: string;
-    /** ARIA label for table */
-    ariaLabel?: string;
-    /** Custom tbody class */
-    tbodyClass?: string;
-    /** Custom pagination wrapper class */
-    paginationClass?: string;
-    /** Enable drag and drop */
-    draggable?: boolean;
-    /** Function to check if a row can be dropped on target row */
-    canDrop?: (draggedRow: TableRow<T>, targetRow: TableRow<T>) => boolean;
-    /** Enable server-side pagination and sorting */
-    serverSide?: boolean;
-    /** Total number of rows (required for server-side mode) */
-    totalRows?: number;
-  }
+  // Type for normalizeTableColumn input (includes index signature)
+  type NormalizeTableColumnInput = { key?: string; field?: string; title?: string; label?: string; name?: string; alias?: string; sortable?: boolean; [key: string]: unknown };
 
   // Props with defaults
   export let columns: TableListingProps["columns"] = [];
@@ -122,60 +53,11 @@
     drop: { draggedRow: TableRow; targetRow: TableRow; draggedIndex: number; targetIndex: number };
   }>();
 
-  // Generate unique table ID if not provided
-  $: uniqueTableId = tableId || (typeof window !== "undefined" ? uniqueId("table-listing-") : "table-listing-ssr");
+  // Generate unique table ID if not provided (SSR-safe)
+  $: uniqueTableId = tableId || safeUniqueId("table-listing-");
 
-  // Normalize column key/field and title/label/name
-  function normalizeColumn(col: TableColumn): TableColumn & { key: string; title: string } {
-    const key = (col.key || col.field || "") as string;
-    const title = (col.title || col.label || col.name || col.alias || String(key)) as string;
-    return {
-      ...col,
-      key,
-      title,
-      sortable: col.sortable ?? false
-    };
-  }
-
-  $: normalizedColumns = columns.map(normalizeColumn);
-
-  // Utility: Check if value is a date
-  function isDateValue(value: unknown): boolean {
-    if (typeof value === "string") {
-      const date = new Date(value);
-      return !isNaN(date.getTime()) && value.match(/^\d{4}-\d{2}-\d{2}/) !== null;
-    }
-    return value instanceof Date;
-  }
-
-  // Utility: Compare values for sorting
-  function compareValues(valueA: unknown, valueB: unknown, isDescending: boolean): number {
-    // Handle null/undefined
-    if (valueA == null) valueA = "";
-    if (valueB == null) valueB = "";
-
-    // Handle dates
-    if (isDateValue(valueA) || isDateValue(valueB)) {
-      const dateA = new Date(valueA as string | Date).getTime();
-      const dateB = new Date(valueB as string | Date).getTime();
-      return isDescending ? dateB - dateA : dateA - dateB;
-    }
-
-    // Handle numeric values
-    if (typeof valueA === "number" && typeof valueB === "number") {
-      return isDescending ? valueB - valueA : valueA - valueB;
-    }
-
-    // Handle string values
-    const strA = String(valueA).toLowerCase();
-    const strB = String(valueB).toLowerCase();
-
-    if (isDescending) {
-      return strA > strB ? -1 : strA < strB ? 1 : 0;
-    } else {
-      return strA < strB ? -1 : strA > strB ? 1 : 0;
-    }
-  }
+  // Normalize columns using utility function
+  $: normalizedColumns = columns.map((col) => normalizeTableColumn(col as NormalizeTableColumnInput)) as TableColumn[];
 
   // Default sort function
   const defaultSortFn = (dataToSort: TableRow[], sortKey: string, isDescending: boolean): TableRow[] => {
@@ -188,6 +70,7 @@
   };
 
   // Sorted data based on sort (skip if server-side)
+  // Optimized: Only recalculates when sort, data, or loading actually changes
   $: sortedData = (() => {
     if (serverSide || !sort || data.length === 0 || loading) {
       return data;
@@ -416,13 +299,13 @@
           {/if}
           {#each normalizedColumns as column}
             <SortHeader
-              name={column.title}
-              key={column.key}
+              name={column.title ?? ""}
+              key={column.key ?? ""}
               bind:sort
               disable={!column.sortable || loading}
               on:sorting={handleSort}
-              class={column.className}
-              colClass={column.colClass}
+              className={column.className ?? ""}
+              colClass={column.colClass ?? ""}
             />
           {/each}
         </tr>

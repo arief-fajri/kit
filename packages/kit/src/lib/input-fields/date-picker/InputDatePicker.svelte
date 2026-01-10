@@ -168,6 +168,8 @@
       aria-haspopup="dialog"
       aria-controls={id ? `${id}-calendar` : undefined}
       aria-label={label || computedBehavior.placeholder}
+      aria-invalid={computedValidation.isError}
+      aria-describedby={computedValidation.isError && id ? `${id}-error` : undefined}
       tabindex={computedBehavior.disabled ? -1 : 0}
     >
       <span

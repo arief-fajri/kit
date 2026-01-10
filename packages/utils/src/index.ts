@@ -34,3 +34,22 @@ export { uniqueId } from './id/index.js';
 
 // JSON utilities
 export { isJson } from './json/index.js';
+
+// SSR utilities
+export { isBrowser, safeUniqueId } from './ssr/index.js';
+
+// Input utilities
+export {
+  applyMask,
+  removeMask,
+  getPatternLength,
+  getPatternSeparators,
+  sanitizeNumericInput,
+  isValidNumericKey,
+  shouldPreventInput,
+  parseAndFormatNumber,
+  formatNumberLocale
+} from './input/index.js';
+
+// Table utilities
+export { isDateValue, compareValues, normalizeTableColumn } from './table/index.js';

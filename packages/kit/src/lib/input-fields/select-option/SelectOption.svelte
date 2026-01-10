@@ -362,6 +362,8 @@
       aria-haspopup="listbox"
       aria-controls={id ? `${id}-listbox` : undefined}
       aria-label={label || computedBehavior.placeholder}
+      aria-invalid={computedValidation.isError}
+      aria-describedby={computedValidation.isError && id ? `${id}-error` : undefined}
       tabindex={computedBehavior.disabled ? -1 : 0}
     >
       {#if openDropdown && computedBehavior.isSearchable}

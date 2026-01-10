@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from "svelte";
   import { slide } from "svelte/transition";
-  import { uniqueId } from "@rief/utils";
+  import { safeUniqueId } from "@rief/utils";
   import type { TextAreaStyling, TextAreaValidation, TextAreaBehavior, TextAreaLayout } from "../../types.js";
 
   // Core props
@@ -13,12 +13,7 @@
   export let textareaRef: HTMLTextAreaElement | undefined = undefined;
 
   // Generate unique ID if not provided (SSR-safe)
-  let textareaId: string = id || (typeof window !== "undefined" ? uniqueId("textarea-") : "");
-  onMount(() => {
-    if (!id && !textareaId) {
-      textareaId = uniqueId("textarea-");
-    }
-  });
+  let textareaId: string = id || safeUniqueId("textarea-");
 
   // Grouped props
   export let styling: TextAreaStyling = {};
@@ -28,18 +23,18 @@
 
   // Computed props with defaults
   $: computedStyling = {
-    size: styling.size || "md",
-    variant: styling.variant || "default",
-    inputClass: styling.inputClass || "",
-    wrapperClass: styling.wrapperClass || "",
-    labelClass: styling.labelClass || "",
-    wrapperStyle: styling.wrapperStyle || ""
+    size: styling.size ?? "md",
+    variant: styling.variant ?? "default",
+    inputClass: styling.inputClass ?? "",
+    wrapperClass: styling.wrapperClass ?? "",
+    labelClass: styling.labelClass ?? "",
+    wrapperStyle: styling.wrapperStyle ?? ""
   };
 
   $: computedValidation = {
     required: validation.required ?? false,
     isError: validation.isError ?? false,
-    errorMessage: validation.errorMessage || "",
+    errorMessage: validation.errorMessage ?? "",
     maxLength: validation.maxLength ?? null,
     showMaxLengthCounter: validation.showMaxLengthCounter ?? false
   };
@@ -49,8 +44,8 @@
     readonly: behavior.readonly ?? false,
     autoFocus: behavior.autoFocus ?? false,
     clearable: behavior.clearable ?? false,
-    autocomplete: behavior.autocomplete || "",
-    excludedKeys: behavior.excludedKeys || []
+    autocomplete: behavior.autocomplete ?? "",
+    excludedKeys: behavior.excludedKeys ?? []
   };
 
   $: computedLayout = {

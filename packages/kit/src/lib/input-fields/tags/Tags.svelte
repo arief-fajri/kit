@@ -573,6 +573,8 @@
           {placeholder}
           disabled={disable || readonly}
           autocomplete="off"
+          aria-invalid={isError}
+          aria-describedby={isError && id ? `${id}-error` : undefined}
           class:tags__input--hidden={maxTags === tags.length}
           inputmode={numberOnly ? (allowDecimal ? "decimal" : "numeric") : undefined}
           pattern={numberOnly ? (allowDecimal ? "[0-9]*[.,]?[0-9]*" : "[0-9]*") : undefined}

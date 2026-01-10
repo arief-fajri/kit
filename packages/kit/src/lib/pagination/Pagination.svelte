@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
   import { ChevronsLeft, ChevronLeft, ChevronsRight, ChevronRight } from "lucide-svelte";
-  import type { PaginationProps, PaginationEvents, PaginationSize, PaginationVariant } from "../../types.js";
+  import type { PaginationProps, PaginationEvents, PaginationSize, PaginationVariant } from "../types.js";
 
   // ============================================
   // PROPS - Organized by category

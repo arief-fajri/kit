@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
-  import type { CardVariant, CardSize, CardPadding, CardProps } from "../../types.js";
+  import type { CardVariant, CardSize, CardPadding, CardProps } from "../types.js";
 
   // Props with defaults
   export let variant: CardProps["variant"] = "default";

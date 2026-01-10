@@ -78,6 +78,9 @@ importers:
       '@rief/utils':
         specifier: workspace:*
         version: link:../utils
+      lucide-svelte:
+        specifier: ^0.562.0
+        version: 0.562.0(svelte@4.2.20)
     devDependencies:
       '@sveltejs/adapter-auto':
         specifier: ^3.0.0
@@ -121,55 +124,6 @@ importers:
       typedoc:
         specifier: ^0.25.0
         version: 0.25.13(typescript@5.9.3)
-      typescript:
-        specifier: ^5.3.3
-        version: 5.9.3
-      vite:
-        specifier: ^5.0.0
-        version: 5.4.21
-
-  packages/ui:
-    dependencies:
-      lucide-svelte:
-        specifier: ^0.562.0
-        version: 0.562.0(svelte@4.2.20)
-    devDependencies:
-      '@sveltejs/kit':
-        specifier: ^2.0.0
-        version: 2.48.5(@sveltejs/vite-plugin-svelte@3.1.2)(svelte@4.2.20)(vite@5.4.21)
-      '@sveltejs/package':
-        specifier: ^2.0.0
-        version: 2.5.4(svelte@4.2.20)(typescript@5.9.3)
-      '@sveltejs/vite-plugin-svelte':
-        specifier: ^3.0.0
-        version: 3.1.2(svelte@4.2.20)(vite@5.4.21)
-      '@typescript-eslint/eslint-plugin':
-        specifier: ^6.0.0
-        version: 6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.1)(typescript@5.9.3)
-      '@typescript-eslint/parser':
-        specifier: ^6.0.0
-        version: 6.21.0(eslint@8.57.1)(typescript@5.9.3)
-      eslint:
-        specifier: ^8.57.0
-        version: 8.57.1
-      eslint-config-prettier:
-        specifier: ^9.1.0
-        version: 9.1.2(eslint@8.57.1)
-      eslint-plugin-svelte:
-        specifier: ^2.35.0
-        version: 2.46.1(eslint@8.57.1)(svelte@4.2.20)
-      prettier:
-        specifier: ^3.2.5
-        version: 3.6.2
-      prettier-plugin-svelte:
-        specifier: ^3.2.0
-        version: 3.4.0(prettier@3.6.2)(svelte@4.2.20)
-      svelte:
-        specifier: ^4.2.0
-        version: 4.2.20
-      svelte-check:
-        specifier: ^3.6.0
-        version: 3.8.6(postcss@8.5.6)(svelte@4.2.20)
       typescript:
         specifier: ^5.3.3
         version: 5.9.3

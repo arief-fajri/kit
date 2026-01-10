@@ -1,7 +1,17 @@
-// Button component types
+/**
+ * Button component types
+ */
+
+/** Visual style variant for buttons */
 export type ButtonVariant = 'filled' | 'outlined' | 'text' | 'link';
+
+/** Size variant for buttons */
 export type ButtonSize = 'sm' | 'md' | 'lg' | 'xl';
+
+/** Interactive state of the button */
 export type ButtonState = 'default' | 'active' | 'selected' | 'highlight';
+
+/** Semantic color scheme for buttons (can be custom string for theming) */
 export type ButtonSemantic =
 	| 'primary'
 	| 'secondary'
@@ -10,10 +20,20 @@ export type ButtonSemantic =
 	| 'warning'
 	| 'info'
 	| string;
+
+/** Position of icon relative to button text */
 export type IconPosition = 'left' | 'right' | 'only';
 
+/** Placement position for dropdowns and popovers */
 export type Placement = 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end' | 'auto';
 
+/**
+ * Button component props
+ * @example
+ * ```svelte
+ * <Button label="Click me" variant="filled" size="md" semantic="primary" />
+ * ```
+ */
 export interface ButtonProps {
 	/** Button text content */
 	label?: string;
@@ -59,11 +79,22 @@ export interface ButtonProps {
 	onclick?: (event: MouseEvent) => void;
 }
 
-// InputText component types
+/**
+ * InputText component types
+ */
+
+/** HTML input type attribute values */
 export type InputType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search';
+
+/** Size variant for input fields */
 export type InputSize = 'sm' | 'md' | 'lg';
+
+/** Visual style variant for input fields */
 export type InputVariant = 'default' | 'filled' | 'outlined';
 
+/**
+ * Styling configuration for InputText component
+ */
 export interface InputTextStyling {
 	/** Input size variant */
 	size?: InputSize;
@@ -79,6 +110,9 @@ export interface InputTextStyling {
 	wrapperStyle?: string;
 }
 
+/**
+ * Validation configuration for InputText component
+ */
 export interface InputTextValidation {
 	/** Required field indicator */
 	required?: boolean;
@@ -94,6 +128,9 @@ export interface InputTextValidation {
 	showMaxLengthCounter?: boolean;
 }
 
+/**
+ * Behavior configuration for InputText component
+ */
 export interface InputTextBehavior {
 	/** Disabled state */
 	disabled?: boolean;
@@ -111,6 +148,18 @@ export interface InputTextBehavior {
 	autocomplete?: string;
 }
 
+/**
+ * Props for InputText component
+ * @example
+ * ```svelte
+ * <InputText
+ *   value={name}
+ *   label="Name"
+ *   validation={{ required: true, isError: hasError, errorMessage: "Name is required" }}
+ *   behavior={{ disabled: false, clearable: true }}
+ * />
+ * ```
+ */
 export interface InputTextProps {
 	/** Input type */
 	type?: InputType;
@@ -134,7 +183,13 @@ export interface InputTextProps {
 	inputRef?: HTMLInputElement;
 }
 
-// TextArea component types
+/**
+ * TextArea component types
+ */
+
+/**
+ * Styling configuration for TextArea component
+ */
 export interface TextAreaStyling {
 	/** TextArea size variant */
 	size?: InputSize;
@@ -150,6 +205,9 @@ export interface TextAreaStyling {
 	wrapperStyle?: string;
 }
 
+/**
+ * Validation configuration for TextArea component
+ */
 export interface TextAreaValidation {
 	/** Required field indicator */
 	required?: boolean;
@@ -163,6 +221,9 @@ export interface TextAreaValidation {
 	showMaxLengthCounter?: boolean;
 }
 
+/**
+ * Behavior configuration for TextArea component
+ */
 export interface TextAreaBehavior {
 	/** Disabled state */
 	disabled?: boolean;
@@ -178,6 +239,9 @@ export interface TextAreaBehavior {
 	excludedKeys?: string[];
 }
 
+/**
+ * Layout configuration for TextArea component
+ */
 export interface TextAreaLayout {
 	/** Number of visible text lines */
 	rows?: number;
@@ -189,6 +253,9 @@ export interface TextAreaLayout {
 	autoResize?: boolean;
 }
 
+/**
+ * Props for TextArea component
+ */
 export interface TextAreaProps {
 	/** TextArea value */
 	value?: string;
@@ -212,7 +279,13 @@ export interface TextAreaProps {
 	textareaRef?: HTMLTextAreaElement;
 }
 
-// DragLine component types
+/**
+ * DragLine component types
+ */
+
+/**
+ * Event detail for drag line interactions
+ */
 export interface DragLineEventDetail {
 	/** Original DOM event */
 	event: MouseEvent | TouchEvent;
@@ -224,6 +297,9 @@ export interface DragLineEventDetail {
 	diffY?: number;
 }
 
+/**
+ * Props for DragLine component
+ */
 export interface DragLineProps {
 	/** Minimum movement in pixels before drag starts */
 	tolerance?: number;
@@ -239,9 +315,16 @@ export interface DragLineProps {
 	ariaLabel?: string;
 }
 
-// Drawer component types
+/**
+ * Drawer component types
+ */
+
+/** Position of the drawer on screen */
 export type DrawerPosition = 'top' | 'bottom' | 'left' | 'right' | 'center';
 
+/**
+ * Event detail for drawer interactions
+ */
 export interface DrawerEventDetail {
 	/** Drawer position */
 	position: DrawerPosition;
@@ -249,6 +332,9 @@ export interface DrawerEventDetail {
 	timestamp: number;
 }
 
+/**
+ * Event detail for drawer resize interactions
+ */
 export interface DrawerResizeEventDetail extends DrawerEventDetail {
 	/** Current width in pixels */
 	width?: number;
@@ -256,6 +342,9 @@ export interface DrawerResizeEventDetail extends DrawerEventDetail {
 	height?: number;
 }
 
+/**
+ * Props for Drawer component
+ */
 export interface DrawerProps {
 	/** Controls drawer visibility */
 	visible?: boolean;
@@ -277,7 +366,13 @@ export interface DrawerProps {
 	ariaLabel?: string;
 }
 
-// BaseLayoutWrapper component types
+/**
+ * BaseLayoutWrapper component types
+ */
+
+/**
+ * Props for BaseLayoutWrapper component
+ */
 export interface BaseLayoutWrapperProps {
 	/** Additional CSS classes for the outer layout container */
 	layoutClassName?: string;
@@ -289,7 +384,13 @@ export interface BaseLayoutWrapperProps {
 	bodyStyle?: string;
 }
 
-// PageWrapper component types
+/**
+ * PageWrapper component types
+ */
+
+/**
+ * Event detail for page scroll events
+ */
 export interface PageWrapperScrollEventDetail {
 	/** Current scroll position from top */
 	scrollTop: number;
@@ -303,6 +404,9 @@ export interface PageWrapperScrollEventDetail {
 	target: HTMLElement;
 }
 
+/**
+ * Props for PageWrapper component
+ */
 export interface PageWrapperProps {
 	/** Center content vertically and horizontally */
 	center?: boolean;
@@ -326,9 +430,16 @@ export interface PageWrapperProps {
 	footerElm?: HTMLElement;
 }
 
-// SidebarWrapper component types
+/**
+ * SidebarWrapper component types
+ */
+
+/** Position of sidebar relative to main content */
 export type SidebarPosition = 'left' | 'right';
 
+/**
+ * Event detail for sidebar resize interactions
+ */
 export interface SidebarResizeEventDetail {
 	/** Current width in pixels */
 	width: number;
@@ -336,6 +447,9 @@ export interface SidebarResizeEventDetail {
 	widthPx: string;
 }
 
+/**
+ * Event detail for sidebar drag interactions
+ */
 export interface SidebarDragEventDetail {
 	/** Initial width when drag started */
 	initialWidth: number;
@@ -343,6 +457,9 @@ export interface SidebarDragEventDetail {
 	finalWidth?: number;
 }
 
+/**
+ * Props for SidebarWrapper component
+ */
 export interface SidebarWrapperProps {
 	/** Collapsed state */
 	collapsed?: boolean;
@@ -374,7 +491,13 @@ export interface SidebarWrapperProps {
 	sidebarElm?: HTMLElement;
 }
 
-// SelectOption component types
+/**
+ * SelectOption component types
+ */
+
+/**
+ * Individual option item for SelectOption component
+ */
 export interface SelectOptionItem {
 	/** Option value (unique identifier) */
 	value: string | number;
@@ -388,9 +511,15 @@ export interface SelectOptionItem {
 	metadata?: Record<string, any>;
 }
 
+/** Size variant for SelectOption component */
 export type SelectOptionSize = 'sm' | 'md' | 'lg';
+
+/** Visual style variant for SelectOption component */
 export type SelectOptionVariant = 'default' | 'filled' | 'outlined';
 
+/**
+ * Styling configuration for SelectOption component
+ */
 export interface SelectOptionStyling {
 	/** Select size variant */
 	size?: SelectOptionSize;
@@ -406,6 +535,9 @@ export interface SelectOptionStyling {
 	wrapperStyle?: string;
 }
 
+/**
+ * Validation configuration for SelectOption component
+ */
 export interface SelectOptionValidation {
 	/** Required field indicator */
 	required?: boolean;
@@ -415,6 +547,9 @@ export interface SelectOptionValidation {
 	errorMessage?: string;
 }
 
+/**
+ * Behavior configuration for SelectOption component
+ */
 export interface SelectOptionBehavior {
 	/** Disabled state */
 	disabled?: boolean;
@@ -440,6 +575,9 @@ export interface SelectOptionBehavior {
 	dropdownClass?: string;
 }
 
+/**
+ * Props for SelectOption component
+ */
 export interface SelectOptionProps {
 	/** Array of selectable options */
 	options?: SelectOptionItem[];
@@ -463,7 +601,13 @@ export interface SelectOptionProps {
 	triggerRef?: HTMLElement;
 }
 
-// Accordion component types
+/**
+ * Accordion component types
+ */
+
+/**
+ * Individual accordion item data
+ */
 export interface AccordionItem {
 	/** Accordion title */
 	title: string;
@@ -477,9 +621,15 @@ export interface AccordionItem {
 	metadata?: Record<string, any>;
 }
 
+/** Size variant for Accordion component */
 export type AccordionSize = 'sm' | 'md' | 'lg';
+
+/** Visual style variant for Accordion component */
 export type AccordionVariant = 'default' | 'filled' | 'outlined';
 
+/**
+ * Styling configuration for Accordion component
+ */
 export interface AccordionStyling {
 	/** Accordion size variant */
 	size?: AccordionSize;
@@ -499,6 +649,9 @@ export interface AccordionStyling {
 	wrapperStyle?: string;
 }
 
+/**
+ * Behavior configuration for Accordion component
+ */
 export interface AccordionBehavior {
 	/** Disabled state */
 	disabled?: boolean;
@@ -512,6 +665,9 @@ export interface AccordionBehavior {
 	titleUnderline?: boolean;
 }
 
+/**
+ * Content configuration for Accordion component
+ */
 export interface AccordionContent {
 	/** Accordion item data */
 	item?: AccordionItem;
@@ -523,6 +679,9 @@ export interface AccordionContent {
 	content?: string;
 }
 
+/**
+ * Props for Accordion component
+ */
 export interface AccordionProps {
 	/** Expanded state - controlled mode */
 	expanded?: boolean;
@@ -536,11 +695,22 @@ export interface AccordionProps {
 	content?: AccordionContent;
 }
 
-// Card component types
+/**
+ * Card component types
+ */
+
+/** Visual style variant for Card component */
 export type CardVariant = "default" | "outlined" | "elevated" | "filled";
+
+/** Size variant for Card component */
 export type CardSize = "sm" | "md" | "lg";
+
+/** Padding size for Card component */
 export type CardPadding = "none" | "sm" | "md" | "lg" | "xl";
 
+/**
+ * Props for Card component
+ */
 export interface CardProps {
 	/** Card variant style */
 	variant?: CardVariant;
@@ -571,9 +741,17 @@ export interface CardProps {
 	customStyle?: string;
 }
 
-// Table component types
+/**
+ * Table component types
+ */
+
+/** Sort order direction */
 export type SortOrder = "asc" | "desc" | null;
 
+/**
+ * Column definition for Table component
+ * @template T - Type of the row data
+ */
 export interface TableColumn<T = Record<string, unknown>> {
 	/** Unique identifier for the column */
 	id?: string;
@@ -610,6 +788,10 @@ export interface TableColumn<T = Record<string, unknown>> {
 	rowspan?: number;
 }
 
+/**
+ * Header row definition for Table component
+ * @template T - Type of the row data
+ */
 export interface TableHeaderRow<T = Record<string, unknown>> {
 	/** Content for each column field */
 	[key: string]: string | number | undefined;
@@ -619,6 +801,10 @@ export interface TableHeaderRow<T = Record<string, unknown>> {
 	rowspan?: Record<string, number> | any;
 }
 
+/**
+ * Data row for Table component
+ * @template T - Type of the row data
+ */
 export interface TableRow<T = Record<string, unknown>> extends Record<string, unknown> {
 	/** Colspan configuration: field -> colspan value */
 	colspan?: Record<string, number>;
@@ -627,13 +813,20 @@ export interface TableRow<T = Record<string, unknown>> extends Record<string, un
 	[key: string]: unknown;
 }
 
+/** Filter criteria for table data */
 export type FilterCriteria = Record<string, string | number | boolean>;
 
+/**
+ * Sort configuration for table
+ */
 export interface SortConfig {
 	field: string;
 	order: SortOrder;
 }
 
+/**
+ * Parameters for async data loading in Table component
+ */
 export interface DataLoadParams {
 	page: number;
 	offset: number;
@@ -641,10 +834,15 @@ export interface DataLoadParams {
 	allSorting: SortConfig[];
 }
 
+/** Table data - can be static array or async function */
 export type TableData<T = Record<string, unknown>> =
 	| TableRow<T>[]
 	| ((params: DataLoadParams) => Promise<TableRow<T>[]> | TableRow<T>[]>);
 
+/**
+ * Props for Table component
+ * @template T - Type of the row data
+ */
 export interface TableProps<T = Record<string, unknown>> {
 	/** Full dataset (rows) or async function that returns data */
 	items: TableData<T>;
@@ -684,6 +882,9 @@ export interface TableProps<T = Record<string, unknown>> {
 	isHeaderRounded?: boolean;
 }
 
+/**
+ * Processed header cell data for rendering
+ */
 export interface ProcessedHeaderCell {
 	content: string | number | undefined;
 	width: number;
@@ -697,16 +898,101 @@ export interface ProcessedHeaderCell {
 	sortOrder?: SortOrder;
 }
 
+/**
+ * Event types for Table component
+ */
 export interface TableEvents {
 	resizeColumn: { columns: TableColumn[] };
 	sort: { column: TableColumn; sortOrder: SortOrder };
 	filter: { column: TableColumn; value: string };
 }
 
-// Pagination component types
+/**
+ * Props interface for TableListing component
+ * @template T - Type of the row data
+ */
+export interface TableListingProps<T = Record<string, unknown>> {
+	/** Column definitions */
+	columns: TableColumn<T>[];
+	/** Data rows */
+	data: TableRow<T>[];
+	/** Current sort string (e.g., "-created_at" for descending, "+name" for ascending) */
+	sort?: string;
+	/** Current offset for pagination (0-based) */
+	currentOffset?: number;
+	/** Items per page */
+	limit?: number;
+	/** Empty state message */
+	emptyMessage?: string;
+	/** Custom CSS class for table wrapper */
+	tableContainerClass?: string;
+	/** Custom CSS class for header */
+	headerClass?: string;
+	/** Custom CSS class for rows (string or function) */
+	rowClass?: string | ((row: TableRow<T>, index: number) => string);
+	/** Custom CSS class for cells (string or function) */
+	cellClass?: string | ((column: TableColumn<T>, row: TableRow<T>) => string);
+	/** Show pagination component */
+	showPagination?: boolean;
+	/** Pagination size */
+	paginationSize?: "sm" | "md" | "lg";
+	/** Pagination variant */
+	paginationVariant?: "default" | "minimal";
+	/** Show first/last page buttons in pagination */
+	paginationShowFirstLast?: boolean;
+	/** Show page info in pagination */
+	paginationShowPageInfo?: boolean;
+	/** Auto reset offset when sort changes */
+	autoResetOffsetOnSort?: boolean;
+	/** Scroll to top on page change */
+	scrollToTopOnPageChange?: boolean;
+	/** Custom sort function */
+	customSortFn?: (data: TableRow<T>[], sortKey: string, isDescending: boolean) => TableRow<T>[];
+	/** Enable row click handling */
+	rowClickable?: boolean;
+	/** Loading state */
+	loading?: boolean;
+	/** Enable row selection */
+	selectable?: boolean;
+	/** Selected row IDs/indices */
+	selectedRows?: (string | number)[];
+	/** Custom CSS variables for theming */
+	cssVariables?: Record<string, string>;
+	/** Enable hover effect on rows */
+	enableHover?: boolean;
+	/** Custom hover background color */
+	hoverColor?: string;
+	/** Table ID for accessibility */
+	tableId?: string;
+	/** ARIA label for table */
+	ariaLabel?: string;
+	/** Custom tbody class */
+	tbodyClass?: string;
+	/** Custom pagination wrapper class */
+	paginationClass?: string;
+	/** Enable drag and drop */
+	draggable?: boolean;
+	/** Function to check if a row can be dropped on target row */
+	canDrop?: (draggedRow: TableRow<T>, targetRow: TableRow<T>) => boolean;
+	/** Enable server-side pagination and sorting */
+	serverSide?: boolean;
+	/** Total number of rows (required for server-side mode) */
+	totalRows?: number;
+}
+
+/**
+ * Pagination component types
+ */
+
+/** Size variant for Pagination component */
 export type PaginationSize = "sm" | "md" | "lg";
+
+/** Visual style variant for Pagination component */
 export type PaginationVariant = "default" | "outlined" | "minimal";
 
+/**
+ * Props for Pagination component
+ */
 export interface PaginationProps {
 	/** Current offset (0-based) */
 	currentOffset?: number;
@@ -752,6 +1038,9 @@ export interface PaginationProps {
 	showEllipsis?: boolean;
 }
 
+/**
+ * Event types for Pagination component
+ */
 export interface PaginationEvents {
 	/** Emitted when page changes */
 	pageChange: { offset: number; page: number };
