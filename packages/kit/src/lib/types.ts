@@ -1,4 +1,37 @@
 /**
+ * Base types for standardized component props pattern
+ */
+
+/** Common size variants used across components */
+export type ComponentSize = 'sm' | 'md' | 'lg' | 'xl';
+
+/** Base styling interface for components */
+export interface BaseStyling {
+	/** Size variant */
+	size?: ComponentSize | 'sm' | 'md' | 'lg';
+	/** Visual style variant */
+	variant?: string;
+	/** Root element CSS class */
+	className?: string;
+	/** Root element inline style */
+	style?: string;
+}
+
+/** Base behavior interface for components */
+export interface BaseBehavior {
+	/** Disabled state */
+	disabled?: boolean;
+}
+
+/** Base accessibility interface for components */
+export interface BaseAccessibility {
+	/** ARIA label */
+	ariaLabel?: string;
+	/** ARIA described by */
+	ariaDescribedBy?: string;
+}
+
+/**
  * Button component types
  */
 
@@ -28,43 +61,37 @@ export type IconPosition = 'left' | 'right' | 'only';
 export type Placement = 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end' | 'auto';
 
 /**
- * Button component props
- * @example
- * ```svelte
- * <Button label="Click me" variant="filled" size="md" semantic="primary" />
- * ```
+ * Styling configuration for Button component
  */
-export interface ButtonProps {
-	/** Button text content */
-	label?: string;
+export interface ButtonStyling extends BaseStyling {
 	/** Button variant style */
 	variant?: ButtonVariant;
 	/** Button semantic color scheme */
 	semantic?: ButtonSemantic;
 	/** Button size */
 	size?: ButtonSize;
-	/** Button state */
-	state?: ButtonState;
 	/** Fully rounded corners */
 	fullRounded?: boolean;
-	/** Custom CSS class */
-	className?: string;
-	/** Custom style */
-	customStyle?: string;
-	/** Disabled state */
-	disabled?: boolean;
-	/** Loading/processing state */
-	loading?: boolean;
-	/** Loading message */
-	loadingMessage?: string;
-	/** Stop click event propagation */
-	stopPropagation?: boolean;
 	/** Fill color (CSS custom property override) */
 	fillColor?: string;
 	/** Text color (CSS custom property override) */
 	textColor?: string;
 	/** Outline color (CSS custom property override) */
 	outlineColor?: string;
+}
+
+/**
+ * Behavior configuration for Button component
+ */
+export interface ButtonBehavior extends BaseBehavior {
+	/** Button state */
+	state?: ButtonState;
+	/** Loading/processing state */
+	loading?: boolean;
+	/** Loading message */
+	loadingMessage?: string;
+	/** Stop click event propagation */
+	stopPropagation?: boolean;
 	/** Link URL (converts button to anchor) */
 	href?: string;
 	/** Link target */
@@ -73,8 +100,22 @@ export interface ButtonProps {
 	rel?: string;
 	/** Icon position */
 	iconPosition?: IconPosition;
-	/** ARIA label (only set if provided or no visible text) */
-	ariaLabel?: string;
+}
+
+/**
+ * Button component props
+ * @example
+ * ```svelte
+ * <Button label="Click me" styling={{ variant: "filled", size: "md", semantic: "primary" }} />
+ * ```
+ */
+export interface ButtonProps extends BaseAccessibility {
+	/** Button text content */
+	label?: string;
+	/** Styling configuration */
+	styling?: ButtonStyling;
+	/** Behavior configuration */
+	behavior?: ButtonBehavior;
 	/** Click handler */
 	onclick?: (event: MouseEvent) => void;
 }
@@ -95,7 +136,7 @@ export type InputVariant = 'default' | 'filled' | 'outlined';
 /**
  * Styling configuration for InputText component
  */
-export interface InputTextStyling {
+export interface InputTextStyling extends BaseStyling {
 	/** Input size variant */
 	size?: InputSize;
 	/** Input style variant */
@@ -131,9 +172,7 @@ export interface InputTextValidation {
 /**
  * Behavior configuration for InputText component
  */
-export interface InputTextBehavior {
-	/** Disabled state */
-	disabled?: boolean;
+export interface InputTextBehavior extends BaseBehavior {
 	/** Readonly state */
 	readonly?: boolean;
 	/** Auto focus on mount */
@@ -160,7 +199,7 @@ export interface InputTextBehavior {
  * />
  * ```
  */
-export interface InputTextProps {
+export interface InputTextProps extends BaseAccessibility {
 	/** Input type */
 	type?: InputType;
 	/** Input value */
@@ -190,7 +229,7 @@ export interface InputTextProps {
 /**
  * Styling configuration for TextArea component
  */
-export interface TextAreaStyling {
+export interface TextAreaStyling extends BaseStyling {
 	/** TextArea size variant */
 	size?: InputSize;
 	/** TextArea style variant */
@@ -224,9 +263,7 @@ export interface TextAreaValidation {
 /**
  * Behavior configuration for TextArea component
  */
-export interface TextAreaBehavior {
-	/** Disabled state */
-	disabled?: boolean;
+export interface TextAreaBehavior extends BaseBehavior {
 	/** Readonly state */
 	readonly?: boolean;
 	/** Auto focus on mount */
@@ -256,7 +293,7 @@ export interface TextAreaLayout {
 /**
  * Props for TextArea component
  */
-export interface TextAreaProps {
+export interface TextAreaProps extends BaseAccessibility {
 	/** TextArea value */
 	value?: string;
 	/** Placeholder text */
@@ -298,21 +335,31 @@ export interface DragLineEventDetail {
 }
 
 /**
- * Props for DragLine component
+ * Styling configuration for DragLine component
  */
-export interface DragLineProps {
+export interface DragLineStyling extends BaseStyling {
+	/** Z-index of the drag element */
+	zIndex?: number;
+}
+
+/**
+ * Behavior configuration for DragLine component
+ */
+export interface DragLineBehavior extends BaseBehavior {
 	/** Minimum movement in pixels before drag starts */
 	tolerance?: number;
 	/** Vertical drag orientation (changes cursor) */
 	isVertical?: boolean;
-	/** Z-index of the drag element */
-	zIndex?: number;
-	/** Disabled state */
-	disabled?: boolean;
-	/** Custom CSS class */
-	className?: string;
-	/** ARIA label for accessibility */
-	ariaLabel?: string;
+}
+
+/**
+ * Props for DragLine component
+ */
+export interface DragLineProps extends BaseAccessibility {
+	/** Styling configuration */
+	styling?: DragLineStyling;
+	/** Behavior configuration */
+	behavior?: DragLineBehavior;
 }
 
 /**
@@ -343,27 +390,39 @@ export interface DrawerResizeEventDetail extends DrawerEventDetail {
 }
 
 /**
- * Props for Drawer component
+ * Styling configuration for Drawer component
  */
-export interface DrawerProps {
-	/** Controls drawer visibility */
-	visible?: boolean;
+export interface DrawerStyling extends BaseStyling {
+	/** Background color of panel */
+	bgPanel?: string;
+}
+
+/**
+ * Behavior configuration for Drawer component
+ */
+export interface DrawerBehavior {
 	/** Drawer position */
 	position?: DrawerPosition;
 	/** Prevent closing when clicking overlay */
 	preventClose?: boolean;
-	/** Background color of panel */
-	bgPanel?: string;
 	/** Enable drag-to-resize functionality */
 	isDraggable?: boolean;
-	/** Custom CSS class for wrapper */
-	className?: string;
 	/** Show overlay backdrop */
 	overlay?: boolean;
 	/** Close drawer on ESC key press */
 	closeOnEscape?: boolean;
-	/** ARIA label for drawer */
-	ariaLabel?: string;
+}
+
+/**
+ * Props for Drawer component
+ */
+export interface DrawerProps extends BaseAccessibility {
+	/** Controls drawer visibility */
+	visible?: boolean;
+	/** Styling configuration */
+	styling?: DrawerStyling;
+	/** Behavior configuration */
+	behavior?: DrawerBehavior;
 }
 
 /**
@@ -371,9 +430,9 @@ export interface DrawerProps {
  */
 
 /**
- * Props for BaseLayoutWrapper component
+ * Styling configuration for BaseLayoutWrapper component
  */
-export interface BaseLayoutWrapperProps {
+export interface BaseLayoutWrapperStyling extends BaseStyling {
 	/** Additional CSS classes for the outer layout container */
 	layoutClassName?: string;
 	/** Inline styles for the outer layout container */
@@ -382,6 +441,14 @@ export interface BaseLayoutWrapperProps {
 	bodyClassName?: string;
 	/** Inline styles for the inner body container */
 	bodyStyle?: string;
+}
+
+/**
+ * Props for BaseLayoutWrapper component
+ */
+export interface BaseLayoutWrapperProps extends BaseAccessibility {
+	/** Styling configuration */
+	styling?: BaseLayoutWrapperStyling;
 }
 
 /**
@@ -405,11 +472,9 @@ export interface PageWrapperScrollEventDetail {
 }
 
 /**
- * Props for PageWrapper component
+ * Styling configuration for PageWrapper component
  */
-export interface PageWrapperProps {
-	/** Center content vertically and horizontally */
-	center?: boolean;
+export interface PageWrapperStyling extends BaseStyling {
 	/** Additional CSS classes for the page wrapper container */
 	wrapperClassName?: string;
 	/** Inline styles for the page wrapper container */
@@ -422,6 +487,24 @@ export interface PageWrapperProps {
 	footerClassName?: string;
 	/** Inline styles for the footer container */
 	footerStyle?: string;
+}
+
+/**
+ * Behavior configuration for PageWrapper component
+ */
+export interface PageWrapperBehavior {
+	/** Center content vertically and horizontally */
+	center?: boolean;
+}
+
+/**
+ * Props for PageWrapper component
+ */
+export interface PageWrapperProps extends BaseAccessibility {
+	/** Styling configuration */
+	styling?: PageWrapperStyling;
+	/** Behavior configuration */
+	behavior?: PageWrapperBehavior;
 	/** Reference to the page wrapper DOM element */
 	pageElm?: HTMLElement;
 	/** Reference to the content DOM element */
@@ -458,9 +541,19 @@ export interface SidebarDragEventDetail {
 }
 
 /**
- * Props for SidebarWrapper component
+ * Styling configuration for SidebarWrapper component
  */
-export interface SidebarWrapperProps {
+export interface SidebarWrapperStyling extends BaseStyling {
+	/** Additional CSS classes for sidebar */
+	sidebarClassName?: string;
+	/** Inline styles for sidebar */
+	sidebarStyle?: string;
+}
+
+/**
+ * Behavior configuration for SidebarWrapper component
+ */
+export interface SidebarWrapperBehavior {
 	/** Collapsed state */
 	collapsed?: boolean;
 	/** Width when collapsed (CSS value) */
@@ -479,14 +572,16 @@ export interface SidebarWrapperProps {
 	persistWidth?: boolean;
 	/** localStorage key for width persistence */
 	storageKey?: string;
-	/** Additional CSS classes for sidebar */
-	sidebarClassName?: string;
-	/** Inline styles for sidebar */
-	sidebarStyle?: string;
-	/** Custom CSS class (exported as class) */
-	class?: string;
-	/** ARIA label for accessibility */
-	ariaLabel?: string;
+}
+
+/**
+ * Props for SidebarWrapper component
+ */
+export interface SidebarWrapperProps extends BaseAccessibility {
+	/** Styling configuration */
+	styling?: SidebarWrapperStyling;
+	/** Behavior configuration */
+	behavior?: SidebarWrapperBehavior;
 	/** Reference to sidebar DOM element */
 	sidebarElm?: HTMLElement;
 }
@@ -520,7 +615,7 @@ export type SelectOptionVariant = 'default' | 'filled' | 'outlined';
 /**
  * Styling configuration for SelectOption component
  */
-export interface SelectOptionStyling {
+export interface SelectOptionStyling extends BaseStyling {
 	/** Select size variant */
 	size?: SelectOptionSize;
 	/** Select style variant */
@@ -550,9 +645,7 @@ export interface SelectOptionValidation {
 /**
  * Behavior configuration for SelectOption component
  */
-export interface SelectOptionBehavior {
-	/** Disabled state */
-	disabled?: boolean;
+export interface SelectOptionBehavior extends BaseBehavior {
 	/** Enable multi-selection mode */
 	isMultiOption?: boolean;
 	/** Enable search/filter functionality */
@@ -573,12 +666,14 @@ export interface SelectOptionBehavior {
 	placement?: Placement;
 	/** dropdown class position */
 	dropdownClass?: string;
+	/** Full anchor width */
+	isFullAnchorWidth?: boolean;
 }
 
 /**
  * Props for SelectOption component
  */
-export interface SelectOptionProps {
+export interface SelectOptionProps extends BaseAccessibility {
 	/** Array of selectable options */
 	options?: SelectOptionItem[];
 	/** Selected value(s) - controlled mode */
@@ -599,6 +694,10 @@ export interface SelectOptionProps {
 	behavior?: SelectOptionBehavior;
 	/** Reference to trigger element */
 	triggerRef?: HTMLElement;
+	/** Fetch function for async options */
+	fetchFn?: ((query: any, callback: (result: SelectOptionItem[], total?: number) => void) => void) | null;
+	/** Limit for fetch */
+	limit?: number;
 }
 
 /**
@@ -630,13 +729,11 @@ export type AccordionVariant = 'default' | 'filled' | 'outlined';
 /**
  * Styling configuration for Accordion component
  */
-export interface AccordionStyling {
+export interface AccordionStyling extends BaseStyling {
 	/** Accordion size variant */
 	size?: AccordionSize;
 	/** Accordion style variant */
 	variant?: AccordionVariant;
-	/** Custom CSS class for root element */
-	className?: string;
 	/** Custom CSS class for header wrapper */
 	headerWrapperClass?: string;
 	/** Custom CSS class for header button */
@@ -652,9 +749,7 @@ export interface AccordionStyling {
 /**
  * Behavior configuration for Accordion component
  */
-export interface AccordionBehavior {
-	/** Disabled state */
-	disabled?: boolean;
+export interface AccordionBehavior extends BaseBehavior {
 	/** Show icon */
 	showIcon?: boolean;
 	/** Icon position */
@@ -682,7 +777,7 @@ export interface AccordionContent {
 /**
  * Props for Accordion component
  */
-export interface AccordionProps {
+export interface AccordionProps extends BaseAccessibility {
 	/** Expanded state - controlled mode */
 	expanded?: boolean;
 	/** Default expanded state - uncontrolled mode */
@@ -709,21 +804,15 @@ export type CardSize = "sm" | "md" | "lg";
 export type CardPadding = "none" | "sm" | "md" | "lg" | "xl";
 
 /**
- * Props for Card component
+ * Styling configuration for Card component
  */
-export interface CardProps {
+export interface CardStyling extends BaseStyling {
 	/** Card variant style */
 	variant?: CardVariant;
 	/** Card size */
 	size?: CardSize;
 	/** Card padding */
 	padding?: CardPadding;
-	/** Custom CSS class */
-	className?: string;
-	/** Whether card is interactive (hover effects) */
-	interactive?: boolean;
-	/** Whether card is clickable */
-	clickable?: boolean;
 	/** Custom background color */
 	backgroundColor?: string;
 	/** Custom border color */
@@ -734,11 +823,26 @@ export interface CardProps {
 	rounded?: boolean;
 	/** Border radius value (overrides rounded) */
 	borderRadius?: string;
-	/** Whether card is disabled */
-	disabled?: boolean;
-	/** ARIA label for accessibility */
-	ariaLabel?: string;
-	customStyle?: string;
+}
+
+/**
+ * Behavior configuration for Card component
+ */
+export interface CardBehavior extends BaseBehavior {
+	/** Whether card is interactive (hover effects) */
+	interactive?: boolean;
+	/** Whether card is clickable */
+	clickable?: boolean;
+}
+
+/**
+ * Props for Card component
+ */
+export interface CardProps extends BaseAccessibility {
+	/** Styling configuration */
+	styling?: CardStyling;
+	/** Behavior configuration */
+	behavior?: CardBehavior;
 }
 
 /**
@@ -908,30 +1012,31 @@ export interface TableEvents {
 }
 
 /**
- * Props interface for TableListing component
- * @template T - Type of the row data
+ * Styling configuration for TableListing component
  */
-export interface TableListingProps<T = Record<string, unknown>> {
-	/** Column definitions */
-	columns: TableColumn<T>[];
-	/** Data rows */
-	data: TableRow<T>[];
-	/** Current sort string (e.g., "-created_at" for descending, "+name" for ascending) */
-	sort?: string;
-	/** Current offset for pagination (0-based) */
-	currentOffset?: number;
-	/** Items per page */
-	limit?: number;
-	/** Empty state message */
-	emptyMessage?: string;
+export interface TableListingStyling extends BaseStyling {
 	/** Custom CSS class for table wrapper */
 	tableContainerClass?: string;
 	/** Custom CSS class for header */
 	headerClass?: string;
 	/** Custom CSS class for rows (string or function) */
-	rowClass?: string | ((row: TableRow<T>, index: number) => string);
+	rowClass?: string | ((row: TableRow<any>, index: number) => string);
 	/** Custom CSS class for cells (string or function) */
-	cellClass?: string | ((column: TableColumn<T>, row: TableRow<T>) => string);
+	cellClass?: string | ((column: TableColumn<any>, row: TableRow<any>) => string);
+	/** Custom tbody class */
+	tbodyClass?: string;
+	/** Custom pagination wrapper class */
+	paginationClass?: string;
+	/** Custom CSS variables for theming */
+	cssVariables?: Record<string, string>;
+	/** Custom hover background color */
+	hoverColor?: string;
+}
+
+/**
+ * Behavior configuration for TableListing component
+ */
+export interface TableListingBehavior {
 	/** Show pagination component */
 	showPagination?: boolean;
 	/** Pagination size */
@@ -947,7 +1052,7 @@ export interface TableListingProps<T = Record<string, unknown>> {
 	/** Scroll to top on page change */
 	scrollToTopOnPageChange?: boolean;
 	/** Custom sort function */
-	customSortFn?: (data: TableRow<T>[], sortKey: string, isDescending: boolean) => TableRow<T>[];
+	customSortFn?: (data: TableRow<any>[], sortKey: string, isDescending: boolean) => TableRow<any>[];
 	/** Enable row click handling */
 	rowClickable?: boolean;
 	/** Loading state */
@@ -956,28 +1061,184 @@ export interface TableListingProps<T = Record<string, unknown>> {
 	selectable?: boolean;
 	/** Selected row IDs/indices */
 	selectedRows?: (string | number)[];
-	/** Custom CSS variables for theming */
-	cssVariables?: Record<string, string>;
 	/** Enable hover effect on rows */
 	enableHover?: boolean;
-	/** Custom hover background color */
-	hoverColor?: string;
-	/** Table ID for accessibility */
-	tableId?: string;
-	/** ARIA label for table */
-	ariaLabel?: string;
-	/** Custom tbody class */
-	tbodyClass?: string;
-	/** Custom pagination wrapper class */
-	paginationClass?: string;
 	/** Enable drag and drop */
 	draggable?: boolean;
 	/** Function to check if a row can be dropped on target row */
-	canDrop?: (draggedRow: TableRow<T>, targetRow: TableRow<T>) => boolean;
+	canDrop?: (draggedRow: TableRow<any>, targetRow: TableRow<any>) => boolean;
 	/** Enable server-side pagination and sorting */
 	serverSide?: boolean;
 	/** Total number of rows (required for server-side mode) */
 	totalRows?: number;
+}
+
+/**
+ * Props interface for TableListing component
+ * @template T - Type of the row data
+ */
+export interface TableListingProps<T = Record<string, unknown>> extends BaseAccessibility {
+	/** Column definitions */
+	columns: TableColumn<T>[];
+	/** Data rows */
+	data: TableRow<T>[];
+	/** Current sort string (e.g., "-created_at" for descending, "+name" for ascending) */
+	sort?: string;
+	/** Current offset for pagination (0-based) */
+	currentOffset?: number;
+	/** Items per page */
+	limit?: number;
+	/** Empty state message */
+	emptyMessage?: string;
+	/** Table ID for accessibility */
+	tableId?: string;
+	/** Styling configuration */
+	styling?: TableListingStyling;
+	/** Behavior configuration */
+	behavior?: TableListingBehavior;
+}
+
+/**
+ * Tags component types
+ */
+
+/**
+ * Styling configuration for Tags component
+ */
+export interface TagsStyling extends BaseStyling {
+	/** Custom CSS class for label */
+	labelClass?: string;
+	/** Custom CSS class for wrapper */
+	wrapperClass?: string;
+}
+
+/**
+ * Validation configuration for Tags component
+ */
+export interface TagsValidation {
+	/** Error state */
+	isError?: boolean;
+	/** Required field indicator */
+	required?: boolean;
+}
+
+/**
+ * Behavior configuration for Tags component
+ */
+export interface TagsBehavior extends BaseBehavior {
+	/** Readonly state */
+	readonly?: boolean;
+	/** Keys that trigger tag addition */
+	addKeys?: number[];
+	/** Maximum number of tags */
+	maxTags?: number | false;
+	/** Only allow unique tags */
+	onlyUnique?: boolean;
+	/** Keys that trigger tag removal */
+	removeKeys?: number[];
+	/** Placeholder text */
+	placeholder?: string;
+	/** Allow paste to add tags */
+	allowPaste?: boolean;
+	/** Allow drop to add tags */
+	allowDrop?: boolean;
+	/** Character(s) to split pasted/dropped text */
+	splitWith?: string;
+	/** Autocomplete data or function */
+	autoComplete?: any[] | ((value: string, signal?: AbortSignal) => any[] | Promise<any[]>) | false;
+	/** Key to extract from autocomplete objects */
+	autoCompleteKey?: string | false;
+	/** Key for markup in autocomplete */
+	autoCompleteMarkupKey?: string | false;
+	/** Allow adding tag on blur */
+	allowBlur?: boolean;
+	/** Minimum characters for autocomplete */
+	minChars?: number;
+	/** Only allow autocomplete suggestions */
+	onlyAutocomplete?: boolean;
+	/** Tag click handler */
+	onTagClick?: (tag: string | any) => void;
+	/** Key to show in autocomplete display */
+	autoCompleteShowKey?: string | false;
+	/** Only allow numbers */
+	numberOnly?: boolean;
+	/** Allow decimal numbers */
+	allowDecimal?: boolean;
+	/** Debounce delay for autocomplete */
+	debounceMs?: number;
+}
+
+/**
+ * Props for Tags component
+ */
+export interface TagsProps extends BaseAccessibility {
+	/** Current tags array */
+	tags?: (string | any)[];
+	/** Field name for form integration */
+	name?: string;
+	/** Field ID for label association */
+	id?: string;
+	/** Label text */
+	label?: string;
+	/** Styling configuration */
+	styling?: TagsStyling;
+	/** Validation configuration */
+	validation?: TagsValidation;
+	/** Behavior configuration */
+	behavior?: TagsBehavior;
+}
+
+/**
+ * DropdownWrapper component types
+ */
+
+/** Placement position for dropdowns */
+export type DropdownPlacement = "bottom-start" | "bottom-end" | "top-start" | "top-end" | "auto";
+
+/** Visual style variant for DropdownWrapper */
+export type DropdownVariant = "default" | "minimal" | "elevated" | "outlined";
+
+/** Size variant for DropdownWrapper */
+export type DropdownSize = "sm" | "md" | "lg" | "xl";
+
+/**
+ * Styling configuration for DropdownWrapper component
+ */
+export interface DropdownWrapperStyling extends BaseStyling {
+	/** Dropdown variant style */
+	variant?: DropdownVariant;
+	/** Dropdown size */
+	size?: DropdownSize;
+}
+
+/**
+ * Behavior configuration for DropdownWrapper component
+ */
+export interface DropdownWrapperBehavior {
+	/** Placement position */
+	placement?: DropdownPlacement;
+	/** Offset from anchor */
+	offset?: { x: number; y: number };
+	/** Close dropdown when clicking outside */
+	closeOnClickOutside?: boolean;
+	/** Close dropdown on ESC key press */
+	closeOnEscape?: boolean;
+	/** Make dropdown full width of anchor */
+	isFullAnchorWidth?: boolean;
+}
+
+/**
+ * Props for DropdownWrapper component
+ */
+export interface DropdownWrapperProps extends BaseAccessibility {
+	/** Controls dropdown visibility */
+	visible?: boolean;
+	/** Anchor element to position relative to */
+	anchor?: HTMLElement | null;
+	/** Styling configuration */
+	styling?: DropdownWrapperStyling;
+	/** Behavior configuration */
+	behavior?: DropdownWrapperBehavior;
 }
 
 /**
@@ -991,35 +1252,13 @@ export type PaginationSize = "sm" | "md" | "lg";
 export type PaginationVariant = "default" | "outlined" | "minimal";
 
 /**
- * Props for Pagination component
+ * Styling configuration for Pagination component
  */
-export interface PaginationProps {
-	/** Current offset (0-based) */
-	currentOffset?: number;
-	/** Items per page */
-	limit?: number;
-	/** Total number of items */
-	totalRows?: number;
-	/** Number of visible page buttons (default: 5) */
-	visiblePages?: number;
+export interface PaginationStyling extends BaseStyling {
 	/** Pagination size */
 	size?: PaginationSize;
 	/** Pagination variant style */
 	variant?: PaginationVariant;
-	/** Custom CSS class */
-	className?: string;
-	/** Whether to show first/last page buttons */
-	showFirstLast?: boolean;
-	/** Whether to show previous/next page buttons */
-	showPreviousNext?: boolean;
-	/** Whether to show page info text */
-	showPageInfo?: boolean;
-	/** Custom page info format function */
-	pageInfoFormatter?: (currentPage: number, totalPages: number, totalRows: number) => string;
-	/** Whether pagination is disabled */
-	disabled?: boolean;
-	/** ARIA label for pagination navigation */
-	ariaLabel?: string;
 	/** Custom background color */
 	backgroundColor?: string;
 	/** Custom text color */
@@ -1034,8 +1273,40 @@ export interface PaginationProps {
 	borderRadius?: string;
 	/** Custom gap between pagination elements */
 	gap?: string;
+}
+
+/**
+ * Behavior configuration for Pagination component
+ */
+export interface PaginationBehavior extends BaseBehavior {
+	/** Number of visible page buttons (default: 5) */
+	visiblePages?: number;
+	/** Whether to show first/last page buttons */
+	showFirstLast?: boolean;
+	/** Whether to show previous/next page buttons */
+	showPreviousNext?: boolean;
+	/** Whether to show page info text */
+	showPageInfo?: boolean;
+	/** Custom page info format function */
+	pageInfoFormatter?: (currentPage: number, totalPages: number, totalRows: number) => string;
 	/** Whether to show ellipsis between page numbers */
 	showEllipsis?: boolean;
+}
+
+/**
+ * Props for Pagination component
+ */
+export interface PaginationProps extends BaseAccessibility {
+	/** Current offset (0-based) */
+	currentOffset?: number;
+	/** Items per page */
+	limit?: number;
+	/** Total number of items */
+	totalRows?: number;
+	/** Styling configuration */
+	styling?: PaginationStyling;
+	/** Behavior configuration */
+	behavior?: PaginationBehavior;
 }
 
 /**

@@ -66,7 +66,7 @@ The PageWrapper creates a three-layer container structure optimized for scrollab
 
 ```svelte
 <BaseLayoutWrapper>
-  <PageWrapper center={true}>
+  <PageWrapper behavior={{ center: true }}>
     <div>Centered content</div>
   </PageWrapper>
 </BaseLayoutWrapper>
@@ -77,10 +77,12 @@ The PageWrapper creates a three-layer container structure optimized for scrollab
 ```svelte
 <BaseLayoutWrapper>
   <PageWrapper 
-    wrapperClassName="my-page"
-    contentClassName="my-content"
-    wrapperStyle="background: #f0f0f0;"
-    contentStyle="padding: 2rem; max-width: 1200px; margin: 0 auto;"
+    styling={{
+      wrapperClassName: "my-page",
+      contentClassName: "my-content",
+      wrapperStyle: "background: #f0f0f0;",
+      contentStyle: "padding: 2rem; max-width: 1200px; margin: 0 auto;"
+    }}
   >
     <div>Custom styled content</div>
   </PageWrapper>
@@ -89,18 +91,39 @@ The PageWrapper creates a three-layer container structure optimized for scrollab
 
 ## Props
 
+### Core Props
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `center` | `boolean` | `false` | Center content vertically and horizontally |
-| `wrapperClassName` | `string` | `""` | Additional CSS classes for the page wrapper container |
-| `wrapperStyle` | `string` | `""` | Inline styles for the page wrapper container |
-| `contentClassName` | `string` | `""` | Additional CSS classes for the content container |
-| `contentStyle` | `string` | `""` | Inline styles for the content container |
-| `footerClassName` | `string` | `""` | Additional CSS classes for the footer container |
-| `footerStyle` | `string` | `""` | Inline styles for the footer container |
 | `pageElm` | `HTMLElement` | `undefined` | Reference to the page wrapper DOM element |
 | `contentElm` | `HTMLElement` | `undefined` | Reference to the content DOM element |
 | `footerElm` | `HTMLElement` | `undefined` | Reference to the footer DOM element |
+
+### Styling Props (`styling` object)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `styling.className` | `string` | `""` | Additional CSS classes for root element |
+| `styling.style` | `string` | `""` | Additional inline styles |
+| `styling.wrapperClassName` | `string` | `""` | Additional CSS classes for the page wrapper container |
+| `styling.wrapperStyle` | `string` | `""` | Inline styles for the page wrapper container |
+| `styling.contentClassName` | `string` | `""` | Additional CSS classes for the content container |
+| `styling.contentStyle` | `string` | `""` | Inline styles for the content container |
+| `styling.footerClassName` | `string` | `""` | Additional CSS classes for the footer container |
+| `styling.footerStyle` | `string` | `""` | Inline styles for the footer container |
+
+### Behavior Props (`behavior` object)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `behavior.center` | `boolean` | `false` | Center content vertically and horizontally |
+
+### Accessibility Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `ariaLabel` | `string` | `undefined` | ARIA label for accessibility |
+| `ariaDescribedBy` | `string` | `undefined` | ARIA described by reference |
 
 ## Events
 
@@ -245,7 +268,7 @@ The component uses CSS custom properties for easy theming and customization. See
 ### Responsive Content Width
 
 ```svelte
-<PageWrapper contentStyle="max-width: min(100%, 1200px); margin: 0 auto; padding: 2rem;">
+<PageWrapper styling={{ contentStyle: "max-width: min(100%, 1200px); margin: 0 auto; padding: 2rem;" }}>
   <div>Responsive centered content</div>
 </PageWrapper>
 ```
@@ -277,8 +300,10 @@ The component uses CSS custom properties for easy theming and customization. See
 
 <BaseLayoutWrapper>
   <PageWrapper 
-    contentClassName="app-content"
-    contentStyle="padding: 2rem;"
+    styling={{
+      contentClassName: "app-content",
+      contentStyle: "padding: 2rem;"
+    }}
   >
     {#if $page.url.pathname === '/dashboard'}
       <Dashboard />
@@ -303,7 +328,9 @@ The component uses CSS custom properties for easy theming and customization. See
 
 <BaseLayoutWrapper>
   <PageWrapper 
-    contentStyle="display: grid; grid-template-columns: {sidebarOpen ? '250px' : '0'} 1fr; transition: grid-template-columns 0.3s;"
+    styling={{
+      contentStyle: "display: grid; grid-template-columns: {$sidebarOpen ? '250px' : '0'} 1fr; transition: grid-template-columns 0.3s;"
+    }}
   >
     <aside class="sidebar">Sidebar</aside>
     <main>Main content</main>
@@ -344,14 +371,18 @@ See the [Global Styling Guide](./STYLING.md) for comprehensive theming options u
 The component exports comprehensive TypeScript types:
 
 ```typescript
-import type { PageWrapperProps, PageWrapperScrollEventDetail } from '@rief/kit';
+import type { PageWrapperProps, PageWrapperStyling, PageWrapperBehavior } from '@rief/kit';
 
 const pageConfig: PageWrapperProps = {
-  center: false,
-  wrapperClassName: 'my-page',
-  contentClassName: 'my-content',
-  wrapperStyle: 'background: #f0f0f0;',
-  contentStyle: 'padding: 2rem;'
+  styling: {
+    wrapperClassName: 'my-page',
+    contentClassName: 'my-content',
+    wrapperStyle: 'background: #f0f0f0;',
+    contentStyle: 'padding: 2rem;'
+  },
+  behavior: {
+    center: false
+  }
 };
 
 function handleScroll(event: CustomEvent<PageWrapperScrollEventDetail>) {

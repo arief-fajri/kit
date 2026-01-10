@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher, onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
+	import { safeHtmlContent } from '../helpers/errorHandling.js';
 	import type { AccordionStyling, AccordionBehavior, AccordionContent } from '../types.js';
 
 	// Props with defaults
@@ -9,6 +10,8 @@
 	export let styling: AccordionStyling = {};
 	export let behavior: AccordionBehavior = {};
 	export let content: AccordionContent = {};
+	export let ariaLabel: string | undefined = undefined;
+	export let ariaDescribedBy: string | undefined = undefined;
 
 	const dispatch = createEventDispatcher<{
 		expand: { expanded: boolean };
@@ -45,20 +48,21 @@
 
 	// Computed props with defaults
 	$: computedStyling = {
-		size: styling.size || 'md',
-		variant: styling.variant || 'default',
-		className: styling.className || '',
-		headerWrapperClass: styling.headerWrapperClass || '',
-		headerButtonClass: styling.headerButtonClass || '',
-		contentClass: styling.contentClass || '',
-		iconClass: styling.iconClass || '',
-		wrapperStyle: styling.wrapperStyle || ''
+		size: styling.size ?? 'md',
+		variant: styling.variant ?? 'default',
+		className: styling.className ?? '',
+		style: styling.style ?? '',
+		headerWrapperClass: styling.headerWrapperClass ?? '',
+		headerButtonClass: styling.headerButtonClass ?? '',
+		contentClass: styling.contentClass ?? '',
+		iconClass: styling.iconClass ?? '',
+		wrapperStyle: styling.wrapperStyle ?? ''
 	};
 
 	$: computedBehavior = {
 		disabled: behavior.disabled ?? false,
 		showIcon: behavior.showIcon ?? true,
-		iconPosition: behavior.iconPosition || 'right',
+		iconPosition: behavior.iconPosition ?? 'right',
 		transitionDuration: behavior.transitionDuration ?? 300,
 		titleUnderline: behavior.titleUnderline ?? false
 	};
@@ -66,8 +70,8 @@
 	$: computedContent = {
 		item: content.item,
 		title: content.title || content.item?.title || '',
-		subtitle: content.subtitle || content.item?.subtitle,
-		content: content.content || content.item?.content
+		subtitle: content.subtitle || content.item?.subtitle || '',
+		content: safeHtmlContent(content.content || content.item?.content || '')
 	};
 
 	// Determine actual expanded state (controlled vs uncontrolled)
@@ -109,7 +113,9 @@
 	class="accordion accordion--{computedStyling.size} accordion--variant-{computedStyling.variant} {computedStyling.className}"
 	class:accordion--expanded={isExpanded}
 	class:accordion--disabled={computedBehavior.disabled}
-	style={computedStyling.wrapperStyle}
+	style={computedStyling.style || computedStyling.wrapperStyle || undefined}
+	aria-label={ariaLabel}
+	aria-describedby={ariaDescribedBy}
 	{...$$restProps}
 >
 	<div class="accordion__header-wrapper {computedStyling.headerWrapperClass}">

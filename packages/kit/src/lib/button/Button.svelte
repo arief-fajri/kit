@@ -1,28 +1,37 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
-  import type { ButtonVariant, ButtonSize, ButtonState, ButtonSemantic, IconPosition, ButtonProps } from "../types.js";
+  import type { ButtonProps, ButtonStyling, ButtonBehavior } from "../types.js";
 
-  // Props with defaults
-  export let variant: ButtonProps["variant"] = "filled";
-  export let semantic: ButtonProps["semantic"] = undefined;
-  export let size: ButtonProps["size"] = "md";
-  export let state: ButtonProps["state"] = undefined;
+  // Core props
   export let label: ButtonProps["label"] = "";
-  export let fullRounded: ButtonProps["fullRounded"] = false;
-  export let className: ButtonProps["className"] = "";
-  export let customStyle: ButtonProps["customStyle"] = "";
-  export let disabled: ButtonProps["disabled"] = false;
-  export let loading: ButtonProps["loading"] = false;
-  export let loadingMessage: ButtonProps["loadingMessage"] = "Loading...";
-  export let stopPropagation: ButtonProps["stopPropagation"] = false;
-  export let fillColor: ButtonProps["fillColor"] = undefined;
-  export let textColor: ButtonProps["textColor"] = undefined;
-  export let outlineColor: ButtonProps["outlineColor"] = undefined;
-  export let href: ButtonProps["href"] = undefined;
-  export let target: ButtonProps["target"] = undefined;
-  export let rel: ButtonProps["rel"] = undefined;
-  export let iconPosition: ButtonProps["iconPosition"] = "left";
+  export let styling: ButtonProps["styling"] = {};
+  export let behavior: ButtonProps["behavior"] = {};
   export let ariaLabel: ButtonProps["ariaLabel"] = undefined;
+
+  // Computed props with defaults
+  $: computedStyling = {
+    variant: styling.variant ?? "filled",
+    semantic: styling.semantic ?? undefined,
+    size: styling.size ?? "md",
+    fullRounded: styling.fullRounded ?? false,
+    className: styling.className ?? "",
+    style: styling.style ?? "",
+    fillColor: styling.fillColor ?? undefined,
+    textColor: styling.textColor ?? undefined,
+    outlineColor: styling.outlineColor ?? undefined
+  };
+
+  $: computedBehavior = {
+    disabled: behavior.disabled ?? false,
+    state: behavior.state ?? undefined,
+    loading: behavior.loading ?? false,
+    loadingMessage: behavior.loadingMessage ?? "Loading...",
+    stopPropagation: behavior.stopPropagation ?? false,
+    href: behavior.href ?? undefined,
+    target: behavior.target ?? undefined,
+    rel: behavior.rel ?? undefined,
+    iconPosition: behavior.iconPosition ?? "left"
+  };
 
   const dispatch = createEventDispatcher<{
     click: MouseEvent;
@@ -33,28 +42,28 @@
   }>();
 
   // Determine actual state
-  $: actualState = state || "default";
+  $: actualState = computedBehavior.state ?? "default";
 
   // Determine if loading
-  $: isLoading = loading;
-  $: loadingMsg = loadingMessage;
+  $: isLoading = computedBehavior.loading;
+  $: loadingMsg = computedBehavior.loadingMessage;
 
   // Determine element type
   const httpRegex = /^((http|https):\/\/)/;
-  $: isExternal = !!href && httpRegex.test(href);
-  $: elementTag = href ? "a" : "button";
-  $: linkTarget = target || (isExternal ? "_blank" : undefined);
-  $: linkRel = rel || (isExternal ? "noopener noreferrer" : undefined);
+  $: isExternal = !!computedBehavior.href && httpRegex.test(computedBehavior.href);
+  $: elementTag = computedBehavior.href ? "a" : "button";
+  $: linkTarget = computedBehavior.target || (isExternal ? "_blank" : undefined);
+  $: linkRel = computedBehavior.rel || (isExternal ? "noopener noreferrer" : undefined);
 
   // Generate CSS custom properties for style overrides
   $: customStyles = (() => {
     const styles: string[] = [];
-    if (semantic) styles.push(`--btn-semantic-name: ${semantic}`);
-    if (fillColor) styles.push(`--btn-bg: ${fillColor}`);
-    if (textColor) styles.push(`--btn-text: ${textColor}`);
-    if (outlineColor) styles.push(`--btn-border: ${outlineColor}`);
-    if (customStyle) {
-      styles.push(customStyle);
+    if (computedStyling.semantic) styles.push(`--btn-semantic-name: ${computedStyling.semantic}`);
+    if (computedStyling.fillColor) styles.push(`--btn-bg: ${computedStyling.fillColor}`);
+    if (computedStyling.textColor) styles.push(`--btn-text: ${computedStyling.textColor}`);
+    if (computedStyling.outlineColor) styles.push(`--btn-border: ${computedStyling.outlineColor}`);
+    if (computedStyling.style) {
+      styles.push(computedStyling.style);
     }
     return styles.join("; ");
   })();
@@ -70,8 +79,8 @@
 
   // Event handlers
   const handleClick = (e: MouseEvent) => {
-    if (disabled || isLoading) return;
-    if (stopPropagation) e.stopPropagation();
+    if (computedBehavior.disabled || isLoading) return;
+    if (computedBehavior.stopPropagation) e.stopPropagation();
     dispatch("click", e);
   };
 
@@ -82,17 +91,17 @@
   $: computedAriaLabel = ariaLabel;
 
   // Compute semantic class name dynamically
-  $: semanticClass = semantic ? `btn--semantic-${semantic}` : "";
+  $: semanticClass = computedStyling.semantic ? `btn--semantic-${computedStyling.semantic}` : "";
 
   $: elementAttributes =
     elementTag === "a"
       ? {
-          href,
+          href: computedBehavior.href,
           rel: linkRel,
           target: linkTarget
         }
       : {
-          disabled: disabled || isLoading
+          disabled: computedBehavior.disabled || isLoading
         };
 </script>
 
@@ -103,17 +112,17 @@
   {...elementAttributes}
   aria-label={computedAriaLabel}
   aria-busy={isLoading}
-  aria-disabled={disabled || isLoading}
+  aria-disabled={computedBehavior.disabled || isLoading}
   aria-pressed={elementTag === "button" && actualState === "active" ? true : undefined}
-  class="btn btn--{variant} btn--{size} {semanticClass} {className}"
-  class:btn--full-rounded={fullRounded}
-  class:btn--disabled={disabled || isLoading}
+  class="btn btn--{computedStyling.variant} btn--{computedStyling.size} {semanticClass} {computedStyling.className}"
+  class:btn--full-rounded={computedStyling.fullRounded}
+  class:btn--disabled={computedBehavior.disabled || isLoading}
   class:btn--state-active={actualState === "active"}
   class:btn--state-selected={actualState === "selected"}
   class:btn--state-highlight={actualState === "highlight"}
   {...$$restProps}
   style={customStyles || undefined}
-  data-icon-position={iconPosition}
+  data-icon-position={computedBehavior.iconPosition}
   on:mouseenter={handleMouseEnter}
   on:mouseleave={handleMouseLeave}
   on:click={handleClick}
@@ -144,10 +153,10 @@
       </div>
     </slot>
   {:else}
-    {#if iconPosition === "left" || iconPosition === "only"}
+    {#if computedBehavior.iconPosition === "left" || computedBehavior.iconPosition === "only"}
       <slot name="icon" />
     {/if}
-    {#if iconPosition !== "only"}
+    {#if computedBehavior.iconPosition !== "only"}
       <slot {hovering}>
         {#if label}
           <span class="btn__label">{label}</span>
@@ -156,7 +165,7 @@
     {:else}
       <slot name="icon" />
     {/if}
-    {#if iconPosition === "right"}
+    {#if computedBehavior.iconPosition === "right"}
       <slot name="icon" />
     {/if}
   {/if}

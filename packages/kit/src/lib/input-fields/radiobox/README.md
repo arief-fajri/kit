@@ -54,19 +54,42 @@ The Radiobox component uses a label-wrapped structure that ensures proper access
 
 ## Props
 
+### Core Props
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `name` | `string` | `"radio"` | Radio group identifier for form grouping |
 | `label` | `string` | `""` | Text label displayed next to the radio button |
 | `checked` | `boolean` | `false` | Whether the radio button is selected |
-| `disabled` | `boolean` | `false` | Disables interaction and applies disabled styling |
-| `size` | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | Size of the radio button indicator |
-| `variant` | `'default' \| 'outlined' \| 'filled'` | `'default'` | Visual style variant |
-| `color` | `'primary' \| 'secondary' \| 'success' \| 'error' \| 'warning'` | `'primary'` | Semantic color scheme |
-| `rtl` | `boolean` | `false` | Right-to-left layout for international support |
-| `class` | `string` | `""` | Additional CSS classes for the wrapper |
-| `labelClass` | `string` | `""` | Additional CSS classes for the label container |
-| `radioClass` | `string` | `""` | Additional CSS classes for the radio input |
+| `id` | `string` | `""` | Field ID for label association |
+| `radioRef` | `HTMLInputElement \| undefined` | `undefined` | Reference to radio DOM element |
+
+### Styling Props (`styling` object)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `styling.size` | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | Size of the radio button indicator |
+| `styling.variant` | `'default' \| 'outlined' \| 'filled'` | `'default'` | Visual style variant |
+| `styling.color` | `'primary' \| 'secondary' \| 'success' \| 'error' \| 'warning'` | `'primary'` | Semantic color scheme |
+| `styling.wrapperClass` | `string` | `""` | Additional CSS classes for the wrapper |
+| `styling.labelClass` | `string` | `""` | Additional CSS classes for the label container |
+| `styling.radioClass` | `string` | `""` | Additional CSS classes for the radio input |
+| `styling.wrapperStyle` | `string` | `""` | Inline styles for wrapper element |
+
+### Behavior Props (`behavior` object)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `behavior.disabled` | `boolean` | `false` | Disables interaction and applies disabled styling |
+| `behavior.rtl` | `boolean` | `false` | Right-to-left layout for international support |
+| `behavior.stopPropagation` | `boolean` | `false` | Prevents click event bubbling when enabled |
+
+### Accessibility Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `ariaLabel` | `string` | `undefined` | ARIA label for accessibility |
+| `ariaDescribedBy` | `string` | `undefined` | ARIA described by reference |
 
 ## Variants
 
@@ -74,41 +97,41 @@ The Radiobox component uses a label-wrapped structure that ensures proper access
 The standard radio button style with a filled background when selected and transparent when unselected.
 
 ```svelte
-<Radiobox variant="default" name="style" label="Default Style" />
+<Radiobox styling={{ variant: "default" }} name="style" label="Default Style" />
 ```
 
 ### Outlined
 A border-only style that shows the color on the border and inner circle when selected, with a transparent background.
 
 ```svelte
-<Radiobox variant="outlined" name="style" label="Outlined Style" />
+<Radiobox styling={{ variant: "outlined" }} name="style" label="Outlined Style" />
 ```
 
 ### Filled
 A pre-filled background style that changes color when selected, providing a different visual emphasis.
 
 ```svelte
-<Radiobox variant="filled" name="style" label="Filled Style" />
+<Radiobox styling={{ variant: "filled" }} name="style" label="Filled Style" />
 ```
 
 ## Sizes
 
 ```svelte
-<Radiobox size="xs" name="size" label="Extra Small" />
-<Radiobox size="sm" name="size" label="Small" />
-<Radiobox size="md" name="size" label="Medium" />
-<Radiobox size="lg" name="size" label="Large" />
-<Radiobox size="xl" name="size" label="Extra Large" />
+<Radiobox styling={{ size: "xs" }} name="size" label="Extra Small" />
+<Radiobox styling={{ size: "sm" }} name="size" label="Small" />
+<Radiobox styling={{ size: "md" }} name="size" label="Medium" />
+<Radiobox styling={{ size: "lg" }} name="size" label="Large" />
+<Radiobox styling={{ size: "xl" }} name="size" label="Extra Large" />
 ```
 
 ## Colors
 
 ```svelte
-<Radiobox color="primary" name="color" label="Primary" />
-<Radiobox color="secondary" name="color" label="Secondary" />
-<Radiobox color="success" name="color" label="Success" />
-<Radiobox color="error" name="color" label="Error" />
-<Radiobox color="warning" name="color" label="Warning" />
+<Radiobox styling={{ color: "primary" }} name="color" label="Primary" />
+<Radiobox styling={{ color: "secondary" }} name="color" label="Secondary" />
+<Radiobox styling={{ color: "success" }} name="color" label="Success" />
+<Radiobox styling={{ color: "error" }} name="color" label="Error" />
+<Radiobox styling={{ color: "warning" }} name="color" label="Warning" />
 ```
 
 ## Radio Button Groups
@@ -189,13 +212,17 @@ Use the label slot for rich content including icons, formatted text, or complex 
 </script>
 
 <!-- Disabled state -->
-<Radiobox name="disabled-demo" label="Disabled Option" disabled />
+<Radiobox 
+  name="disabled-demo" 
+  label="Disabled Option" 
+  behavior={{ disabled: true }}
+/>
 
 <!-- Conditional disabling -->
 <Radiobox 
   name="conditional" 
   label="Available when form is valid" 
-  disabled={!formValid} 
+  behavior={{ disabled: !formValid }}
 />
 
 <!-- Pre-selected option -->
@@ -209,8 +236,16 @@ For international applications supporting RTL languages:
 ```svelte
 <!-- Arabic/Hebrew layout -->
 <div dir="rtl">
-  <Radiobox name="language" label="العربية" rtl />
-  <Radiobox name="language" label="עברית" rtl />
+  <Radiobox 
+    name="language" 
+    label="العربية" 
+    behavior={{ rtl: true }}
+  />
+  <Radiobox 
+    name="language" 
+    label="עברית" 
+    behavior={{ rtl: true }}
+  />
 </div>
 ```
 
@@ -334,7 +369,7 @@ The Radiobox component is fully accessible by default:
       name="plan" 
       value="basic"
       bind:checked={$form.plan === 'basic'}
-      color={$errors.plan ? 'error' : 'primary'}
+      styling={{ color: $errors.plan ? 'error' : 'primary' }}
       label="Basic Plan - $9/month" 
     />
     
@@ -342,7 +377,7 @@ The Radiobox component is fully accessible by default:
       name="plan" 
       value="pro"
       bind:checked={$form.plan === 'pro'}
-      color={$errors.plan ? 'error' : 'primary'}
+      styling={{ color: $errors.plan ? 'error' : 'primary' }}
       label="Pro Plan - $19/month" 
     />
     
@@ -362,8 +397,10 @@ The Radiobox component is fully accessible by default:
 <Radiobox 
   name="theme" 
   label="Dark Theme" 
-  class="custom-radio-dark"
-  labelClass="text-white font-medium"
+  styling={{
+    wrapperClass: "custom-radio-dark",
+    labelClass: "text-white font-medium"
+  }}
 />
 
 <style>
@@ -386,17 +423,21 @@ The component exports comprehensive TypeScript types:
 ```typescript
 import type { 
   RadioboxProps,
-  RadioboxSize,
-  RadioboxVariant,
-  RadioboxColor 
+  RadioboxStyling,
+  RadioboxBehavior
 } from '@rief/kit';
 
 const radioConfig: RadioboxProps = {
   name: 'example',
   label: 'Typed Radio Button',
-  size: 'lg',
-  variant: 'outlined',
-  color: 'success',
-  checked: false
+  checked: false,
+  styling: {
+    size: 'lg',
+    variant: 'outlined',
+    color: 'success'
+  },
+  behavior: {
+    disabled: false
+  }
 };
 ```

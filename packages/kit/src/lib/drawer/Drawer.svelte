@@ -4,16 +4,27 @@
   import DragLine from "../drag-line/DragLine.svelte";
   import type { DrawerPosition, DrawerEventDetail, DrawerResizeEventDetail } from "../types.js";
 
-  // Props
+  // Core props
   export let visible: boolean = false;
-  export let position: DrawerPosition = "right";
-  export let preventClose: boolean = false;
-  export let bgPanel: string = "var(--color-surface, #F6F6F6)";
-  export let isDraggable: boolean = true;
-  export let className: string = "";
-  export let overlay: boolean = true;
-  export let closeOnEscape: boolean = true;
+  export let styling: DrawerStyling = {};
+  export let behavior: DrawerBehavior = {};
   export let ariaLabel: string | undefined = undefined;
+  export let ariaDescribedBy: string | undefined = undefined;
+
+  // Computed props with defaults
+  $: computedStyling = {
+    className: styling.className ?? "",
+    style: styling.style ?? "",
+    bgPanel: styling.bgPanel ?? "var(--color-surface, #F6F6F6)"
+  };
+
+  $: computedBehavior = {
+    position: behavior.position ?? "right",
+    preventClose: behavior.preventClose ?? false,
+    isDraggable: behavior.isDraggable ?? true,
+    overlay: behavior.overlay ?? true,
+    closeOnEscape: behavior.closeOnEscape ?? true
+  };
 
   const dispatch = createEventDispatcher<{
     open: DrawerEventDetail;
@@ -27,8 +38,8 @@
   let previousFocusElement: HTMLElement | null = null;
 
   // Validate position
-  $: validPosition = (["top", "bottom", "left", "right", "center"] as DrawerPosition[]).includes(position)
-    ? position
+  $: validPosition = (["top", "bottom", "left", "right", "center"] as DrawerPosition[]).includes(computedBehavior.position)
+    ? computedBehavior.position
     : "right";
 
   // Animation functions
@@ -106,7 +117,7 @@
 
   // Handle close
   const handleClose = (reason: "overlay" | "escape" | "programmatic" = "programmatic") => {
-    if (preventClose && reason !== "programmatic") return;
+    if (computedBehavior.preventClose && reason !== "programmatic") return;
 
     visible = false;
     dispatch("close", {
@@ -129,10 +140,11 @@
 
   // Handle keyboard events
   const handleKeydown = (e: KeyboardEvent) => {
-    if (e.key === "Escape" && visible && closeOnEscape) {
+    if (e.key === "Escape" && visible && computedBehavior.closeOnEscape) {
       e.preventDefault();
       handleClose("escape");
     }
+    trapFocus(e);
   };
 
   // Handle drag start
@@ -173,10 +185,48 @@
   // Computed class name for position
   $: positionClass = `drawer-panel--${validPosition}`;
 
+  // Focus trap functionality
+  const trapFocus = (e: KeyboardEvent) => {
+    if (!visible || !drawerElm) return;
+    
+    const focusableElements = drawerElm.querySelectorAll(
+      'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    );
+    
+    if (focusableElements.length === 0) return;
+    
+    const firstElement = focusableElements[0] as HTMLElement;
+    const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+    
+    if (e.key === 'Tab') {
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement.focus();
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement.focus();
+        }
+      }
+    }
+  };
+
   // Watch for visibility changes
   $: if (visible) {
     // Store previous focus element
     previousFocusElement = document.activeElement as HTMLElement;
+
+    // Focus first element in drawer
+    setTimeout(() => {
+      if (drawerElm) {
+        const firstFocusable = drawerElm.querySelector(
+          'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        ) as HTMLElement;
+        firstFocusable?.focus();
+      }
+    }, 100);
 
     // Dispatch open event
     dispatch("open", {
@@ -201,7 +251,7 @@
 </script>
 
 {#if visible}
-  {#if overlay}
+  {#if computedBehavior.overlay}
     <div
       class="drawer-overlay"
       role="presentation"
@@ -218,16 +268,17 @@
     />
   {/if}
   <div
-    class="drawer-panel {positionClass} {className}"
-    style="background: {bgPanel}; {getPanelStyle()}"
+    class="drawer-panel {positionClass} {computedStyling.className}"
+    style="background: {computedStyling.bgPanel}; {getPanelStyle()}; {computedStyling.style || ''}"
     bind:this={drawerElm}
     role="dialog"
     aria-modal="true"
     aria-label={ariaLabel}
+    aria-describedby={ariaDescribedBy}
     transition:grow
   >
     <slot />
-    {#if isDraggable && ["left", "right"].includes(validPosition)}
+    {#if computedBehavior.isDraggable && ["left", "right"].includes(validPosition)}
       <div class="drawer-handle drawer-handle--{validPosition}">
         <DragLine on:dragstart={handleDragStart} on:dragging={handleDragging} on:dragstop={handleDragStop}>
           <div class="drawer-handle-indicator">

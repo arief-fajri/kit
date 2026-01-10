@@ -26,7 +26,7 @@ A flexible, accessible drawer/sidebar component for Svelte applications. The Dra
 
 <Drawer 
   bind:visible={isOpen}
-  position="right"
+  behavior={{ position: "right" }}
   on:close={(e) => console.log('Drawer closed:', e.detail)}
 >
   <h2>Drawer Content</h2>
@@ -36,17 +36,36 @@ A flexible, accessible drawer/sidebar component for Svelte applications. The Dra
 
 ## Props
 
+### Core Props
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `visible` | `boolean` | `false` | Controls drawer visibility |
-| `position` | `'top' \| 'bottom' \| 'left' \| 'right' \| 'center'` | `'right'` | Drawer slide position |
-| `preventClose` | `boolean` | `false` | Prevent closing when clicking overlay |
-| `bgPanel` | `string` | `"var(--color-surface, #F6F6F6)"` | Background color of panel |
-| `isDraggable` | `boolean` | `true` | Enable drag-to-resize (left/right only) |
-| `className` | `string` | `""` | Additional CSS classes |
-| `overlay` | `boolean` | `true` | Show overlay backdrop |
-| `closeOnEscape` | `boolean` | `true` | Close drawer on ESC key press |
+
+### Styling Props (`styling` object)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `styling.className` | `string` | `""` | Additional CSS classes |
+| `styling.style` | `string` | `""` | Additional inline styles |
+| `styling.bgPanel` | `string` | `"var(--color-surface, #F6F6F6)"` | Background color of panel |
+
+### Behavior Props (`behavior` object)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `behavior.position` | `'top' \| 'bottom' \| 'left' \| 'right' \| 'center'` | `'right'` | Drawer slide position |
+| `behavior.preventClose` | `boolean` | `false` | Prevent closing when clicking overlay |
+| `behavior.isDraggable` | `boolean` | `true` | Enable drag-to-resize (left/right only) |
+| `behavior.overlay` | `boolean` | `true` | Show overlay backdrop |
+| `behavior.closeOnEscape` | `boolean` | `true` | Close drawer on ESC key press |
+
+### Accessibility Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
 | `ariaLabel` | `string` | `undefined` | Accessibility label for drawer |
+| `ariaDescribedBy` | `string` | `undefined` | ARIA described by reference |
 
 ## Positions
 
@@ -54,7 +73,10 @@ A flexible, accessible drawer/sidebar component for Svelte applications. The Dra
 Drawer slides in from the right side.
 
 ```svelte
-<Drawer visible={true} position="right">
+<Drawer 
+  visible={true} 
+  behavior={{ position: "right" }}
+>
   <div>Content</div>
 </Drawer>
 ```
@@ -63,7 +85,10 @@ Drawer slides in from the right side.
 Drawer slides in from the left side.
 
 ```svelte
-<Drawer visible={true} position="left">
+<Drawer 
+  visible={true} 
+  behavior={{ position: "left" }}
+>
   <div>Content</div>
 </Drawer>
 ```
@@ -72,7 +97,10 @@ Drawer slides in from the left side.
 Drawer slides down from the top.
 
 ```svelte
-<Drawer visible={true} position="top">
+<Drawer 
+  visible={true} 
+  behavior={{ position: "top" }}
+>
   <div>Content</div>
 </Drawer>
 ```
@@ -81,7 +109,10 @@ Drawer slides down from the top.
 Drawer slides up from the bottom.
 
 ```svelte
-<Drawer visible={true} position="bottom">
+<Drawer 
+  visible={true} 
+  behavior={{ position: "bottom" }}
+>
   <div>Content</div>
 </Drawer>
 ```
@@ -90,7 +121,10 @@ Drawer slides up from the bottom.
 Drawer appears in the center of the screen with scale animation.
 
 ```svelte
-<Drawer visible={true} position="center">
+<Drawer 
+  visible={true} 
+  behavior={{ position: "center" }}
+>
   <div>Content</div>
 </Drawer>
 ```
@@ -146,8 +180,10 @@ Dispatched during drag-to-resize (left/right drawers only).
 ```svelte
 <Drawer 
   visible={isOpen}
-  position="right"
-  isDraggable={true}
+  behavior={{
+    position: "right",
+    isDraggable: true
+  }}
   on:resize={(e) => {
     console.log('New width:', e.detail.width);
   }}
@@ -171,8 +207,10 @@ The drawer supports drag-to-resize functionality for left and right positioned d
 ```svelte
 <Drawer 
   visible={isOpen}
-  position="right"
-  isDraggable={true}
+  behavior={{
+    position: "right",
+    isDraggable: true
+  }}
   on:resize={(e) => {
     // Handle resize
     console.log('Width:', e.detail.width);
@@ -186,9 +224,9 @@ The drawer supports drag-to-resize functionality for left and right positioned d
 
 ## Keyboard Support
 
-- **ESC**: Closes the drawer (if `closeOnEscape` is `true`)
+- **ESC**: Closes the drawer (if `behavior.closeOnEscape` is `true`)
 - **Tab**: Focus management within drawer
-- **Enter/Space on overlay**: Closes drawer (if `preventClose` is `false`)
+- **Enter/Space on overlay**: Closes drawer (if `behavior.preventClose` is `false`)
 
 ## Accessibility
 
@@ -196,7 +234,8 @@ The Drawer component includes:
 
 - `role="dialog"` for screen readers
 - `aria-modal="true"` to indicate modal behavior
-- `aria-label` support for custom labels
+- `ariaLabel` support for custom labels
+- `ariaDescribedBy` support for additional descriptions
 - Focus management (stores and restores focus)
 - Keyboard navigation support
 
@@ -213,7 +252,10 @@ The Drawer component includes:
 
 <Button label="Open Drawer" on:click={() => isOpen = true} />
 
-<Drawer bind:visible={isOpen} position="right">
+<Drawer 
+  bind:visible={isOpen}
+  behavior={{ position: "right" }}
+>
   <div style="padding: 1rem;">
     <h2>My Drawer</h2>
     <p>Drawer content goes here.</p>
@@ -227,8 +269,10 @@ The Drawer component includes:
 ```svelte
 <Drawer 
   visible={isOpen}
-  preventClose={true}
-  position="right"
+  behavior={{
+    preventClose: true,
+    position: "right"
+  }}
 >
   <div>This drawer cannot be closed by clicking the overlay</div>
 </Drawer>
@@ -239,8 +283,10 @@ The Drawer component includes:
 ```svelte
 <Drawer 
   visible={isOpen}
-  overlay={false}
-  position="left"
+  behavior={{
+    overlay: false,
+    position: "left"
+  }}
 >
   <div>Drawer without backdrop overlay</div>
 </Drawer>
@@ -251,9 +297,11 @@ The Drawer component includes:
 ```svelte
 <Drawer 
   visible={isOpen}
-  bgPanel="#FFFFFF"
-  className="my-custom-drawer"
-  position="right"
+  styling={{
+    bgPanel: "#FFFFFF",
+    className: "my-custom-drawer"
+  }}
+  behavior={{ position: "right" }}
 >
   <div>Custom styled drawer</div>
 </Drawer>

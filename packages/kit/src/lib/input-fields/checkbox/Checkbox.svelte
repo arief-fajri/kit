@@ -10,6 +10,8 @@
   export let value: any = undefined;
   export let label: string = "";
   export let checkboxRef: HTMLInputElement | undefined = undefined;
+  export let ariaLabel: string | undefined = undefined;
+  export let ariaDescribedBy: string | undefined = undefined;
 
   // Generate unique ID if not provided (SSR-safe)
   let checkboxId: string = id || safeUniqueId("checkbox-");
@@ -97,7 +99,8 @@
       on:change={handleChange}
       on:focus={handleFocus}
       on:blur={handleBlur}
-      aria-describedby={$$slots.description ? `${checkboxId}-description` : undefined}
+      aria-label={ariaLabel}
+      aria-describedby={ariaDescribedBy || ($$slots.description ? `${checkboxId}-description` : undefined)}
       {...$$restProps} 
     />
     <span class="checkmark" data-variant={computedStyling.variant} />

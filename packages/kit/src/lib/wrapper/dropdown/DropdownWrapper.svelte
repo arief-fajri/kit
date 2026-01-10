@@ -2,31 +2,31 @@
   import { onMount, tick, createEventDispatcher } from "svelte";
   import { sineOut } from "svelte/easing";
   import { portal } from "@rief/utils";
-
-  // Types
-  type Placement = "bottom-start" | "bottom-end" | "top-start" | "top-end" | "auto";
-  type Variant = "default" | "minimal" | "elevated" | "outlined";
-  type Size = "sm" | "md" | "lg" | "xl";
+  import type { DropdownWrapperProps, DropdownWrapperStyling, DropdownWrapperBehavior } from "../../types.js";
 
   // Core props
   export let visible: boolean = false;
   export let anchor: HTMLElement | null = null;
+  export let styling: DropdownWrapperProps["styling"] = {};
+  export let behavior: DropdownWrapperProps["behavior"] = {};
+  export let ariaLabel: DropdownWrapperProps["ariaLabel"] = undefined;
+  export let ariaDescribedBy: DropdownWrapperProps["ariaDescribedBy"] = undefined;
 
-  // Positioning
-  export let placement: Placement = "bottom-start";
-  export let offset: { x: number; y: number } = { x: 0, y: 4 };
+  // Computed props with defaults
+  $: computedStyling = {
+    variant: styling.variant ?? "default",
+    size: styling.size ?? "md",
+    className: styling.className ?? "",
+    style: styling.style ?? ""
+  };
 
-  // Styling
-  export let variant: Variant = "default";
-  export let size: Size = "md";
-
-  // Behavior
-  export let closeOnClickOutside: boolean = true;
-  export let closeOnEscape: boolean = true;
-  export let isFullAnchorWidth: boolean = true;
-
-  // Custom styling
-  export let className: string = "";
+  $: computedBehavior = {
+    placement: behavior.placement ?? "bottom-start",
+    offset: behavior.offset ?? { x: 0, y: 4 },
+    closeOnClickOutside: behavior.closeOnClickOutside ?? true,
+    closeOnEscape: behavior.closeOnEscape ?? true,
+    isFullAnchorWidth: behavior.isFullAnchorWidth ?? true
+  };
 
   let dropdownEl: HTMLElement;
   const dispatch = createEventDispatcher<{
@@ -42,7 +42,7 @@
   });
 
   // Size configurations
-  const sizeConfig: Record<Size, { minWidth: string; maxWidth: string }> = {
+  const sizeConfig: Record<typeof computedStyling.size, { minWidth: string; maxWidth: string }> = {
     sm: { minWidth: "120px", maxWidth: "200px" },
     md: { minWidth: "160px", maxWidth: "280px" },
     lg: { minWidth: "200px", maxWidth: "360px" },
@@ -50,8 +50,9 @@
   };
 
   const composeStyle = (): string => {
-    const config = sizeConfig[size] || sizeConfig.md;
-    return `--dropdown-min-width: ${config.minWidth}; --dropdown-max-width: ${config.maxWidth};`;
+    const config = sizeConfig[computedStyling.size] || sizeConfig.md;
+    const baseStyle = `--dropdown-min-width: ${config.minWidth}; --dropdown-max-width: ${config.maxWidth};`;
+    return computedStyling.style ? `${baseStyle}; ${computedStyling.style}` : baseStyle;
   };
 
   const positionDropdown = (): void => {
@@ -64,11 +65,11 @@
       height: Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
     };
 
-    let finalPlacement: Placement = placement;
+    let finalPlacement: typeof computedBehavior.placement = computedBehavior.placement;
     let top: number, left: number, origin: string;
 
     // Auto placement detection
-    if (placement === "auto") {
+    if (computedBehavior.placement === "auto") {
       const spaceBelow = viewport.height - anchorRect.bottom;
       const spaceAbove = anchorRect.top;
       const spaceRight = viewport.width - anchorRect.left;
@@ -85,7 +86,7 @@
 
     let _width = dropdownRect.width;
 
-    if (isFullAnchorWidth) {
+    if (computedBehavior.isFullAnchorWidth) {
       dropdownEl.style.maxWidth = `${anchorRect.width}px`;
       dropdownEl.style.width = `${anchorRect.width}px`;
       _width = anchorRect.width;
@@ -94,28 +95,28 @@
     // Calculate position based on placement
     switch (finalPlacement) {
       case "bottom-start":
-        top = anchorRect.bottom + offset.y;
-        left = anchorRect.left + offset.x;
+        top = anchorRect.bottom + computedBehavior.offset.y;
+        left = anchorRect.left + computedBehavior.offset.x;
         origin = "top left";
         break;
       case "bottom-end":
-        top = anchorRect.bottom + offset.y;
-        left = anchorRect.right - _width - offset.x;
+        top = anchorRect.bottom + computedBehavior.offset.y;
+        left = anchorRect.right - _width - computedBehavior.offset.x;
         origin = "top right";
         break;
       case "top-start":
-        top = anchorRect.top - dropdownRect.height - offset.y;
-        left = anchorRect.left + offset.x;
+        top = anchorRect.top - dropdownRect.height - computedBehavior.offset.y;
+        left = anchorRect.left + computedBehavior.offset.x;
         origin = "bottom left";
         break;
       case "top-end":
-        top = anchorRect.top - dropdownRect.height - offset.y;
-        left = anchorRect.right - _width - offset.x;
+        top = anchorRect.top - dropdownRect.height - computedBehavior.offset.y;
+        left = anchorRect.right - _width - computedBehavior.offset.x;
         origin = "bottom right";
         break;
       default:
-        top = anchorRect.bottom + offset.y;
-        left = anchorRect.left + offset.x;
+        top = anchorRect.bottom + computedBehavior.offset.y;
+        left = anchorRect.left + computedBehavior.offset.x;
         origin = "top left";
     }
 
@@ -140,7 +141,7 @@
 
   // Event handlers
   const handleDocumentClick = (event: MouseEvent): void => {
-    if (!closeOnClickOutside) return;
+    if (!computedBehavior.closeOnClickOutside) return;
     const target = event.target as Node;
     if (dropdownEl && !dropdownEl.contains(target) && anchor && !anchor.contains(target)) {
       dispatch("close");
@@ -148,7 +149,7 @@
   };
 
   const handleKeydown = (event: KeyboardEvent): void => {
-    if (!closeOnEscape) return;
+    if (!computedBehavior.closeOnEscape) return;
     if (event.key === "Escape") {
       event.preventDefault();
       dispatch("close");
@@ -157,10 +158,10 @@
 
   const addEventListeners = (): void => {
     if (typeof window === "undefined") return;
-    if (closeOnClickOutside) {
+    if (computedBehavior.closeOnClickOutside) {
       document.addEventListener("mousedown", handleDocumentClick, true);
     }
-    if (closeOnEscape) {
+    if (computedBehavior.closeOnEscape) {
       document.addEventListener("keydown", handleKeydown, true);
     }
   };
@@ -202,10 +203,12 @@
   <div
     bind:this={dropdownEl}
     use:portal
-    class="dropdown dropdown--{variant} dropdown--{size} {className}"
+    class="dropdown dropdown--{computedStyling.variant} dropdown--{computedStyling.size} {computedStyling.className}"
     style={composeStyle()}
     transition:grow
     role="menu"
+    aria-label={ariaLabel}
+    aria-describedby={ariaDescribedBy}
     aria-hidden={!visible}
   >
     <slot>

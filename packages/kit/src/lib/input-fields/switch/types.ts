@@ -40,7 +40,9 @@ export interface SwitchBehavior {
 	stopPropagation?: boolean;
 }
 
-export interface SwitchProps {
+import type { BaseAccessibility } from "../../types.js";
+
+export interface SwitchProps extends BaseAccessibility {
 	/** Unique identifier for the switch input */
 	id?: string;
 	/** HTML name attribute for form handling */

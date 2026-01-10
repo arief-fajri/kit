@@ -19,35 +19,46 @@
 
   const dispatch = createEventDispatcher<{ change: DatePickerChangeEvent }>();
 
-  // Props with defaults
-  export let variant: DatePickerProps["variant"] = "default";
-  export let size: DatePickerProps["size"] = "md";
+  import type { DatePickerProps, DatePickerStyling, DatePickerBehavior } from "./types.js";
+
+  // Core props
   export let value: DatePickerProps["value"] = null;
   export let rangeValue: DatePickerProps["rangeValue"] = [null, null];
   export let multipleValue: DatePickerProps["multipleValue"] = [];
-  export let mode: DatePickerProps["mode"] = "single";
-  export let minDate: DatePickerProps["minDate"] = null;
-  export let maxDate: DatePickerProps["maxDate"] = null;
-  export let disabledDates: DatePickerProps["disabledDates"] = undefined;
-  export let firstDayOfWeek: DatePickerProps["firstDayOfWeek"] = 0;
-  export let showWeekNumbers: DatePickerProps["showWeekNumbers"] = false;
-  export let showToday: DatePickerProps["showToday"] = true;
-  export let showClear: DatePickerProps["showClear"] = true;
-  export let closeOnSelect: DatePickerProps["closeOnSelect"] = true;
-  export let labels: DatePickerProps["labels"] = {};
-  export let className: DatePickerProps["className"] = "";
-  export let disabled: DatePickerProps["disabled"] = false;
-  export let loading: DatePickerProps["loading"] = false;
-  export let locale: DatePickerProps["locale"] = "en-US";
+  export let styling: DatePickerProps["styling"] = {};
+  export let behavior: DatePickerProps["behavior"] = {};
+  export let ariaLabel: DatePickerProps["ariaLabel"] = undefined;
+  export let ariaDescribedBy: DatePickerProps["ariaDescribedBy"] = undefined;
 
-  // Generate CSS custom properties for style overrides
-  $: customStyles = (() => {
-    const styles: string[] = [];
-    return styles.join("; ");
-  })();
+  // Computed props with defaults
+  $: computedStyling = {
+    variant: styling.variant ?? "default",
+    size: styling.size ?? "md",
+    className: styling.className ?? "",
+    style: styling.style ?? ""
+  };
 
-  // Merge labels with defaults
-  $: mergedLabels = { ...DEFAULT_LABELS, ...labels };
+  $: computedBehavior = {
+    mode: behavior.mode ?? "single",
+    disabled: behavior.disabled ?? false,
+    loading: behavior.loading ?? false,
+    minDate: behavior.minDate ?? null,
+    maxDate: behavior.maxDate ?? null,
+    disabledDates: behavior.disabledDates ?? undefined,
+    firstDayOfWeek: behavior.firstDayOfWeek ?? 0,
+    showWeekNumbers: behavior.showWeekNumbers ?? false,
+    showToday: behavior.showToday ?? true,
+    showClear: behavior.showClear ?? true,
+    closeOnSelect: behavior.closeOnSelect ?? true,
+    labels: behavior.labels ?? {},
+    locale: behavior.locale ?? "en-US"
+  };
+
+  // Generate CSS custom properties for style overrides - memoized
+  $: customStyles = "";
+
+  // Merge labels with defaults - memoized
+  $: mergedLabels = { ...DEFAULT_LABELS, ...computedBehavior.labels };
 
   // Internal state
   let display: DisplayMode = "calendar";
@@ -56,19 +67,19 @@
   let year = 0;
 
   // Date validation
-  $: validation = useDateValidation({ minDate, maxDate, disabledDates });
+  $: validation = useDateValidation({ minDate: computedBehavior.minDate, maxDate: computedBehavior.maxDate, disabledDates: computedBehavior.disabledDates });
 
   // Current date for navigation
   $: currentDate = (() => {
-    if (mode === "single" && value) {
+    if (computedBehavior.mode === "single" && value) {
       const date = toDate(value);
       return date || new Date();
     }
-    if (mode === "range" && rangeValue && rangeValue[0]) {
+    if (computedBehavior.mode === "range" && rangeValue && rangeValue[0]) {
       const date = toDate(rangeValue[0]);
       return date || new Date();
     }
-    if (mode === "multiple" && multipleValue && multipleValue.length > 0) {
+    if (computedBehavior.mode === "multiple" && multipleValue && multipleValue.length > 0) {
       const date = toDate(multipleValue[0]);
       return date || new Date();
     }
@@ -86,18 +97,18 @@
 
   // Handle date selection
   const handleDateChange = (event: CustomEvent<{ date: Date; type: "select" | "range-start" | "range-end" }>) => {
-    if (disabled || loading) return;
+    if (computedBehavior.disabled || computedBehavior.loading) return;
 
     const { date, type } = event.detail;
 
-    if (mode === "single") {
+    if (computedBehavior.mode === "single") {
       const changeEvent: DatePickerChangeEvent = {
         value: date,
         mode: "single",
-        formatted: formatDate(date, locale)
+        formatted: formatDate(date, computedBehavior.locale)
       };
       dispatch("change", changeEvent);
-    } else if (mode === "range") {
+    } else if (computedBehavior.mode === "range") {
       let newRange: DateRangeValue;
 
       if (type === "range-start" || !rangeValue || !rangeValue[0] || (rangeValue[0] && rangeValue[1])) {
@@ -109,10 +120,10 @@
       const changeEvent: DatePickerChangeEvent = {
         value: newRange,
         mode: "range",
-        formatted: newRange.map((d) => formatDate(toDate(d), locale))
+        formatted: newRange.map((d) => formatDate(toDate(d), computedBehavior.locale))
       };
       dispatch("change", changeEvent);
-    } else if (mode === "multiple") {
+    } else if (computedBehavior.mode === "multiple") {
       const currentMultiple = [...(multipleValue || [])];
       const existingIndex = currentMultiple.findIndex((d) => {
         const existing = toDate(d);
@@ -131,7 +142,7 @@
       const changeEvent: DatePickerChangeEvent = {
         value: newMultiple,
         mode: "multiple",
-        formatted: newMultiple.map((d) => formatDate(toDate(d), locale))
+        formatted: newMultiple.map((d) => formatDate(toDate(d), computedBehavior.locale))
       };
       dispatch("change", changeEvent);
     }
@@ -166,7 +177,7 @@
 
   // Today button handler
   const goToToday = () => {
-    if (disabled || loading) return;
+    if (computedBehavior.disabled || computedBehavior.loading) return;
 
     const today = new Date();
     month = today.getMonth();
@@ -176,18 +187,18 @@
     // Dispatch change event based on mode
     let changeEvent: DatePickerChangeEvent;
 
-    if (mode === "single") {
+    if (computedBehavior.mode === "single") {
       changeEvent = {
         value: today,
         mode: "single",
-        formatted: formatDate(today, locale)
+        formatted: formatDate(today, computedBehavior.locale)
       };
-    } else if (mode === "range") {
+    } else if (computedBehavior.mode === "range") {
       // Set today as start date (replace existing range)
       changeEvent = {
         value: [today, null],
         mode: "range",
-        formatted: [formatDate(today, locale), ""]
+        formatted: [formatDate(today, computedBehavior.locale), ""]
       };
     } else {
       // Multiple mode: add today to selection (or toggle if exists)
@@ -209,7 +220,7 @@
       changeEvent = {
         value: newMultiple,
         mode: "multiple",
-        formatted: newMultiple.map((d) => formatDate(toDate(d), locale))
+        formatted: newMultiple.map((d) => formatDate(toDate(d), computedBehavior.locale))
       };
     }
 
@@ -218,13 +229,13 @@
 
   // Clear button handler
   const clearSelection = () => {
-    if (disabled || loading) return;
+    if (computedBehavior.disabled || computedBehavior.loading) return;
 
     let changeEvent: DatePickerChangeEvent;
 
-    if (mode === "single") {
+    if (computedBehavior.mode === "single") {
       changeEvent = { value: null, mode: "single", formatted: "" };
-    } else if (mode === "range") {
+    } else if (computedBehavior.mode === "range") {
       changeEvent = { value: [null, null], mode: "range", formatted: ["", ""] };
     } else {
       changeEvent = { value: [], mode: "multiple", formatted: [] };
@@ -234,19 +245,24 @@
   };
 
   // Root CSS classes
-  $: rootClasses = ["date-picker", `date-picker--${variant}`, `date-picker--${size}`, className]
+  $: rootClasses = ["date-picker", `date-picker--${computedStyling.variant}`, `date-picker--${computedStyling.size}`, computedStyling.className]
     .filter(Boolean)
     .join(" ");
 </script>
 
 <div
   class={rootClasses}
-  class:date-picker--disabled={disabled}
-  class:date-picker--loading={loading}
-  style={customStyles}
+  class:date-picker--disabled={computedBehavior.disabled}
+  class:date-picker--loading={computedBehavior.loading}
+  style={customStyles || computedStyling.style || undefined}
+  role="application"
+  aria-label={ariaLabel || "Date picker"}
+  aria-describedby={ariaDescribedBy}
+  aria-live="polite"
+  aria-atomic="true"
   {...$$restProps}
 >
-  {#if loading}
+  {#if computedBehavior.loading}
     <div class="date-picker__loading">
       <svg
         class="date-picker__spinner"
@@ -276,7 +292,7 @@
             type="button"
             on:click={() => (display = "month")}
             aria-label={mergedLabels.selectMonth}
-            {disabled}
+            disabled={computedBehavior.disabled}
           >
             {mergedLabels.months[month]}
           </button>
@@ -286,30 +302,30 @@
           type="button"
           on:click={() => (display = "year")}
           aria-label={mergedLabels.selectYear}
-          {disabled}
+          disabled={computedBehavior.disabled}
         >
           {year}
         </button>
       </div>
 
       <div class="date-picker__controls">
-        {#if showToday}
+        {#if computedBehavior.showToday}
           <button
             class="date-picker__control-button date-picker__control-button--today"
             type="button"
             on:click={goToToday}
-            {disabled}
+            disabled={computedBehavior.disabled}
           >
             {mergedLabels.today}
           </button>
         {/if}
 
-        {#if showClear}
+        {#if computedBehavior.showClear}
           <button
             class="date-picker__control-button date-picker__control-button--clear"
             type="button"
             on:click={clearSelection}
-            {disabled}
+            disabled={computedBehavior.disabled}
           >
             {mergedLabels.clear}
           </button>
@@ -320,7 +336,7 @@
           type="button"
           on:click={prev}
           aria-label={mergedLabels.prev}
-          {disabled}
+          disabled={computedBehavior.disabled}
         >
           <svg viewBox="0 0 16 16" aria-hidden="true">
             <path
@@ -339,7 +355,7 @@
           type="button"
           on:click={next}
           aria-label={mergedLabels.next}
-          {disabled}
+          disabled={computedBehavior.disabled}
         >
           <svg viewBox="0 0 16 16" aria-hidden="true">
             <path
@@ -364,10 +380,10 @@
             {value}
             {rangeValue}
             {multipleValue}
-            {mode}
+            mode={computedBehavior.mode}
             isAllowed={validation.isAllowed}
-            {firstDayOfWeek}
-            {showWeekNumbers}
+            firstDayOfWeek={computedBehavior.firstDayOfWeek}
+            showWeekNumbers={computedBehavior.showWeekNumbers}
             weekdayLabels={mergedLabels.weekdays}
             on:datechange={handleDateChange}
           />
@@ -383,7 +399,7 @@
                 month = i;
                 display = "calendar";
               }}
-              {disabled}
+              disabled={computedBehavior.disabled}
             >
               {monthName}
             </button>
@@ -400,7 +416,7 @@
                 year = y;
                 display = "calendar";
               }}
-              {disabled}
+              disabled={computedBehavior.disabled}
             >
               {y}
             </button>

@@ -68,14 +68,34 @@ The DragLine component renders as a flexible wrapper container that detects drag
 
 ## Props
 
+### Core Props
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `tolerance` | `number` | `0` | Minimum movement in pixels before drag starts |
-| `isVertical` | `boolean` | `false` | Vertical drag orientation (changes cursor) |
-| `zIndex` | `number` | `101` | Z-index of the drag element |
-| `disabled` | `boolean` | `false` | Disable drag functionality |
-| `className` | `string` | `""` | Additional CSS classes |
+| *(No core props - DragLine uses only styling and behavior)* | | | |
+
+### Styling Props (`styling` object)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `styling.className` | `string` | `""` | Additional CSS classes |
+| `styling.style` | `string` | `""` | Additional inline styles |
+| `styling.zIndex` | `number` | `101` | Z-index of the drag element |
+
+### Behavior Props (`behavior` object)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `behavior.disabled` | `boolean` | `false` | Disable drag functionality |
+| `behavior.tolerance` | `number` | `0` | Minimum movement in pixels before drag starts |
+| `behavior.isVertical` | `boolean` | `false` | Vertical drag orientation (changes cursor) |
+
+### Accessibility Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
 | `ariaLabel` | `string` | `undefined` | Accessibility label |
+| `ariaDescribedBy` | `string` | `undefined` | ARIA described by reference |
 
 ## Events
 
@@ -132,7 +152,7 @@ Dispatched when drag operation ends.
 ### Vertical
 
 ```svelte
-<DragLine isVertical={true}>
+<DragLine behavior={{ isVertical: true }}>
   <div class="drag-handle">Vertical drag</div>
 </DragLine>
 ```
@@ -143,7 +163,7 @@ The `tolerance` prop prevents accidental drags by requiring a minimum movement b
 
 ```svelte
 <!-- Require 5px movement before drag starts -->
-<DragLine tolerance={5}>
+<DragLine behavior={{ tolerance: 5 }}>
   <div class="drag-handle">Drag me</div>
 </DragLine>
 ```
@@ -151,17 +171,17 @@ The `tolerance` prop prevents accidental drags by requiring a minimum movement b
 ## Disabled State
 
 ```svelte
-<DragLine disabled={isLocked}>
+<DragLine behavior={{ disabled: isLocked }}>
   <div class="drag-handle">Drag me</div>
 </DragLine>
 ```
 
 ## Custom Styling
 
-Use the `className` prop to add custom classes:
+Use the `styling` prop to add custom classes:
 
 ```svelte
-<DragLine className="my-custom-dragline">
+<DragLine styling={{ className: "my-custom-dragline" }}>
   <div class="drag-handle">Drag me</div>
 </DragLine>
 ```
@@ -175,7 +195,7 @@ The component includes ARIA attributes for accessibility:
 ```svelte
 <DragLine 
   ariaLabel="Resize panel"
-  isVertical={true}
+  behavior={{ isVertical: true }}
 >
   <div class="drag-handle">Drag to resize</div>
 </DragLine>
@@ -251,14 +271,18 @@ The component includes ARIA attributes for accessibility:
 The component exports comprehensive TypeScript types:
 
 ```typescript
-import type { DragLineProps, DragLineEventDetail } from '@rief/kit';
+import type { DragLineProps, DragLineStyling, DragLineBehavior } from '@rief/kit';
 
 const dragLineConfig: DragLineProps = {
-  tolerance: 5,
-  isVertical: false,
-  zIndex: 200,
-  disabled: false,
-  className: 'custom-dragline',
+  styling: {
+    className: 'custom-dragline',
+    zIndex: 200
+  },
+  behavior: {
+    tolerance: 5,
+    isVertical: false,
+    disabled: false
+  },
   ariaLabel: 'Resize panel'
 };
 ```

@@ -98,6 +98,8 @@ The TableListing component uses a standard HTML table structure with enhanced fu
 
 ## Props
 
+### Core Props
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `columns` | `TableColumn[]` | `[]` | Column definitions |
@@ -106,33 +108,51 @@ The TableListing component uses a standard HTML table structure with enhanced fu
 | `currentOffset` | `number` | `0` | Current offset for pagination (0-based) |
 | `limit` | `number` | `10` | Items per page |
 | `emptyMessage` | `string` | `"Tidak ada data"` | Empty state message |
-| `tableContainerClass` | `string` | `""` | Custom CSS class for table wrapper |
-| `headerClass` | `string` | `""` | Custom CSS class for header |
-| `rowClass` | `string \| function` | `""` | Custom CSS class for rows |
-| `cellClass` | `string \| function` | `""` | Custom CSS class for cells |
-| `showPagination` | `boolean` | `true` | Show pagination component |
-| `paginationSize` | `'sm' \| 'md' \| 'lg'` | `'md'` | Pagination size |
-| `paginationVariant` | `'default' \| 'minimal'` | `'default'` | Pagination variant |
-| `paginationShowFirstLast` | `boolean` | `true` | Show first/last buttons in pagination |
-| `paginationShowPageInfo` | `boolean` | `false` | Show page info in pagination |
-| `autoResetOffsetOnSort` | `boolean` | `true` | Reset offset when sort changes |
-| `scrollToTopOnPageChange` | `boolean` | `true` | Scroll to top on page change |
-| `customSortFn` | `function` | `undefined` | Custom sort function |
-| `rowClickable` | `boolean` | `false` | Enable row click handling |
-| `loading` | `boolean` | `false` | Loading state |
-| `selectable` | `boolean` | `false` | Enable row selection |
-| `selectedRows` | `(string \| number)[]` | `[]` | Selected row IDs/indices |
-| `cssVariables` | `Record<string, string>` | `{}` | Custom CSS variables |
-| `enableHover` | `boolean` | `true` | Enable hover effect on rows |
-| `hoverColor` | `string` | `undefined` | Custom hover background color |
 | `tableId` | `string` | `undefined` | Table ID for accessibility |
+
+### Styling Props (`styling` object)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `styling.className` | `string` | `""` | Additional CSS classes for root element |
+| `styling.style` | `string` | `""` | Additional inline styles |
+| `styling.tableContainerClass` | `string` | `""` | Custom CSS class for table wrapper |
+| `styling.headerClass` | `string` | `""` | Custom CSS class for header |
+| `styling.rowClass` | `string \| function` | `""` | Custom CSS class for rows |
+| `styling.cellClass` | `string \| function` | `""` | Custom CSS class for cells |
+| `styling.tbodyClass` | `string` | `""` | Custom tbody class |
+| `styling.paginationClass` | `string` | `""` | Custom pagination wrapper class |
+| `styling.cssVariables` | `Record<string, string>` | `{}` | Custom CSS variables |
+| `styling.hoverColor` | `string` | `undefined` | Custom hover background color |
+
+### Behavior Props (`behavior` object)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `behavior.showPagination` | `boolean` | `true` | Show pagination component |
+| `behavior.paginationSize` | `'sm' \| 'md' \| 'lg'` | `'md'` | Pagination size |
+| `behavior.paginationVariant` | `'default' \| 'minimal'` | `'default'` | Pagination variant |
+| `behavior.paginationShowFirstLast` | `boolean` | `true` | Show first/last buttons in pagination |
+| `behavior.paginationShowPageInfo` | `boolean` | `false` | Show page info in pagination |
+| `behavior.autoResetOffsetOnSort` | `boolean` | `true` | Reset offset when sort changes |
+| `behavior.scrollToTopOnPageChange` | `boolean` | `true` | Scroll to top on page change |
+| `behavior.customSortFn` | `function` | `undefined` | Custom sort function |
+| `behavior.rowClickable` | `boolean` | `false` | Enable row click handling |
+| `behavior.loading` | `boolean` | `false` | Loading state |
+| `behavior.selectable` | `boolean` | `false` | Enable row selection |
+| `behavior.selectedRows` | `(string \| number)[]` | `[]` | Selected row IDs/indices |
+| `behavior.enableHover` | `boolean` | `true` | Enable hover effect on rows |
+| `behavior.draggable` | `boolean` | `false` | Enable drag and drop |
+| `behavior.canDrop` | `function` | `undefined` | Function to validate drops |
+| `behavior.serverSide` | `boolean` | `false` | Enable server-side pagination/sorting |
+| `behavior.totalRows` | `number` | `undefined` | Total rows (required for server-side) |
+
+### Accessibility Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
 | `ariaLabel` | `string` | `undefined` | ARIA label for table |
-| `tbodyClass` | `string` | `""` | Custom tbody class |
-| `paginationClass` | `string` | `""` | Custom pagination wrapper class |
-| `draggable` | `boolean` | `false` | Enable drag and drop |
-| `canDrop` | `function` | `undefined` | Function to validate drops |
-| `serverSide` | `boolean` | `false` | Enable server-side pagination/sorting |
-| `totalRows` | `number` | `undefined` | Total rows (required for server-side) |
+| `ariaDescribedBy` | `string` | `undefined` | ARIA described by reference |
 
 ## Column Definition
 
@@ -265,7 +285,7 @@ The TableListing component dispatches several events:
 <TableListing 
   {columns}
   {data}
-  {customSortFn}
+  behavior={{ customSortFn }}
 />
 ```
 
@@ -327,9 +347,11 @@ The TableListing component dispatches several events:
   {data}
   bind:currentOffset
   {limit}
-  {totalRows}
+  behavior={{
+    totalRows: totalRows,
+    serverSide: true
+  }}
   bind:sort
-  serverSide={true}
   on:pageChange={handlePageChange}
   on:sortChange={handleSortChange}
 />
@@ -356,7 +378,10 @@ The TableListing component dispatches several events:
 <TableListing 
   {columns}
   {data}
-  selectable={true}
+  behavior={{
+    selectable: true,
+    selectedRows: selectedRows
+  }}
   bind:selectedRows
   on:rowSelect={handleRowSelect}
 />
@@ -376,7 +401,7 @@ The TableListing component dispatches several events:
 <TableListing 
   {columns}
   {data}
-  rowClickable={true}
+  behavior={{ rowClickable: true }}
   on:rowClick={handleRowClick}
 />
 ```
@@ -403,8 +428,10 @@ The TableListing component dispatches several events:
 <TableListing 
   {columns}
   {data}
-  draggable={true}
-  {canDrop}
+  behavior={{
+    draggable: true,
+    canDrop: canDrop
+  }}
   on:drop={handleDrop}
 />
 ```
@@ -429,7 +456,7 @@ The TableListing component dispatches several events:
 <TableListing 
   {columns}
   {data}
-  {loading}
+  behavior={{ loading }}
 />
 ```
 
@@ -477,7 +504,11 @@ The TableListing component dispatches several events:
 ### Custom Checkbox
 
 ```svelte
-<TableListing {columns} {data} selectable={true}>
+<TableListing 
+  {columns}
+  {data}
+  behavior={{ selectable: true }}
+>
   <CustomCheckbox slot="row-checkbox" let:row let:isSelected />
   <CustomCheckbox slot="header-checkbox" />
 </TableListing>
@@ -500,7 +531,7 @@ The TableListing component dispatches several events:
 <TableListing 
   {columns}
   {data}
-  rowClass={getRowClass}
+  styling={{ rowClass: getRowClass }}
 />
 ```
 
@@ -519,7 +550,7 @@ The TableListing component dispatches several events:
 <TableListing 
   {columns}
   {data}
-  cellClass={getCellClass}
+  styling={{ cellClass: getCellClass }}
 />
 ```
 
@@ -529,9 +560,11 @@ The TableListing component dispatches several events:
 <TableListing 
   {columns}
   {data}
-  cssVariables={{
-    'table-listing-hover-bg': '#f0f0f0',
-    'table-listing-selected-bg': '#e0e0e0'
+  styling={{
+    cssVariables: {
+      'table-listing-hover-bg': '#f0f0f0',
+      'table-listing-selected-bg': '#e0e0e0'
+    }
   }}
 />
 ```

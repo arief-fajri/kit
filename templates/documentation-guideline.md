@@ -83,12 +83,26 @@ src/lib/[component-name]/
   import { [ComponentName] } from '@rief/kit';
 </script>
 
-<!-- Basic example -->
-<[ComponentName] [basicProp]="[value]" />
-
-<!-- Example with handler -->
+<!-- Basic example with grouped props -->
 <[ComponentName] 
-  [prop]="[value]" 
+  [coreProp]="[value]"
+  styling={{
+    variant: "[default-variant]",
+    size: "md"
+  }}
+/>
+
+<!-- Example with handler and behavior -->
+<[ComponentName] 
+  [coreProp]="[value]"
+  styling={{
+    variant: "[variant]",
+    size: "md"
+  }}
+  behavior={{
+    disabled: false,
+    loading: false
+  }}
   on:[event]={[handler]} 
 />
 ```
@@ -97,27 +111,62 @@ src/lib/[component-name]/
 **Guidelines:**
 - Start with the simplest possible usage
 - Show import statement
+- Use grouped props pattern (`styling`, `behavior`, `validation`)
 - Include one basic example and one with event handler
 - Use realistic prop values
+- Show the standardized props structure
 
 ### 4. Props Table
 
 ```markdown
 ## Props
 
+### Core Props
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `[prop1]` | `[type]` | `[default]` | [Description] |
-| `[prop2]` | `'option1' \| 'option2'` | `'option1'` | [Description] |
-| `[prop3]` | `boolean` | `false` | [Description] |
+| `[coreProp1]` | `[type]` | `[default]` | [Description] |
+| `[coreProp2]` | `[type]` | `[default]` | [Description] |
+
+### Styling Props (`styling` object)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `styling.variant` | `'option1' \| 'option2'` | `'option1'` | Visual style variant |
+| `styling.size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Component size |
+| `styling.className` | `string` | `""` | Additional CSS classes |
+| `styling.style` | `string` | `""` | Additional inline styles |
+
+### Behavior Props (`behavior` object)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `behavior.disabled` | `boolean` | `false` | Disable the component |
+| `behavior.loading` | `boolean` | `false` | Show loading state |
+
+### Validation Props (`validation` object) - Form components only
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `validation.required` | `boolean` | `false` | Required field indicator |
+| `validation.isError` | `boolean` | `false` | Error state |
+| `validation.errorMessage` | `string` | `""` | Error message to display |
+
+### Accessibility Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `ariaLabel` | `string` | `undefined` | ARIA label for accessibility |
+| `ariaDescribedBy` | `string` | `undefined` | ARIA described by reference |
 ```
 
 **Guidelines:**
+- Group props by category (Core, Styling, Behavior, Validation, Accessibility)
 - Include ALL props, even optional ones
 - Use TypeScript union types for enums
 - Provide meaningful defaults
 - Keep descriptions concise but complete
-- Order by importance (required first, then by usage frequency)
+- Document component-specific props within their respective groups
 
 ### 5. Variants Section
 

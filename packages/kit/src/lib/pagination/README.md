@@ -67,29 +67,48 @@ The Pagination component uses a horizontal navigation layout with configurable b
 
 ## Props
 
+### Core Props
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `currentOffset` | `number` | `0` | Current offset (0-based) |
 | `limit` | `number` | `10` | Items per page |
 | `totalRows` | `number` | `0` | Total number of items |
-| `visiblePages` | `number` | `5` | Number of visible page buttons |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Pagination size |
-| `variant` | `'default' \| 'outlined' \| 'minimal'` | `'default'` | Visual style variant |
-| `className` | `string` | `""` | Additional CSS classes |
-| `disabled` | `boolean` | `false` | Disable pagination |
-| `showFirstLast` | `boolean` | `true` | Show first/last page buttons |
-| `showPreviousNext` | `boolean` | `true` | Show previous/next buttons |
-| `showEllipsis` | `boolean` | `true` | Show ellipsis for page ranges |
-| `showPageInfo` | `boolean` | `false` | Show page information text |
-| `backgroundColor` | `string` | `undefined` | Custom background color |
-| `textColor` | `string` | `undefined` | Custom text color |
-| `borderColor` | `string` | `undefined` | Custom border color |
-| `activeBackgroundColor` | `string` | `undefined` | Custom active page background |
-| `activeTextColor` | `string` | `undefined` | Custom active page text color |
-| `borderRadius` | `string` | `undefined` | Custom border radius |
-| `gap` | `string` | `undefined` | Custom gap between buttons |
-| `pageInfoFormatter` | `(currentPage: number, totalPages: number, totalRows: number) => string` | `undefined` | Custom page info formatter |
+
+### Styling Props (`styling` object)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `styling.size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Pagination size |
+| `styling.variant` | `'default' \| 'outlined' \| 'minimal'` | `'default'` | Visual style variant |
+| `styling.className` | `string` | `""` | Additional CSS classes |
+| `styling.style` | `string` | `""` | Additional inline styles |
+| `styling.backgroundColor` | `string` | `undefined` | Custom background color |
+| `styling.textColor` | `string` | `undefined` | Custom text color |
+| `styling.borderColor` | `string` | `undefined` | Custom border color |
+| `styling.activeBackgroundColor` | `string` | `undefined` | Custom active page background |
+| `styling.activeTextColor` | `string` | `undefined` | Custom active page text color |
+| `styling.borderRadius` | `string` | `undefined` | Custom border radius |
+| `styling.gap` | `string` | `undefined` | Custom gap between buttons |
+
+### Behavior Props (`behavior` object)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `behavior.disabled` | `boolean` | `false` | Disable pagination |
+| `behavior.visiblePages` | `number` | `5` | Number of visible page buttons |
+| `behavior.showFirstLast` | `boolean` | `true` | Show first/last page buttons |
+| `behavior.showPreviousNext` | `boolean` | `true` | Show previous/next buttons |
+| `behavior.showEllipsis` | `boolean` | `true` | Show ellipsis for page ranges |
+| `behavior.showPageInfo` | `boolean` | `false` | Show page information text |
+| `behavior.pageInfoFormatter` | `(currentPage: number, totalPages: number, totalRows: number) => string` | `undefined` | Custom page info formatter |
+
+### Accessibility Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
 | `ariaLabel` | `string` | `"Pagination navigation"` | Accessibility label |
+| `ariaDescribedBy` | `string` | `undefined` | ARIA described by reference |
 
 ## Variants
 
@@ -101,7 +120,7 @@ Standard pagination with borders and background colors.
   bind:currentOffset
   {limit}
   {totalRows}
-  variant="default"
+  styling={{ variant: "default" }}
 />
 ```
 
@@ -113,7 +132,7 @@ Pagination with thicker borders for emphasis.
   bind:currentOffset
   {limit}
   {totalRows}
-  variant="outlined"
+  styling={{ variant: "outlined" }}
 />
 ```
 
@@ -125,16 +144,16 @@ Minimal style with no borders, perfect for clean interfaces.
   bind:currentOffset
   {limit}
   {totalRows}
-  variant="minimal"
+  styling={{ variant: "minimal" }}
 />
 ```
 
 ## Sizes
 
 ```svelte
-<Pagination size="sm" bind:currentOffset {limit} {totalRows} />
-<Pagination size="md" bind:currentOffset {limit} {totalRows} />
-<Pagination size="lg" bind:currentOffset {limit} {totalRows} />
+<Pagination styling={{ size: "sm" }} bind:currentOffset {limit} {totalRows} />
+<Pagination styling={{ size: "md" }} bind:currentOffset {limit} {totalRows} />
+<Pagination styling={{ size: "lg" }} bind:currentOffset {limit} {totalRows} />
 ```
 
 ## Display Options
@@ -146,7 +165,7 @@ Minimal style with no borders, perfect for clean interfaces.
   bind:currentOffset
   {limit}
   {totalRows}
-  showFirstLast={false}
+  behavior={{ showFirstLast: false }}
 />
 ```
 
@@ -157,7 +176,7 @@ Minimal style with no borders, perfect for clean interfaces.
   bind:currentOffset
   {limit}
   {totalRows}
-  showPreviousNext={false}
+  behavior={{ showPreviousNext: false }}
 />
 ```
 
@@ -168,7 +187,7 @@ Minimal style with no borders, perfect for clean interfaces.
   bind:currentOffset
   {limit}
   {totalRows}
-  showEllipsis={false}
+  behavior={{ showEllipsis: false }}
 />
 ```
 
@@ -179,7 +198,7 @@ Minimal style with no borders, perfect for clean interfaces.
   bind:currentOffset
   {limit}
   {totalRows}
-  showPageInfo={true}
+  behavior={{ showPageInfo: true }}
 />
 ```
 
@@ -196,8 +215,10 @@ Minimal style with no borders, perfect for clean interfaces.
   bind:currentOffset
   {limit}
   {totalRows}
-  showPageInfo={true}
-  pageInfoFormatter={customFormatter}
+  behavior={{
+    showPageInfo: true,
+    pageInfoFormatter: customFormatter
+  }}
 />
 ```
 
@@ -278,7 +299,7 @@ Customize page information display:
   bind:currentOffset
   {limit}
   {totalRows}
-  showPageInfo={true}
+  behavior={{ showPageInfo: true }}
 >
   <div slot="page-info" let:currentPage let:totalPages let:totalRows let:offset let:limit>
     <strong>{currentPage}</strong> / {totalPages} pages
@@ -290,18 +311,20 @@ Customize page information display:
 
 ## Custom Colors
 
-Override colors using the color props:
+Override colors using the styling props:
 
 ```svelte
 <Pagination 
   bind:currentOffset
   {limit}
   {totalRows}
-  backgroundColor="#f0f0f0"
-  textColor="#333"
-  activeBackgroundColor="#3b82f6"
-  activeTextColor="#fff"
-  borderColor="#e5e7eb"
+  styling={{
+    backgroundColor: "#f0f0f0",
+    textColor: "#333",
+    activeBackgroundColor: "#3b82f6",
+    activeTextColor: "#fff",
+    borderColor: "#e5e7eb"
+  }}
 />
 ```
 
@@ -312,7 +335,7 @@ Override colors using the color props:
   bind:currentOffset
   {limit}
   {totalRows}
-  disabled={isLoading}
+  behavior={{ disabled: isLoading }}
 />
 ```
 
@@ -398,19 +421,22 @@ The component exports comprehensive TypeScript types:
 ```typescript
 import type { 
   PaginationProps, 
-  PaginationSize, 
-  PaginationVariant,
-  PaginationEvents
+  PaginationStyling, 
+  PaginationBehavior 
 } from '@rief/kit';
 
 const paginationConfig: PaginationProps = {
   currentOffset: 0,
   limit: 10,
   totalRows: 100,
-  size: 'md',
-  variant: 'default',
-  showFirstLast: true,
-  showPreviousNext: true,
-  showPageInfo: false
+  styling: {
+    size: 'md',
+    variant: 'default'
+  },
+  behavior: {
+    showFirstLast: true,
+    showPreviousNext: true,
+    showPageInfo: false
+  }
 };
 ```

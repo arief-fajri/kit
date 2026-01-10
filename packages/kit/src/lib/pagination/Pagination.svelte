@@ -3,40 +3,41 @@
   import { ChevronsLeft, ChevronLeft, ChevronsRight, ChevronRight } from "lucide-svelte";
   import type { PaginationProps, PaginationEvents, PaginationSize, PaginationVariant } from "../types.js";
 
-  // ============================================
-  // PROPS - Organized by category
-  // ============================================
+  import type { PaginationProps, PaginationStyling, PaginationBehavior } from "../types.js";
 
-  // Core pagination props
+  // Core props
   export let currentOffset: PaginationProps["currentOffset"] = 0;
   export let limit: PaginationProps["limit"] = 10;
   export let totalRows: PaginationProps["totalRows"] = 0;
-  export let visiblePages: PaginationProps["visiblePages"] = 5;
-
-  // Appearance props
-  export let size: PaginationSize = "md";
-  export let variant: PaginationVariant = "default";
-  export let className: PaginationProps["className"] = "";
-  export let disabled: PaginationProps["disabled"] = false;
-
-  // Display control props
-  export let showFirstLast: PaginationProps["showFirstLast"] = true;
-  export let showPreviousNext: PaginationProps["showPreviousNext"] = true;
-  export let showEllipsis: PaginationProps["showEllipsis"] = true;
-  export let showPageInfo: PaginationProps["showPageInfo"] = false;
-
-  // Customization props
-  export let backgroundColor: PaginationProps["backgroundColor"] = undefined;
-  export let textColor: PaginationProps["textColor"] = undefined;
-  export let borderColor: PaginationProps["borderColor"] = undefined;
-  export let activeBackgroundColor: PaginationProps["activeBackgroundColor"] = undefined;
-  export let activeTextColor: PaginationProps["activeTextColor"] = undefined;
-  export let borderRadius: PaginationProps["borderRadius"] = undefined;
-  export let gap: PaginationProps["gap"] = undefined;
-
-  // Content props
-  export let pageInfoFormatter: PaginationProps["pageInfoFormatter"] = undefined;
+  export let styling: PaginationProps["styling"] = {};
+  export let behavior: PaginationProps["behavior"] = {};
   export let ariaLabel: PaginationProps["ariaLabel"] = "Pagination navigation";
+  export let ariaDescribedBy: PaginationProps["ariaDescribedBy"] = undefined;
+
+  // Computed props with defaults
+  $: computedStyling = {
+    size: styling.size ?? "md",
+    variant: styling.variant ?? "default",
+    className: styling.className ?? "",
+    style: styling.style ?? "",
+    backgroundColor: styling.backgroundColor ?? undefined,
+    textColor: styling.textColor ?? undefined,
+    borderColor: styling.borderColor ?? undefined,
+    activeBackgroundColor: styling.activeBackgroundColor ?? undefined,
+    activeTextColor: styling.activeTextColor ?? undefined,
+    borderRadius: styling.borderRadius ?? undefined,
+    gap: styling.gap ?? undefined
+  };
+
+  $: computedBehavior = {
+    disabled: behavior.disabled ?? false,
+    visiblePages: behavior.visiblePages ?? 5,
+    showFirstLast: behavior.showFirstLast ?? true,
+    showPreviousNext: behavior.showPreviousNext ?? true,
+    showEllipsis: behavior.showEllipsis ?? true,
+    showPageInfo: behavior.showPageInfo ?? false,
+    pageInfoFormatter: behavior.pageInfoFormatter ?? undefined
+  };
 
   // ============================================
   // EVENT DISPATCHER
@@ -49,7 +50,7 @@
   $: safeCurrentOffset = currentOffset ?? 0;
   $: safeLimit = limit ?? 10;
   $: safeTotalRows = totalRows ?? 0;
-  $: safeVisiblePages = visiblePages ?? 5;
+  $: safeVisiblePages = computedBehavior.visiblePages ?? 5;
 
   // ============================================
   // PAGINATION STATE CALCULATIONS
@@ -125,13 +126,14 @@
    */
   function generateCustomStyles(): string {
     const styles: string[] = [];
-    if (backgroundColor) styles.push(`--pagination-bg: ${backgroundColor}`);
-    if (textColor) styles.push(`--pagination-text: ${textColor}`);
-    if (borderColor) styles.push(`--pagination-border: ${borderColor}`);
-    if (activeBackgroundColor) styles.push(`--pagination-active-bg: ${activeBackgroundColor}`);
-    if (activeTextColor) styles.push(`--pagination-active-text: ${activeTextColor}`);
-    if (borderRadius) styles.push(`--pagination-border-radius: ${borderRadius}`);
-    if (gap !== undefined) styles.push(`--pagination-gap: ${gap}`);
+    if (computedStyling.backgroundColor) styles.push(`--pagination-bg: ${computedStyling.backgroundColor}`);
+    if (computedStyling.textColor) styles.push(`--pagination-text: ${computedStyling.textColor}`);
+    if (computedStyling.borderColor) styles.push(`--pagination-border: ${computedStyling.borderColor}`);
+    if (computedStyling.activeBackgroundColor) styles.push(`--pagination-active-bg: ${computedStyling.activeBackgroundColor}`);
+    if (computedStyling.activeTextColor) styles.push(`--pagination-active-text: ${computedStyling.activeTextColor}`);
+    if (computedStyling.borderRadius) styles.push(`--pagination-border-radius: ${computedStyling.borderRadius}`);
+    if (computedStyling.gap !== undefined) styles.push(`--pagination-gap: ${computedStyling.gap}`);
+    if (computedStyling.style) styles.push(computedStyling.style);
     return styles.join("; ");
   }
 
@@ -139,7 +141,7 @@
    * Unified page change handler
    */
   function changePage(page: number, eventType: keyof PaginationEvents = "pageChange"): void {
-    if (disabled || page < 1 || page > totalPages) return;
+    if (computedBehavior.disabled || page < 1 || page > totalPages) return;
 
     const newOffset = (page - 1) * safeLimit;
     const eventData = { offset: newOffset, page };
@@ -154,9 +156,9 @@
   // COMPUTED VALUES
   // ============================================
 
-  $: pageNumbers = calculatePageNumbers(currentPage, totalPages, safeVisiblePages, showEllipsis ?? false);
+  $: pageNumbers = calculatePageNumbers(currentPage, totalPages, safeVisiblePages, computedBehavior.showEllipsis ?? false);
   $: customStyles = generateCustomStyles();
-  $: pageInfo = showPageInfo ? formatPageInfo(safeCurrentOffset, safeLimit, safeTotalRows, pageInfoFormatter) : "";
+  $: pageInfo = computedBehavior.showPageInfo ? formatPageInfo(safeCurrentOffset, safeLimit, safeTotalRows, computedBehavior.pageInfoFormatter) : "";
 
   // ============================================
   // EVENT HANDLERS
@@ -170,38 +172,38 @@
   // ============================================
   // CLASS COMPUTATION
   // ============================================
-  $: baseClasses = `pagination pagination--${size} pagination--${variant}`;
-  $: paginationClasses = `${baseClasses} ${className || ""}`.trim();
-  $: paginationClassesWithModifiers = `${paginationClasses}${disabled ? " pagination--disabled" : ""}`.trim();
+  $: baseClasses = `pagination pagination--${computedStyling.size} pagination--${computedStyling.variant}`;
+  $: paginationClasses = `${baseClasses} ${computedStyling.className || ""}`.trim();
+  $: paginationClassesWithModifiers = `${paginationClasses}${computedBehavior.disabled ? " pagination--disabled" : ""}`.trim();
 </script>
 
-<nav class={paginationClassesWithModifiers} style={customStyles || undefined} aria-label={ariaLabel} {...$$restProps}>
+<nav class={paginationClassesWithModifiers} style={customStyles || undefined} aria-label={ariaLabel} aria-describedby={ariaDescribedBy} {...$$restProps}>
   <div class="pagination__container">
-    {#if showFirstLast}
+    {#if computedBehavior.showFirstLast}
       <button
         type="button"
         class="pagination__button pagination__button--first"
-        disabled={disabled || isFirstPage}
+        disabled={computedBehavior.disabled || isFirstPage}
         aria-label="Go to first page"
-        aria-disabled={disabled || isFirstPage}
+        aria-disabled={computedBehavior.disabled || isFirstPage}
         on:click={handleFirstPage}
       >
-        <slot name="first-icon" {isFirstPage} {disabled}>
+        <slot name="first-icon" {isFirstPage} disabled={computedBehavior.disabled}>
           <ChevronsLeft class="pagination__icon" />
         </slot>
       </button>
     {/if}
 
-    {#if showPreviousNext}
+    {#if computedBehavior.showPreviousNext}
       <button
         type="button"
         class="pagination__button pagination__button--previous"
-        disabled={disabled || isFirstPage}
+        disabled={computedBehavior.disabled || isFirstPage}
         aria-label="Go to previous page"
-        aria-disabled={disabled || isFirstPage}
+        aria-disabled={computedBehavior.disabled || isFirstPage}
         on:click={handlePreviousPage}
       >
-        <slot name="previous-icon" {isFirstPage} {disabled}>
+        <slot name="previous-icon" {isFirstPage} disabled={computedBehavior.disabled}>
           <ChevronLeft class="pagination__icon" />
         </slot>
       </button>
@@ -212,7 +214,7 @@
         <button
           type="button"
           class="pagination__button pagination__button--page"
-          {disabled}
+          disabled={computedBehavior.disabled}
           aria-label="Go to page 1"
           on:click={() => handlePageClick(1)}
         >
@@ -228,7 +230,7 @@
           type="button"
           class="pagination__button pagination__button--page"
           class:pagination__button--active={pageNum === currentPage}
-          {disabled}
+          disabled={computedBehavior.disabled}
           aria-label="Go to page {pageNum}"
           aria-current={pageNum === currentPage ? "page" : undefined}
           on:click={() => handlePageClick(pageNum)}
@@ -246,7 +248,7 @@
         <button
           type="button"
           class="pagination__button pagination__button--page"
-          {disabled}
+          disabled={computedBehavior.disabled}
           aria-label="Go to page {totalPages}"
           on:click={() => handlePageClick(totalPages)}
         >
@@ -257,38 +259,38 @@
       {/if}
     </div>
 
-    {#if showPreviousNext}
+    {#if computedBehavior.showPreviousNext}
       <button
         type="button"
         class="pagination__button pagination__button--next"
-        disabled={disabled || isLastPage}
+        disabled={computedBehavior.disabled || isLastPage}
         aria-label="Go to next page"
-        aria-disabled={disabled || isLastPage}
+        aria-disabled={computedBehavior.disabled || isLastPage}
         on:click={handleNextPage}
       >
-        <slot name="next-icon" {isLastPage} {disabled}>
+        <slot name="next-icon" {isLastPage} disabled={computedBehavior.disabled}>
           <ChevronRight class="pagination__icon" />
         </slot>
       </button>
     {/if}
 
-    {#if showFirstLast}
+    {#if computedBehavior.showFirstLast}
       <button
         type="button"
         class="pagination__button pagination__button--last"
-        disabled={disabled || isLastPage}
+        disabled={computedBehavior.disabled || isLastPage}
         aria-label="Go to last page"
-        aria-disabled={disabled || isLastPage}
+        aria-disabled={computedBehavior.disabled || isLastPage}
         on:click={handleLastPage}
       >
-        <slot name="last-icon" {isLastPage} {disabled}>
+        <slot name="last-icon" {isLastPage} disabled={computedBehavior.disabled}>
           <ChevronsRight class="pagination__icon" />
         </slot>
       </button>
     {/if}
   </div>
 
-  {#if showPageInfo && pageInfo}
+  {#if computedBehavior.showPageInfo && pageInfo}
     <div class="pagination__info" role="status" aria-live="polite">
       <slot
         name="page-info"

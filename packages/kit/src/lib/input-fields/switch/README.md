@@ -56,19 +56,42 @@ The Switch uses a label-wrapped checkbox so the entire control is clickable whil
 
 ## Props
 
+### Core Props
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `id` | `string` | `undefined` | Unique identifier used for label association and form inputs. |
-| `name` | `string` | `"switch"` | HTML name attribute so the switch participates in form submissions. |
-| `checked` | `boolean` | `false` | Controls the current on/off state; works with `bind:checked`. |
-| `disabled` | `boolean` | `false` | Prevents interaction and applies reduced-opacity styling. |
-| `required` | `boolean` | `false` | Marks the field as required for native form validation. |
-| `value` | `any` | `undefined` | Value submitted with the form when the switch is checked. |
-| `label` | `string` | `""` | Optional inline label (falls back to the `label` slot). |
-| `size` | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | Adjusts track width/height and knob size proportionally. |
-| `variant` | `'default' \| 'primary' \| 'success' \| 'error' \| 'warning'` | `'default'` | Sets semantic track colors for checked state. |
-| `class` | `string` | `""` | Adds custom classes to the root wrapper for scoping overrides. |
-| `stopPropagation` | `boolean` | `false` | Stops click bubbling when you need isolated interaction zones. |
+| `id` | `string \| undefined` | `undefined` | Unique identifier used for label association and form inputs |
+| `name` | `string` | `"switch"` | HTML name attribute so the switch participates in form submissions |
+| `checked` | `boolean` | `false` | Controls the current on/off state; works with `bind:checked` |
+| `value` | `any` | `undefined` | Value submitted with the form when the switch is checked |
+| `label` | `string` | `""` | Optional inline label (falls back to the `label` slot) |
+| `switchRef` | `HTMLInputElement \| undefined` | `undefined` | Reference to switch DOM element |
+
+### Styling Props (`styling` object)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `styling.size` | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | Adjusts track width/height and knob size proportionally |
+| `styling.variant` | `'default' \| 'primary' \| 'success' \| 'error' \| 'warning'` | `'default'` | Sets semantic track colors for checked state |
+| `styling.wrapperClass` | `string` | `""` | Adds custom classes to the root wrapper |
+| `styling.labelClass` | `string` | `""` | Additional CSS classes for label |
+| `styling.inputClass` | `string` | `""` | Additional CSS classes for input |
+| `styling.wrapperStyle` | `string` | `""` | Inline styles for wrapper element |
+
+### Behavior Props (`behavior` object)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `behavior.disabled` | `boolean` | `false` | Prevents interaction and applies reduced-opacity styling |
+| `behavior.required` | `boolean` | `false` | Marks the field as required for native form validation |
+| `behavior.stopPropagation` | `boolean` | `false` | Stops click bubbling when you need isolated interaction zones |
+
+### Accessibility Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `ariaLabel` | `string` | `undefined` | ARIA label for accessibility |
+| `ariaDescribedBy` | `string` | `undefined` | ARIA described by reference |
 
 ## Variants
 
@@ -76,53 +99,53 @@ The Switch uses a label-wrapped checkbox so the entire control is clickable whil
 Neutral gray track suited for generic binary toggles.
 
 ```svelte
-<Switch variant="default" label="Neutral" />
+<Switch styling={{ variant: "default" }} label="Neutral" />
 ```
 
 ### Primary
 Aligns with the primary brand color for emphasis.
 
 ```svelte
-<Switch variant="primary" label="Primary action" />
+<Switch styling={{ variant: "primary" }} label="Primary action" />
 ```
 
 ### Success
 Communicates enabling positive outcomes or confirmations.
 
 ```svelte
-<Switch variant="success" label="Auto backup" />
+<Switch styling={{ variant: "success" }} label="Auto backup" />
 ```
 
 ### Error
 Use for destructive or high-risk toggles.
 
 ```svelte
-<Switch variant="error" label="Danger mode" />
+<Switch styling={{ variant: "error" }} label="Danger mode" />
 ```
 
 ### Warning
 Great for experimental features or cautionary toggles.
 
 ```svelte
-<Switch variant="warning" label="Beta features" />
+<Switch styling={{ variant: "warning" }} label="Beta features" />
 ```
 
 ## Sizes
 
 ```svelte
-<Switch size="xs" label="XS" />
-<Switch size="sm" label="Small" />
-<Switch size="md" label="Medium" />
-<Switch size="lg" label="Large" />
-<Switch size="xl" label="XL" />
+<Switch styling={{ size: "xs" }} label="XS" />
+<Switch styling={{ size: "sm" }} label="Small" />
+<Switch styling={{ size: "md" }} label="Medium" />
+<Switch styling={{ size: "lg" }} label="Large" />
+<Switch styling={{ size: "xl" }} label="XL" />
 ```
 
 ## States
 
 ```svelte
 <Switch checked label="Enabled" />
-<Switch disabled label="Unavailable" />
-<Switch disabled checked label="Locked on" />
+<Switch behavior={{ disabled: true }} label="Unavailable" />
+<Switch behavior={{ disabled: true }} checked label="Locked on" />
 ```
 
 ## Label Slot
@@ -146,7 +169,7 @@ Use the `label` slot when you need custom markup (icons, helper text, etc.).
     id="privacy"
     name="privacy"
     value="enabled"
-    required
+    behavior={{ required: true }}
     label="Privacy Shield"
   />
   <button type="submit">Save</button>

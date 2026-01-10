@@ -4,3 +4,4 @@
 
 export * from './propValidation.js';
 export * from './ariaHelpers.js';
+export * from './errorHandling.js';

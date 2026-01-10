@@ -1,3 +1,5 @@
+import type { BaseStyling, BaseBehavior, BaseAccessibility } from "../../types.js";
+
 // DatePicker component types
 export type DatePickerVariant = 'default' | 'minimal' | 'rounded' | 'bordered';
 export type DatePickerSize = 'sm' | 'md' | 'lg';
@@ -25,19 +27,16 @@ export interface DatePickerLabels {
 	months?: [string, string, string, string, string, string, string, string, string, string, string, string];
 }
 
-export interface DatePickerProps {
-	/** Selected date value for single mode */
-	value?: DateValue;
-	/** Selected date range for range mode */
-	rangeValue?: DateRangeValue;
-	/** Selected dates for multiple mode */
-	multipleValue?: DateMultipleValue;
-	/** Selection mode */
-	mode?: DatePickerMode;
+export interface DatePickerStyling extends BaseStyling {
 	/** Component variant style */
 	variant?: DatePickerVariant;
 	/** Component size */
 	size?: DatePickerSize;
+}
+
+export interface DatePickerBehavior extends BaseBehavior {
+	/** Selection mode */
+	mode?: DatePickerMode;
 	/** Minimum selectable date */
 	minDate?: DateValue;
 	/** Maximum selectable date */
@@ -56,14 +55,23 @@ export interface DatePickerProps {
 	closeOnSelect?: boolean;
 	/** Custom labels for internationalization */
 	labels?: DatePickerLabels;
-	/** Custom CSS class */
-	className?: string;
-	/** Disabled state */
-	disabled?: boolean;
 	/** Loading state */
 	loading?: boolean;
 	/** Custom locale for date formatting */
 	locale?: string;
+}
+
+export interface DatePickerProps extends BaseAccessibility {
+	/** Selected date value for single mode */
+	value?: DateValue;
+	/** Selected date range for range mode */
+	rangeValue?: DateRangeValue;
+	/** Selected dates for multiple mode */
+	multipleValue?: DateMultipleValue;
+	/** Styling configuration */
+	styling?: DatePickerStyling;
+	/** Behavior configuration */
+	behavior?: DatePickerBehavior;
 }
 
 export interface DatePickerChangeEvent {

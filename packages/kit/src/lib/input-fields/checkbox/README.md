@@ -57,20 +57,43 @@ The Checkbox component renders as a flexible container with customizable checkma
 
 ## Props
 
+### Core Props
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `id` | `string \| undefined` | `undefined` | Unique identifier for the checkbox input |
 | `name` | `string` | `"checkbox"` | HTML name attribute for form handling |
 | `checked` | `boolean` | `false` | Controls the checked state of the checkbox |
-| `disabled` | `boolean` | `false` | Disables the checkbox interaction |
-| `required` | `boolean` | `false` | Marks the checkbox as required for form validation |
-| `readonly` | `boolean` | `false` | Makes the checkbox read-only (visually interactive but unchangeable) |
 | `value` | `any` | `undefined` | Value associated with the checkbox for form submission |
 | `label` | `string` | `""` | Text label displayed next to the checkbox |
-| `size` | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | Size variant of the checkbox |
-| `variant` | `'default' \| 'primary' \| 'success' \| 'error'` | `'default'` | Visual variant with semantic colors |
-| `class` | `string` | `""` | Additional CSS classes for custom styling |
-| `stopPropagation` | `boolean` | `false` | Prevents click event bubbling when enabled |
+| `checkboxRef` | `HTMLInputElement \| undefined` | `undefined` | Reference to checkbox DOM element |
+
+### Styling Props (`styling` object)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `styling.size` | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | Size variant of the checkbox |
+| `styling.variant` | `'default' \| 'primary' \| 'success' \| 'error'` | `'default'` | Visual variant with semantic colors |
+| `styling.wrapperClass` | `string` | `""` | Additional CSS classes for wrapper |
+| `styling.labelClass` | `string` | `""` | Additional CSS classes for label |
+| `styling.inputClass` | `string` | `""` | Additional CSS classes for input |
+| `styling.wrapperStyle` | `string` | `""` | Inline styles for wrapper element |
+
+### Behavior Props (`behavior` object)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `behavior.disabled` | `boolean` | `false` | Disables the checkbox interaction |
+| `behavior.required` | `boolean` | `false` | Marks the checkbox as required for form validation |
+| `behavior.readonly` | `boolean` | `false` | Makes the checkbox read-only (visually interactive but unchangeable) |
+| `behavior.stopPropagation` | `boolean` | `false` | Prevents click event bubbling when enabled |
+
+### Accessibility Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `ariaLabel` | `string` | `undefined` | ARIA label for accessibility |
+| `ariaDescribedBy` | `string` | `undefined` | ARIA described by reference |
 
 ## Variants
 
@@ -78,38 +101,38 @@ The Checkbox component renders as a flexible container with customizable checkma
 Standard checkbox appearance with neutral colors, perfect for general use cases.
 
 ```svelte
-<Checkbox variant="default" label="Default Checkbox" />
+<Checkbox styling={{ variant: "default" }} label="Default Checkbox" />
 ```
 
 ### Primary
 Emphasizes important selections with primary brand colors.
 
 ```svelte
-<Checkbox variant="primary" label="Primary Action" />
+<Checkbox styling={{ variant: "primary" }} label="Primary Action" />
 ```
 
 ### Success
 Indicates positive actions or successful states with green accent colors.
 
 ```svelte
-<Checkbox variant="success" label="Task Completed" />
+<Checkbox styling={{ variant: "success" }} label="Task Completed" />
 ```
 
 ### Error
 Highlights critical selections or error states with red accent colors.
 
 ```svelte
-<Checkbox variant="error" label="Delete Account" />
+<Checkbox styling={{ variant: "error" }} label="Delete Account" />
 ```
 
 ## Sizes
 
 ```svelte
-<Checkbox size="xs" label="Extra Small" />
-<Checkbox size="sm" label="Small" />
-<Checkbox size="md" label="Medium" />
-<Checkbox size="lg" label="Large" />
-<Checkbox size="xl" label="Extra Large" />
+<Checkbox styling={{ size: "xs" }} label="Extra Small" />
+<Checkbox styling={{ size: "sm" }} label="Small" />
+<Checkbox styling={{ size: "md" }} label="Medium" />
+<Checkbox styling={{ size: "lg" }} label="Large" />
+<Checkbox styling={{ size: "xl" }} label="Extra Large" />
 ```
 
 ## States
@@ -119,13 +142,13 @@ Highlights critical selections or error states with red accent colors.
 <Checkbox checked={true} label="Pre-selected Option" />
 
 <!-- Disabled state -->
-<Checkbox disabled={true} label="Unavailable Option" />
+<Checkbox behavior={{ disabled: true }} label="Unavailable Option" />
 
 <!-- Read-only state -->
-<Checkbox readonly={true} checked={true} label="Read-only Selection" />
+<Checkbox behavior={{ readonly: true }} checked={true} label="Read-only Selection" />
 
 <!-- Required state -->
-<Checkbox required={true} label="Required Field" />
+<Checkbox behavior={{ required: true }} label="Required Field" />
 ```
 
 ## Custom Labels and Content
@@ -183,8 +206,8 @@ The Checkbox component integrates seamlessly with form libraries and native HTML
   <Checkbox 
     name="terms"
     bind:checked={formData.terms}
-    required={true}
-    variant="primary"
+    behavior={{ required: true }}
+    styling={{ variant: "primary" }}
     label="Accept terms and conditions"
   />
   
@@ -291,9 +314,11 @@ The Checkbox component is fully accessible by default:
 </script>
 
 <Checkbox 
-  variant={currentVariant}
-  required={isRequired}
-  disabled={!hasAccount}
+  styling={{ variant: currentVariant }}
+  behavior={{
+    required: isRequired,
+    disabled: !hasAccount
+  }}
   label={hasAccount ? 'Update preferences' : 'Create account first'}
 />
 ```
@@ -347,16 +372,22 @@ The component exports comprehensive TypeScript types:
 ```typescript
 import type { 
   CheckboxProps, 
-  CheckboxSize, 
-  CheckboxVariant,
+  CheckboxStyling, 
+  CheckboxBehavior,
   CheckboxEventDetail,
   FocusEventDetail 
 } from '@rief/kit';
 
 const checkboxConfig: CheckboxProps = {
-  variant: 'primary',
-  size: 'lg',
   label: 'Typed Checkbox',
-  checked: true
+  checked: true,
+  styling: {
+    variant: 'primary',
+    size: 'lg'
+  },
+  behavior: {
+    disabled: false,
+    required: false
+  }
 };
 ```

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from "svelte";
   import { uniqueId as generateUniqueId } from "@rief/utils";
+  import { safeHtmlContent } from "../../helpers/errorHandling.js";
 
   // Types
   interface TagItem {
@@ -48,36 +49,55 @@
 
   const DEFAULT_DEBOUNCE_MS = 500;
 
-  // Props
+  import type { TagsProps, TagsStyling, TagsValidation, TagsBehavior } from "../../types.js";
+
+  // Core props
   export let tags: TagsArray = [];
-  export let isError: boolean = false;
-  export let addKeys: number[] = [KEY_CODES.ENTER];
-  export let maxTags: number | false = false;
-  export let onlyUnique: boolean = false;
-  export let removeKeys: number[] = [KEY_CODES.BACKSPACE];
-  export let placeholder: string = "";
-  export let allowPaste: boolean = false;
-  export let allowDrop: boolean = false;
-  export let splitWith: string = ",";
-  export let autoComplete: AutoCompleteArray | ((value: string, signal?: AbortSignal) => AutoCompleteArray | Promise<AutoCompleteArray>) | false = false;
-  export let autoCompleteKey: string | false = false;
-  export let autoCompleteMarkupKey: string | false = false;
   export let name: string = "svelte-tags-input";
   export let id: string = "";
-  export let allowBlur: boolean = false;
-  export let disable: boolean = false;
-  export let minChars: number = 0;
-  export let onlyAutocomplete: boolean = false;
-  export let readonly: boolean = false;
-  export let onTagClick: (tag: string | TagItem) => void = () => {};
-  export let autoCompleteShowKey: string | false = false;
   export let label: string = "";
-  export let labelClass: string = "";
-  export let required: boolean = false;
-  export let wrapperClass: string = "";
-  export let numberOnly: boolean = false;
-  export let allowDecimal: boolean = false;
-  export let debounceMs: number = DEFAULT_DEBOUNCE_MS;
+  export let styling: TagsStyling = {};
+  export let validation: TagsValidation = {};
+  export let behavior: TagsBehavior = {};
+  export let ariaLabel: string | undefined = undefined;
+  export let ariaDescribedBy: string | undefined = undefined;
+
+  // Computed props with defaults
+  $: computedStyling = {
+    className: styling.className ?? "",
+    style: styling.style ?? "",
+    labelClass: styling.labelClass ?? "",
+    wrapperClass: styling.wrapperClass ?? ""
+  };
+
+  $: computedValidation = {
+    isError: validation.isError ?? false,
+    required: validation.required ?? false
+  };
+
+  $: computedBehavior = {
+    disabled: behavior.disabled ?? false,
+    readonly: behavior.readonly ?? false,
+    addKeys: behavior.addKeys ?? [KEY_CODES.ENTER],
+    maxTags: behavior.maxTags ?? false,
+    onlyUnique: behavior.onlyUnique ?? false,
+    removeKeys: behavior.removeKeys ?? [KEY_CODES.BACKSPACE],
+    placeholder: behavior.placeholder ?? "",
+    allowPaste: behavior.allowPaste ?? false,
+    allowDrop: behavior.allowDrop ?? false,
+    splitWith: behavior.splitWith ?? ",",
+    autoComplete: behavior.autoComplete ?? false,
+    autoCompleteKey: behavior.autoCompleteKey ?? false,
+    autoCompleteMarkupKey: behavior.autoCompleteMarkupKey ?? false,
+    allowBlur: behavior.allowBlur ?? false,
+    minChars: behavior.minChars ?? 0,
+    onlyAutocomplete: behavior.onlyAutocomplete ?? false,
+    onTagClick: behavior.onTagClick ?? (() => {}),
+    autoCompleteShowKey: behavior.autoCompleteShowKey ?? behavior.autoCompleteKey ?? false,
+    numberOnly: behavior.numberOnly ?? false,
+    allowDecimal: behavior.allowDecimal ?? false,
+    debounceMs: behavior.debounceMs ?? DEFAULT_DEBOUNCE_MS
+  };
 
   // Internal state
   let tag: string = "";
@@ -86,7 +106,7 @@
   let layoutElement: HTMLElement;
   let inputElement: HTMLInputElement;
   let dropdownElement: HTMLElement;
-  let storePlaceholder: string = placeholder;
+  let storePlaceholder: string = "";
   let isLoading: boolean = false;
   let searchInput: string = "";
   let debounceSearch: ReturnType<typeof setTimeout> | null = null;
@@ -99,6 +119,7 @@
     if (!uniqueId) {
       uniqueId = generateUniqueId("sti_");
     }
+    storePlaceholder = computedBehavior.placeholder;
   });
   
   // Fallback ID for SSR
@@ -108,7 +129,8 @@
 
   $: tags = tags || [];
   $: id = id || uniqueId;
-  $: autoCompleteShowKey = autoCompleteShowKey || autoCompleteKey;
+  $: autoCompleteShowKey = computedBehavior.autoCompleteShowKey || computedBehavior.autoCompleteKey;
+  $: storePlaceholder = computedBehavior.placeholder;
 
   // Utility functions
   function regExpEscape(s: string): string {
@@ -142,7 +164,7 @@
   }
 
   function splitTags(data: string): string[] {
-    return data.split(splitWith).map((tag) => tag.trim());
+    return data.split(computedBehavior.splitWith).map((tag) => tag.trim());
   }
 
   function sanitizeNumberInput(data: string, allowDecimal: boolean): string {
@@ -159,7 +181,7 @@
   }
 
   function validateNumberInput(e: KeyboardEvent): boolean {
-    if (!numberOnly) return true;
+    if (!computedBehavior.numberOnly) return true;
 
     const isNumberKey = (e.keyCode >= KEY_CODES.NUM_0 && e.keyCode <= KEY_CODES.NUM_9) ||
       (e.keyCode >= KEY_CODES.NUMPAD_0 && e.keyCode <= KEY_CODES.NUMPAD_9);
@@ -171,7 +193,7 @@
       KEY_CODES.ARROW_RIGHT,
       KEY_CODES.DELETE
     ].includes(e.keyCode as any);
-    const isDecimal = allowDecimal && (e.key === "." || e.keyCode === KEY_CODES.DECIMAL || e.keyCode === KEY_CODES.NUMPAD_DECIMAL);
+    const isDecimal = computedBehavior.allowDecimal && (e.key === "." || e.keyCode === KEY_CODES.DECIMAL || e.keyCode === KEY_CODES.NUMPAD_DECIMAL);
 
     if (!(isNumberKey || isAllowedKey || isDecimal)) {
       e.preventDefault();
@@ -189,11 +211,11 @@
   // Tag management
   function addTag(currentTag: string | TagItem): void {
     if (!currentTag) return;
-    if (numberOnly && typeof currentTag === 'string' && !new RegExp(allowDecimal ? /^\d*(\.\d+)?$/ : /^\d+$/).test(currentTag)) return;
+    if (computedBehavior.numberOnly && typeof currentTag === 'string' && !new RegExp(computedBehavior.allowDecimal ? /^\d*(\.\d+)?$/ : /^\d+$/).test(currentTag)) return;
 
     let currentObjTags: TagItem | undefined;
     if (typeof currentTag === "object" && currentTag !== null) {
-      if (!autoCompleteKey) {
+      if (!computedBehavior.autoCompleteKey) {
         dispatch("error", { 
           message: "'autoCompleteKey' is necessary if 'autoComplete' result is an array of objects",
           code: "MISSING_AUTOCOMPLETE_KEY"
@@ -201,25 +223,25 @@
         return;
       }
 
-      if (onlyUnique) {
+      if (computedBehavior.onlyUnique) {
         let found = tags?.find((elem) => 
           typeof elem === 'object' && elem !== null && 
-          autoCompleteKey && (elem as any)[autoCompleteKey] === (currentTag as any)[autoCompleteKey]
+          computedBehavior.autoCompleteKey && (elem as any)[computedBehavior.autoCompleteKey] === (currentTag as any)[computedBehavior.autoCompleteKey]
         );
         if (found) return;
       }
 
       currentObjTags = currentTag;
-      const tagValue = autoCompleteKey ? currentTag[autoCompleteKey] : '';
+      const tagValue = computedBehavior.autoCompleteKey ? currentTag[computedBehavior.autoCompleteKey] : '';
       currentTag = typeof tagValue === "string" ? tagValue.trim() : String(tagValue);
     } else if (typeof currentTag === "string") {
       currentTag = currentTag.trim();
     }
 
     if (currentTag == "") return;
-    if (maxTags && tags.length == maxTags) return;
-    if (onlyUnique && tags.includes(currentTag)) return;
-    if (onlyAutocomplete && arrelementsmatch.length === 0) return;
+    if (computedBehavior.maxTags && tags.length == computedBehavior.maxTags) return;
+    if (computedBehavior.onlyUnique && tags.includes(currentTag)) return;
+    if (computedBehavior.onlyAutocomplete && arrelementsmatch.length === 0) return;
 
     tags.push(currentObjTags ? currentObjTags : currentTag);
     tags = tags;
@@ -232,11 +254,11 @@
       inputElement.focus();
     }
 
-    if (maxTags && tags.length == maxTags) {
+    if (computedBehavior.maxTags && tags.length == computedBehavior.maxTags) {
       if (inputElement) {
         inputElement.readOnly = true;
       }
-      placeholder = "";
+      storePlaceholder = "";
     }
 
     dispatch("tags", { tags });
@@ -262,13 +284,13 @@
 
     const currentTag = (e.target as HTMLInputElement).value;
 
-    if (addKeys) {
-      addKeys.forEach(function (key) {
+    if (computedBehavior.addKeys) {
+      computedBehavior.addKeys.forEach(function (key) {
         if (key === e.keyCode) {
           if (currentTag) e.preventDefault();
 
-          if (autoComplete && dropdownElement && arrelementsmatch.length > 0) {
-            if (onlyAutocomplete) {
+          if (computedBehavior.autoComplete && dropdownElement && arrelementsmatch.length > 0) {
+            if (computedBehavior.onlyAutocomplete) {
               addTag(arrelementsmatch?.[autoCompleteIndex]?.label);
             } else {
               addTag(arrelementsmatch?.[autoCompleteIndex]?.label || currentTag);
@@ -280,8 +302,8 @@
       });
     }
 
-    if (removeKeys) {
-      removeKeys.forEach(function (key) {
+    if (computedBehavior.removeKeys) {
+      computedBehavior.removeKeys.forEach(function (key) {
         if (key === e.keyCode && tag === "") {
           tags.pop();
           tags = tags;
@@ -292,15 +314,15 @@
             inputElement.readOnly = false;
             inputElement.focus();
           }
-          placeholder = storePlaceholder;
+          storePlaceholder = computedBehavior.placeholder;
         }
       });
     }
 
-    if (e.keyCode === KEY_CODES.ARROW_DOWN && autoComplete && dropdownElement && arrelementsmatch.length > 0) {
+    if (e.keyCode === KEY_CODES.ARROW_DOWN && computedBehavior.autoComplete && dropdownElement && arrelementsmatch.length > 0) {
       if (autoCompleteIndex + 1 === arrelementsmatch.length) autoCompleteIndex = 0;
       else autoCompleteIndex++;
-    } else if (e.keyCode === KEY_CODES.ARROW_UP && autoComplete && dropdownElement && arrelementsmatch.length > 0) {
+    } else if (e.keyCode === KEY_CODES.ARROW_UP && computedBehavior.autoComplete && dropdownElement && arrelementsmatch.length > 0) {
       if (autoCompleteIndex <= 0) autoCompleteIndex = arrelementsmatch.length - 1;
       else autoCompleteIndex--;
     } else if (e.keyCode === KEY_CODES.ESCAPE) {
@@ -313,23 +335,23 @@
 
   // Paste and drop handlers
   function onPaste(e: ClipboardEvent): void {
-    if (!allowPaste) return;
+    if (!computedBehavior.allowPaste) return;
     e.preventDefault();
 
     let data = getClipboardData(e);
-    if (numberOnly) {
-      data = sanitizeNumberInput(data, allowDecimal);
+    if (computedBehavior.numberOnly) {
+      data = sanitizeNumberInput(data, computedBehavior.allowDecimal);
     }
     splitTags(data).map((tag) => addTag(tag));
   }
 
   function onDrop(e: DragEvent): void {
-    if (!allowDrop) return;
+    if (!computedBehavior.allowDrop) return;
     e.preventDefault();
 
     let data = e.dataTransfer?.getData("Text") || "";
-    if (numberOnly) {
-      data = sanitizeNumberInput(data, allowDecimal);
+    if (computedBehavior.numberOnly) {
+      data = sanitizeNumberInput(data, computedBehavior.allowDecimal);
     }
     splitTags(data).map((tag) => addTag(tag));
   }
@@ -346,7 +368,7 @@
       layoutElement.classList.remove("focus");
     }
 
-    if (allowBlur) {
+    if (computedBehavior.allowBlur) {
       if (arrelementsmatch.length && autoCompleteIndex > -1) {
         addTag(arrelementsmatch?.[autoCompleteIndex]?.label);
       } else if (!arrelementsmatch.length) {
@@ -361,13 +383,13 @@
 
   // Autocomplete
   async function getMatchElements(value: string): Promise<void> {
-    if (!autoComplete) return;
-    if (maxTags && tags.length >= maxTags) return;
+    if (!computedBehavior.autoComplete) return;
+    if (computedBehavior.maxTags && tags.length >= computedBehavior.maxTags) return;
 
     dispatch("input", { value });
     searchInput = value;
 
-    if (value.length < minChars) {
+    if (value.length < computedBehavior.minChars) {
       arrelementsmatch = [];
       isLoading = false;
       return;
@@ -376,16 +398,16 @@
     isLoading = true;
 
     let autoCompleteValues: AutoCompleteArray = [];
-    if (Array.isArray(autoComplete)) {
-      autoCompleteValues = autoComplete;
-    } else if (typeof autoComplete === "function") {
+    if (Array.isArray(computedBehavior.autoComplete)) {
+      autoCompleteValues = computedBehavior.autoComplete;
+    } else if (typeof computedBehavior.autoComplete === "function") {
       try {
-        if ((autoComplete as any).constructor.name === "AsyncFunction") {
+        if ((computedBehavior.autoComplete as any).constructor.name === "AsyncFunction") {
           if (controller) controller.abort();
           controller = new AbortController();
-          autoCompleteValues = await autoComplete(value, controller.signal);
+          autoCompleteValues = await computedBehavior.autoComplete(value, controller.signal);
         } else {
-          autoCompleteValues = autoComplete(value) as AutoCompleteArray;
+          autoCompleteValues = computedBehavior.autoComplete(value) as AutoCompleteArray;
         }
       } catch (error) {
         dispatch("error", {
@@ -414,7 +436,7 @@
     let matchs = autoCompleteValues;
 
     if (autoCompleteValues !== null && autoCompleteValues.length && typeof autoCompleteValues[0] === "object") {
-      if (!autoCompleteKey) {
+      if (!computedBehavior.autoCompleteKey) {
         dispatch("error", {
           message: "'autoCompleteKey' is necessary if 'autoComplete' result is an array of objects",
           code: "MISSING_AUTOCOMPLETE_KEY"
@@ -424,9 +446,9 @@
       matchs = matchs.map((matchTag) => {
         return {
           label: matchTag,
-          search: autoCompleteMarkupKey
-            ? matchTag[autoCompleteMarkupKey]
-            : buildMatchMarkup(value, matchTag[autoCompleteKey])
+          search: computedBehavior.autoCompleteMarkupKey
+            ? matchTag[computedBehavior.autoCompleteMarkupKey]
+            : buildMatchMarkup(value, matchTag[computedBehavior.autoCompleteKey])
         };
       });
     } else {
@@ -438,7 +460,7 @@
       });
     }
 
-    if (onlyUnique === true && !autoCompleteKey) {
+    if (computedBehavior.onlyUnique === true && !computedBehavior.autoCompleteKey) {
       matchs = matchs.filter((tag) => !tags.includes(tag.label));
     }
     arrelementsmatch = matchs;
@@ -473,7 +495,7 @@
 
     debounceSearch = setTimeout(() => {
       getMatchElements(valToSearch);
-    }, debounceMs);
+    }, computedBehavior.debounceMs);
   };
 
   // Dropdown positioning
@@ -513,21 +535,21 @@
 <div class="tags">
   <slot name="label">
     {#if label}
-      <p class="tags__label {labelClass}">
+      <p class="tags__label {computedStyling.labelClass}">
         {label}
-        {#if required}
+        {#if computedValidation.required}
           <span class="tags__required">*</span>
         {/if}
       </p>
     {/if}
   </slot>
-  <div class="tags__container" class:tags__container--error={isError}>
+  <div class="tags__container" class:tags__container--error={computedValidation.isError}>
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div
-      class="tags__wrapper {wrapperClass}"
-      class:tags__wrapper--disabled={disable}
-      class:tags__wrapper--readonly={readonly}
+      class="tags__wrapper {computedStyling.wrapperClass}"
+      class:tags__wrapper--disabled={computedBehavior.disabled}
+      class:tags__wrapper--readonly={computedBehavior.readonly}
       on:click={() => {
         if (inputElement) {
           inputElement.focus();
@@ -538,7 +560,7 @@
       <div class="tags__layout" bind:this={layoutElement}>
         {#if tags.length > 0}
           {#each tags as tagItem, i}
-            <button class="tags__tag" on:click={() => onTagClick(tagItem)}>
+            <button class="tags__tag" on:click={() => computedBehavior.onTagClick(tagItem)}>
               <slot name="tag-label" tag={tagItem}>
                 {#if typeof tagItem === "string" || typeof tagItem === "number"}
                   {tagItem}
@@ -547,7 +569,7 @@
                 {/if}
               </slot>
 
-              {#if !disable && !readonly}
+              {#if !computedBehavior.disabled && !computedBehavior.readonly}
                 <span class="tags__tag-remove" on:pointerdown|preventDefault={() => removeTag(i)}>
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 4L4 12M4 4L12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -570,14 +592,15 @@
           on:focus={onFocus}
           on:blur={(e) => onBlur(e, tag)}
           class="tags__input"
-          {placeholder}
-          disabled={disable || readonly}
+          placeholder={computedBehavior.placeholder}
+          disabled={computedBehavior.disabled || computedBehavior.readonly}
           autocomplete="off"
-          aria-invalid={isError}
-          aria-describedby={isError && id ? `${id}-error` : undefined}
-          class:tags__input--hidden={maxTags === tags.length}
-          inputmode={numberOnly ? (allowDecimal ? "decimal" : "numeric") : undefined}
-          pattern={numberOnly ? (allowDecimal ? "[0-9]*[.,]?[0-9]*" : "[0-9]*") : undefined}
+          aria-label={ariaLabel}
+          aria-invalid={computedValidation.isError}
+          aria-describedby={ariaDescribedBy || (computedValidation.isError && id ? `${id}-error` : undefined)}
+          class:tags__input--hidden={computedBehavior.maxTags === tags.length}
+          inputmode={computedBehavior.numberOnly ? (computedBehavior.allowDecimal ? "decimal" : "numeric") : undefined}
+          pattern={computedBehavior.numberOnly ? (computedBehavior.allowDecimal ? "[0-9]*[.,]?[0-9]*" : "[0-9]*") : undefined}
         />
       </div>
       {#if isLoading}
@@ -588,7 +611,7 @@
           </svg>
         </div>
       {/if}
-      {#if autoComplete && arrelementsmatch.length > 0}
+      {#if computedBehavior.autoComplete && arrelementsmatch.length > 0}
         <ul class="tags__dropdown" bind:this={dropdownElement} use:checkPosition>
           {#each arrelementsmatch as element, index}
             <li
@@ -597,7 +620,7 @@
               on:pointerdown|preventDefault={() => addTag(element.label)}
             >
               <slot {element}>
-                {@html element.search}
+                {@html safeHtmlContent(element.search || '')}
               </slot>
             </li>
           {/each}

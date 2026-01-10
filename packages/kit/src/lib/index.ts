@@ -153,7 +153,12 @@ export {
 export {
   validateRequiredProp,
   validateEnumProp,
+  validateNumberRange,
   getAriaDescribedBy,
   getErrorId,
-  getHelperId
+  getHelperId,
+  createComponentError,
+  logComponentError,
+  sanitizeHtml,
+  safeHtmlContent
 } from './helpers/index.js';

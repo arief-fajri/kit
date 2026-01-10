@@ -1,22 +1,31 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
-  import type { CardVariant, CardSize, CardPadding, CardProps } from "../types.js";
+  import type { CardProps, CardStyling, CardBehavior } from "../types.js";
 
-  // Props with defaults
-  export let variant: CardProps["variant"] = "default";
-  export let size: CardProps["size"] = "md";
-  export let padding: CardProps["padding"] = "md";
-  export let className: CardProps["className"] = "";
-  export let customStyle: CardProps["customStyle"] = "";
-  export let interactive: CardProps["interactive"] = false;
-  export let clickable: CardProps["clickable"] = false;
-  export let backgroundColor: CardProps["backgroundColor"] = undefined;
-  export let borderColor: CardProps["borderColor"] = undefined;
-  export let shadowColor: CardProps["shadowColor"] = undefined;
-  export let rounded: CardProps["rounded"] = true;
-  export let borderRadius: CardProps["borderRadius"] = undefined;
-  export let disabled: CardProps["disabled"] = false;
+  // Core props
+  export let styling: CardProps["styling"] = {};
+  export let behavior: CardProps["behavior"] = {};
   export let ariaLabel: CardProps["ariaLabel"] = undefined;
+
+  // Computed props with defaults
+  $: computedStyling = {
+    variant: styling.variant ?? "default",
+    size: styling.size ?? "md",
+    padding: styling.padding ?? "md",
+    className: styling.className ?? "",
+    style: styling.style ?? "",
+    backgroundColor: styling.backgroundColor ?? undefined,
+    borderColor: styling.borderColor ?? undefined,
+    shadowColor: styling.shadowColor ?? undefined,
+    rounded: styling.rounded ?? true,
+    borderRadius: styling.borderRadius ?? undefined
+  };
+
+  $: computedBehavior = {
+    disabled: behavior.disabled ?? false,
+    interactive: behavior.interactive ?? false,
+    clickable: behavior.clickable ?? false
+  };
 
   const dispatch = createEventDispatcher<{
     click: MouseEvent;
@@ -29,17 +38,17 @@
   // Generate CSS custom properties for style overrides
   $: customStyles = (() => {
     const styles: string[] = [];
-    if (backgroundColor) styles.push(`--card-bg: ${backgroundColor}`);
-    if (borderColor) styles.push(`--card-border: ${borderColor}`);
-    if (shadowColor) styles.push(`--card-shadow-color: ${shadowColor}`);
-    if (borderRadius) styles.push(`--card-border-radius: ${borderRadius}`);
-    if (customStyle) styles.push(customStyle);
+    if (computedStyling.backgroundColor) styles.push(`--card-bg: ${computedStyling.backgroundColor}`);
+    if (computedStyling.borderColor) styles.push(`--card-border: ${computedStyling.borderColor}`);
+    if (computedStyling.shadowColor) styles.push(`--card-shadow-color: ${computedStyling.shadowColor}`);
+    if (computedStyling.borderRadius) styles.push(`--card-border-radius: ${computedStyling.borderRadius}`);
+    if (computedStyling.style) styles.push(computedStyling.style);
     return styles.join("; ");
   })();
 
   // Event handlers
   const handleClick = (e: MouseEvent) => {
-    if (disabled || !clickable) return;
+    if (computedBehavior.disabled || !computedBehavior.clickable) return;
     dispatch("click", e);
   };
 
@@ -52,18 +61,18 @@
   };
 
   // Determine element type
-  $: elementTag = clickable ? "button" : "div";
+  $: elementTag = computedBehavior.clickable ? "button" : "div";
   $: elementAttributes =
     elementTag === "button"
       ? {
-          disabled: disabled,
+          disabled: computedBehavior.disabled,
           type: "button"
         }
       : {};
 
   // Compute classes
-  $: cardClasses = `card card--${variant} card--${size} card--padding-${padding} ${className}`;
-  $: cardClassesWithModifiers = `${cardClasses} ${rounded ? "card--rounded" : ""} ${interactive ? "card--interactive" : ""} ${clickable ? "card--clickable" : ""} ${disabled ? "card--disabled" : ""}`;
+  $: cardClasses = `card card--${computedStyling.variant} card--${computedStyling.size} card--padding-${computedStyling.padding} ${computedStyling.className}`;
+  $: cardClassesWithModifiers = `${cardClasses} ${computedStyling.rounded ? "card--rounded" : ""} ${computedBehavior.interactive ? "card--interactive" : ""} ${computedBehavior.clickable ? "card--clickable" : ""} ${computedBehavior.disabled ? "card--disabled" : ""}`;
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->

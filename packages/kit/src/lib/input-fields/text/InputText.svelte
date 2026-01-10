@@ -27,6 +27,8 @@
   export let name: string = "";
   export let id: string = "";
   export let inputRef: HTMLInputElement | undefined = undefined;
+  export let ariaLabel: string | undefined = undefined;
+  export let ariaDescribedBy: string | undefined = undefined;
 
   // Generate unique ID if not provided (SSR-safe)
   let inputId: string = id || safeUniqueId("input-");
@@ -73,28 +75,23 @@
   let passwordView: boolean = false;
   let cursorPosition: number = 0;
 
-  // Event listener cleanup
+  // Event listener cleanup - optimized
   let cleanupListeners: (() => void) | null = null;
 
-  // Reactive statements
+  // Reactive statements - optimized
   $: {
     if (inputRef) {
       // Clean up previous listeners
       if (cleanupListeners) {
         cleanupListeners();
+        cleanupListeners = null;
       }
 
-      if (computedBehavior.useKeyup) {
-        inputRef.addEventListener("keyup", handleInput);
-        cleanupListeners = () => {
-          inputRef?.removeEventListener("keyup", handleInput);
-        };
-      } else {
-        inputRef.addEventListener("input", handleInput);
-        cleanupListeners = () => {
-          inputRef?.removeEventListener("input", handleInput);
-        };
-      }
+      const eventType = computedBehavior.useKeyup ? "keyup" : "input";
+      inputRef.addEventListener(eventType, handleInput);
+      cleanupListeners = () => {
+        inputRef?.removeEventListener(eventType, handleInput);
+      };
     }
   }
 
@@ -265,9 +262,10 @@
         disabled={computedBehavior.disabled}
         readonly={computedBehavior.readonly}
         autocomplete={computedBehavior.autocomplete}
+        aria-label={ariaLabel}
         aria-invalid={computedValidation.isError}
         aria-required={computedValidation.required}
-        aria-describedby={computedValidation.errorMessage ? `${inputId}-error` : undefined}
+        aria-describedby={ariaDescribedBy || (computedValidation.errorMessage ? `${inputId}-error` : undefined)}
         on:change
         on:keydown={handleKeydown}
         on:focus={() => dispatch("focus")}

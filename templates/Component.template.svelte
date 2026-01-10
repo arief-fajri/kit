@@ -1,21 +1,28 @@
 <script lang="ts">
 	import { createEventDispatcher, onMount } from "svelte";
-	import { uniqueId } from "@rief/utils";
-	import type { [ComponentName]Variant, [ComponentName]Size, [ComponentName]State, [ComponentName]Props } from '../types.js';
+	import { safeUniqueId } from "@rief/utils";
+	import type { [ComponentName]Props, [ComponentName]Styling, [ComponentName]Behavior } from '../types.js';
 
-	// Props with defaults
-	export let variant: [ComponentName]Props['variant'] = "[default-variant]";
-	export let size: [ComponentName]Props['size'] = "md";
-	export let state: [ComponentName]Props['state'] = undefined;
+	// Core props
 	export let [primaryProp]: [ComponentName]Props['[primaryProp]'] = "[default-value]";
-	export let className: [ComponentName]Props['className'] = "";
-	export let customStyle: [ComponentName]Props['customStyle'] = "";
-	export let disabled: [ComponentName]Props['disabled'] = false;
-	export let loading: [ComponentName]Props['loading'] = false;
-	export let loadingMessage: [ComponentName]Props['loadingMessage'] = "Loading...";
-	export let [customProp1]: [ComponentName]Props['[customProp1]'] = undefined;
-	export let [customProp2]: [ComponentName]Props['[customProp2]'] = undefined;
-	export let [customProp3]: [ComponentName]Props['[customProp3]'] = false;
+	export let styling: [ComponentName]Props['styling'] = {};
+	export let behavior: [ComponentName]Props['behavior'] = {};
+	export let ariaLabel: [ComponentName]Props['ariaLabel'] = undefined;
+	export let ariaDescribedBy: [ComponentName]Props['ariaDescribedBy'] = undefined;
+
+	// Computed props with defaults
+	$: computedStyling = {
+		variant: styling.variant ?? "[default-variant]",
+		size: styling.size ?? "md",
+		className: styling.className ?? "",
+		style: styling.style ?? ""
+	};
+
+	$: computedBehavior = {
+		disabled: behavior.disabled ?? false,
+		loading: behavior.loading ?? false,
+		loadingMessage: behavior.loadingMessage ?? "Loading..."
+	};
 
 	const dispatch = createEventDispatcher<{
 		[primaryEvent]: [EventType];
@@ -24,26 +31,13 @@
 		[specialEvent]: { [eventData]: [DataType] };
 	}>();
 
-	// Determine actual state
-	$: actualState = state || 'default';
-
-	// Determine if loading
-	$: isLoading = loading;
-
 	// Generate unique ID if not provided (SSR-safe)
-	let [componentId]: string = "";
-	onMount(() => {
-		if (![componentId]) {
-			[componentId] = uniqueId("[component-prefix]-");
-		}
-	});
+	let [componentId]: string = safeUniqueId("[component-prefix]-");
 
 	// Generate CSS custom properties for style overrides
 	$: customStyles = (() => {
 		const styles: string[] = [];
-		if ([customProp1]) styles.push(`--[component-prefix]-[property]: ${[customProp1]}`);
-		if ([customProp2]) styles.push(`--[component-prefix]-[property]: ${[customProp2]}`);
-		if (customStyle) styles.push(customStyle);
+		if (computedStyling.style) styles.push(computedStyling.style);
 		return styles.join("; ");
 	})();
 
@@ -52,7 +46,7 @@
 
 	// Event handlers
 	const [handlePrimaryEvent] = (e: [EventType]) => {
-		if (disabled || isLoading) return;
+		if (computedBehavior.disabled || computedBehavior.loading) return;
 		dispatch("[primaryEvent]", e);
 	};
 
@@ -69,17 +63,18 @@
 </script>
 
 <div
-	class="[component-class] [component-class]--{variant} [component-class]--{size} {className}"
-	class:[component-class]--disabled={disabled || isLoading}
-	class:[component-class]--loading={isLoading}
-	class:[component-class]--state-{actualState}={actualState !== 'default'}
+	class="[component-class] [component-class]--{computedStyling.variant} [component-class]--{computedStyling.size} {computedStyling.className}"
+	class:[component-class]--disabled={computedBehavior.disabled || computedBehavior.loading}
+	class:[component-class]--loading={computedBehavior.loading}
 	style={customStyles || undefined}
+	aria-label={ariaLabel}
+	aria-describedby={ariaDescribedBy}
 	{...$$restProps}
 	on:[primaryEvent]={[handlePrimaryEvent]}
 	on:[secondaryEvent]={[handleSecondaryEvent]}
 	on:[tertiaryEvent]={(e) => dispatch("[tertiaryEvent]", e)}
 >
-	{#if isLoading}
+	{#if computedBehavior.loading}
 		<slot name="loading" let:[loadingData]>
 			<div class="[component-class]__loading">
 				<svg 
@@ -95,8 +90,8 @@
 						d="[spinner-path-data]"
 					/>
 				</svg>
-				{#if [loadingMessage]}
-					<span class="[component-class]__loading-message">{[loadingMessage]}</span>
+				{#if computedBehavior.loadingMessage}
+					<span class="[component-class]__loading-message">{computedBehavior.loadingMessage}</span>
 				{/if}
 			</div>
 		</slot>

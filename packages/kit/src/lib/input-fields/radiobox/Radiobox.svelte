@@ -9,6 +9,8 @@
   export let checked: boolean = false;
   export let id: string = "";
   export let radioRef: HTMLInputElement | undefined = undefined;
+  export let ariaLabel: string | undefined = undefined;
+  export let ariaDescribedBy: string | undefined = undefined;
 
   // Generate unique ID if not provided (SSR-safe)
   let radioId: string = id || safeUniqueId("radio-");
@@ -73,6 +75,8 @@
       disabled={computedBehavior.disabled} 
       {checked} 
       {name} 
+      aria-label={ariaLabel}
+      aria-describedby={ariaDescribedBy}
       on:change={handleChange} 
       {...$$restProps} 
     />

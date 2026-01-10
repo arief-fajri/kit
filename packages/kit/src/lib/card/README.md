@@ -44,7 +44,12 @@ The Card component uses a flexible container that can render as either a `<div>`
 </Card>
 
 <!-- Card with variant and size -->
-<Card variant="elevated" size="lg">
+<Card 
+  styling={{
+    variant: "elevated",
+    size: "lg"
+  }}
+>
   <h3>Elevated Card</h3>
   <p>This card has a shadow effect</p>
 </Card>
@@ -52,22 +57,41 @@ The Card component uses a flexible container that can render as either a `<div>`
 
 ## Props
 
+### Core Props
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `variant` | `'default' \| 'outlined' \| 'elevated' \| 'filled'` | `'default'` | Visual style variant |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Card size |
-| `padding` | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | Internal padding size |
-| `className` | `string` | `""` | Additional CSS classes |
-| `customStyle` | `string` | `""` | Additional inline styles (CSS string) |
-| `interactive` | `boolean` | `false` | Enable hover effects |
-| `clickable` | `boolean` | `false` | Make card clickable (renders as button) |
-| `backgroundColor` | `string` | `undefined` | Custom background color |
-| `borderColor` | `string` | `undefined` | Custom border color |
-| `shadowColor` | `string` | `undefined` | Custom shadow color |
-| `rounded` | `boolean` | `true` | Apply rounded corners |
-| `borderRadius` | `string` | `undefined` | Custom border radius |
-| `disabled` | `boolean` | `false` | Disable card interaction |
+| *(No core props - Card uses only styling and behavior)* | | | |
+
+### Styling Props (`styling` object)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `styling.variant` | `'default' \| 'outlined' \| 'elevated' \| 'filled'` | `'default'` | Visual style variant |
+| `styling.size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Card size |
+| `styling.padding` | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | Internal padding size |
+| `styling.className` | `string` | `""` | Additional CSS classes |
+| `styling.style` | `string` | `""` | Additional inline styles |
+| `styling.backgroundColor` | `string` | `undefined` | Custom background color |
+| `styling.borderColor` | `string` | `undefined` | Custom border color |
+| `styling.shadowColor` | `string` | `undefined` | Custom shadow color |
+| `styling.rounded` | `boolean` | `true` | Apply rounded corners |
+| `styling.borderRadius` | `string` | `undefined` | Custom border radius |
+
+### Behavior Props (`behavior` object)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `behavior.disabled` | `boolean` | `false` | Disable card interaction |
+| `behavior.interactive` | `boolean` | `false` | Enable hover effects |
+| `behavior.clickable` | `boolean` | `false` | Make card clickable (renders as button) |
+
+### Accessibility Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
 | `ariaLabel` | `string` | `undefined` | Accessibility label (required when clickable) |
+| `ariaDescribedBy` | `string` | `undefined` | ARIA described by reference |
 
 ## Variants
 
@@ -75,7 +99,7 @@ The Card component uses a flexible container that can render as either a `<div>`
 Clean, minimal style with transparent background and subtle border. Best for most use cases.
 
 ```svelte
-<Card variant="default">
+<Card styling={{ variant: "default" }}>
   <h3>Default Card</h3>
   <p>Content here</p>
 </Card>
@@ -85,7 +109,7 @@ Clean, minimal style with transparent background and subtle border. Best for mos
 Card with prominent border outline. Emphasizes the card boundaries.
 
 ```svelte
-<Card variant="outlined">
+<Card styling={{ variant: "outlined" }}>
   <h3>Outlined Card</h3>
   <p>Content here</p>
 </Card>
@@ -95,7 +119,7 @@ Card with prominent border outline. Emphasizes the card boundaries.
 Card with shadow effect. Creates depth and visual hierarchy.
 
 ```svelte
-<Card variant="elevated">
+<Card styling={{ variant: "elevated" }}>
   <h3>Elevated Card</h3>
   <p>Content here</p>
 </Card>
@@ -105,7 +129,7 @@ Card with shadow effect. Creates depth and visual hierarchy.
 Card with background color. Provides visual separation from surrounding content.
 
 ```svelte
-<Card variant="filled">
+<Card styling={{ variant: "filled" }}>
   <h3>Filled Card</h3>
   <p>Content here</p>
 </Card>
@@ -114,19 +138,19 @@ Card with background color. Provides visual separation from surrounding content.
 ## Sizes
 
 ```svelte
-<Card size="sm">Small Card</Card>
-<Card size="md">Medium Card</Card>
-<Card size="lg">Large Card</Card>
+<Card styling={{ size: "sm" }}>Small Card</Card>
+<Card styling={{ size: "md" }}>Medium Card</Card>
+<Card styling={{ size: "lg" }}>Large Card</Card>
 ```
 
 ## Padding Options
 
 ```svelte
-<Card padding="none">No Padding</Card>
-<Card padding="sm">Small Padding</Card>
-<Card padding="md">Medium Padding</Card>
-<Card padding="lg">Large Padding</Card>
-<Card padding="xl">Extra Large Padding</Card>
+<Card styling={{ padding: "none" }}>No Padding</Card>
+<Card styling={{ padding: "sm" }}>Small Padding</Card>
+<Card styling={{ padding: "md" }}>Medium Padding</Card>
+<Card styling={{ padding: "lg" }}>Large Padding</Card>
+<Card styling={{ padding: "xl" }}>Extra Large Padding</Card>
 ```
 
 ## Interactive Cards
@@ -136,7 +160,7 @@ Card with background color. Provides visual separation from surrounding content.
 Enable hover effects with the `interactive` prop:
 
 ```svelte
-<Card interactive>
+<Card behavior={{ interactive: true }}>
   <h3>Interactive Card</h3>
   <p>Hover over me!</p>
 </Card>
@@ -154,7 +178,7 @@ Make cards clickable by using the `clickable` prop. The card will render as a `<
 </script>
 
 <Card 
-  clickable 
+  behavior={{ clickable: true }}
   ariaLabel="Click to view details"
   on:click={handleCardClick}
 >
@@ -165,13 +189,15 @@ Make cards clickable by using the `clickable` prop. The card will render as a `<
 
 ## Custom Colors
 
-Override colors using the color props:
+Override colors using the styling props:
 
 ```svelte
 <Card 
-  backgroundColor="#f0f0f0"
-  borderColor="#3b82f6"
-  shadowColor="rgba(59, 130, 246, 0.3)"
+  styling={{
+    backgroundColor: "#f0f0f0",
+    borderColor: "#3b82f6",
+    shadowColor: "rgba(59, 130, 246, 0.3)"
+  }}
 >
   <h3>Custom Colored Card</h3>
   <p>Content here</p>
@@ -181,7 +207,12 @@ Override colors using the color props:
 ## Disabled State
 
 ```svelte
-<Card disabled clickable>
+<Card 
+  behavior={{
+    disabled: true,
+    clickable: true
+  }}
+>
   <h3>Disabled Card</h3>
   <p>This card cannot be clicked</p>
 </Card>
@@ -264,9 +295,13 @@ The Card component is fully accessible by default:
 
 ```svelte
 <Card 
-  variant={isActive ? 'elevated' : 'default'}
-  interactive={!isDisabled}
-  disabled={isDisabled}
+  styling={{
+    variant: isActive ? 'elevated' : 'default'
+  }}
+  behavior={{
+    interactive: !isDisabled,
+    disabled: isDisabled
+  }}
 >
   <h3>Conditional Card</h3>
   <p>Content here</p>
@@ -277,8 +312,10 @@ The Card component is fully accessible by default:
 
 ```svelte
 <Card 
-  rounded={false}
-  borderRadius="1rem"
+  styling={{
+    rounded: false,
+    borderRadius: "1rem"
+  }}
 >
   <h3>Custom Border Radius</h3>
   <p>Content here</p>
@@ -289,13 +326,13 @@ The Card component is fully accessible by default:
 
 ```svelte
 <div class="grid grid-cols-3 gap-4">
-  <Card variant="elevated" size="md">
+  <Card styling={{ variant: "elevated", size: "md" }}>
     <h3>Card 1</h3>
   </Card>
-  <Card variant="elevated" size="md">
+  <Card styling={{ variant: "elevated", size: "md" }}>
     <h3>Card 2</h3>
   </Card>
-  <Card variant="elevated" size="md">
+  <Card styling={{ variant: "elevated", size: "md" }}>
     <h3>Card 3</h3>
   </Card>
 </div>
@@ -312,16 +349,19 @@ The component exports comprehensive TypeScript types:
 ```typescript
 import type { 
   CardProps, 
-  CardVariant, 
-  CardSize, 
-  CardPadding 
+  CardStyling, 
+  CardBehavior 
 } from '@rief/kit';
 
 const cardConfig: CardProps = {
-  variant: 'elevated',
-  size: 'lg',
-  padding: 'md',
-  interactive: true,
-  clickable: false
+  styling: {
+    variant: 'elevated',
+    size: 'lg',
+    padding: 'md'
+  },
+  behavior: {
+    interactive: true,
+    clickable: false
+  }
 };
 ```

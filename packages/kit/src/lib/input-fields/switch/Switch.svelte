@@ -10,6 +10,8 @@
   export let value: any = undefined;
   export let label: string = "";
   export let switchRef: HTMLInputElement | undefined = undefined;
+  export let ariaLabel: string | undefined = undefined;
+  export let ariaDescribedBy: string | undefined = undefined;
 
   // Generate unique ID if not provided (SSR-safe)
   let switchId: string = id || safeUniqueId("switch-");
@@ -90,6 +92,8 @@
       disabled={computedBehavior.disabled}
       required={computedBehavior.required}
       {value}
+      aria-label={ariaLabel}
+      aria-describedby={ariaDescribedBy}
       aria-checked={checked}
       aria-disabled={computedBehavior.disabled}
       on:change={handleChange}

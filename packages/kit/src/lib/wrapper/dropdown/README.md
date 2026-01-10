@@ -64,8 +64,8 @@ The DropdownWrapper creates a floating container that positions itself relative 
 <DropdownWrapper 
   bind:visible={dropdownVisible}
   anchor={buttonElement}
-  placement="bottom-start"
-  variant="elevated"
+  styling={{ variant: "elevated" }}
+  behavior={{ placement: "bottom-start" }}
   on:close={() => dropdownVisible = false}
   on:open={() => console.log('Dropdown opened')}
 />
@@ -73,17 +73,38 @@ The DropdownWrapper creates a floating container that positions itself relative 
 
 ## Props
 
+### Core Props
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `visible` | `boolean` | `false` | Controls dropdown visibility state |
 | `anchor` | `HTMLElement \| null` | `null` | Element to position dropdown relative to |
-| `placement` | `'bottom-start' \| 'bottom-end' \| 'top-start' \| 'top-end' \| 'auto'` | `'bottom-start'` | Preferred placement relative to anchor |
-| `offset` | `{ x: number; y: number }` | `{ x: 0, y: 4 }` | Pixel offset from anchor element |
-| `variant` | `'default' \| 'minimal' \| 'elevated' \| 'outlined'` | `'default'` | Visual style variant |
-| `size` | `'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | Size preset affecting width constraints |
-| `closeOnClickOutside` | `boolean` | `true` | Whether to close when clicking outside dropdown |
-| `closeOnEscape` | `boolean` | `true` | Whether to close when pressing Escape key |
-| `class` | `string` | `""` | Additional CSS classes to apply |
+
+### Styling Props (`styling` object)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `styling.variant` | `'default' \| 'minimal' \| 'elevated' \| 'outlined'` | `'default'` | Visual style variant |
+| `styling.size` | `'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | Size preset affecting width constraints |
+| `styling.className` | `string` | `""` | Additional CSS classes |
+| `styling.style` | `string` | `""` | Additional inline styles |
+
+### Behavior Props (`behavior` object)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `behavior.placement` | `'bottom-start' \| 'bottom-end' \| 'top-start' \| 'top-end' \| 'auto'` | `'bottom-start'` | Preferred placement relative to anchor |
+| `behavior.offset` | `{ x: number; y: number }` | `{ x: 0, y: 4 }` | Pixel offset from anchor element |
+| `behavior.closeOnClickOutside` | `boolean` | `true` | Whether to close when clicking outside dropdown |
+| `behavior.closeOnEscape` | `boolean` | `true` | Whether to close when pressing Escape key |
+| `behavior.isFullAnchorWidth` | `boolean` | `true` | Make dropdown full width of anchor |
+
+### Accessibility Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `ariaLabel` | `string` | `undefined` | ARIA label for accessibility |
+| `ariaDescribedBy` | `string` | `undefined` | ARIA described by reference |
 
 ## Variants
 
@@ -91,7 +112,11 @@ The DropdownWrapper creates a floating container that positions itself relative 
 Standard dropdown appearance with subtle border and shadow. Perfect for most use cases.
 
 ```svelte
-<DropdownWrapper variant="default" bind:visible={isOpen} anchor={buttonEl}>
+<DropdownWrapper 
+  bind:visible={isOpen} 
+  anchor={buttonEl}
+  styling={{ variant: "default" }}
+>
   <div>Standard dropdown content</div>
 </DropdownWrapper>
 ```
@@ -100,7 +125,11 @@ Standard dropdown appearance with subtle border and shadow. Perfect for most use
 Clean appearance with reduced visual weight. Ideal for subtle UI elements.
 
 ```svelte
-<DropdownWrapper variant="minimal" bind:visible={isOpen} anchor={buttonEl}>
+<DropdownWrapper 
+  bind:visible={isOpen} 
+  anchor={buttonEl}
+  styling={{ variant: "minimal" }}
+>
   <div>Minimal dropdown content</div>
 </DropdownWrapper>
 ```
@@ -109,7 +138,11 @@ Clean appearance with reduced visual weight. Ideal for subtle UI elements.
 Enhanced shadow for prominent floating elements. Great for important actions.
 
 ```svelte
-<DropdownWrapper variant="elevated" bind:visible={isOpen} anchor={buttonEl}>
+<DropdownWrapper 
+  bind:visible={isOpen} 
+  anchor={buttonEl}
+  styling={{ variant: "elevated" }}
+>
   <div>Elevated dropdown content</div>
 </DropdownWrapper>
 ```
@@ -118,7 +151,11 @@ Enhanced shadow for prominent floating elements. Great for important actions.
 Strong border emphasis without shadow. Perfect for high-contrast interfaces.
 
 ```svelte
-<DropdownWrapper variant="outlined" bind:visible={isOpen} anchor={buttonEl}>
+<DropdownWrapper 
+  bind:visible={isOpen} 
+  anchor={buttonEl}
+  styling={{ variant: "outlined" }}
+>
   <div>Outlined dropdown content</div>
 </DropdownWrapper>
 ```
@@ -126,10 +163,10 @@ Strong border emphasis without shadow. Perfect for high-contrast interfaces.
 ## Sizes
 
 ```svelte
-<DropdownWrapper size="sm" bind:visible={isOpen} anchor={buttonEl}>Small dropdown</DropdownWrapper>
-<DropdownWrapper size="md" bind:visible={isOpen} anchor={buttonEl}>Medium dropdown</DropdownWrapper>
-<DropdownWrapper size="lg" bind:visible={isOpen} anchor={buttonEl}>Large dropdown</DropdownWrapper>
-<DropdownWrapper size="xl" bind:visible={isOpen} anchor={buttonEl}>Extra large dropdown</DropdownWrapper>
+<DropdownWrapper styling={{ size: "sm" }} bind:visible={isOpen} anchor={buttonEl}>Small dropdown</DropdownWrapper>
+<DropdownWrapper styling={{ size: "md" }} bind:visible={isOpen} anchor={buttonEl}>Medium dropdown</DropdownWrapper>
+<DropdownWrapper styling={{ size: "lg" }} bind:visible={isOpen} anchor={buttonEl}>Large dropdown</DropdownWrapper>
+<DropdownWrapper styling={{ size: "xl" }} bind:visible={isOpen} anchor={buttonEl}>Extra large dropdown</DropdownWrapper>
 ```
 
 ## Placement Options
@@ -142,15 +179,19 @@ The dropdown automatically positions itself relative to the anchor element with 
 </script>
 
 <!-- Auto-placement (recommended) -->
-<DropdownWrapper placement="auto" bind:visible={isOpen} anchor={buttonEl}>
+<DropdownWrapper 
+  bind:visible={isOpen} 
+  anchor={buttonEl}
+  behavior={{ placement: "auto" }}
+>
   <div>Auto-positioned content</div>
 </DropdownWrapper>
 
 <!-- Manual placement options -->
-<DropdownWrapper placement="bottom-start" bind:visible={isOpen} anchor={buttonEl}>Bottom-left aligned</DropdownWrapper>
-<DropdownWrapper placement="bottom-end" bind:visible={isOpen} anchor={buttonEl}>Bottom-right aligned</DropdownWrapper>
-<DropdownWrapper placement="top-start" bind:visible={isOpen} anchor={buttonEl}>Top-left aligned</DropdownWrapper>
-<DropdownWrapper placement="top-end" bind:visible={isOpen} anchor={buttonEl}>Top-right aligned</DropdownWrapper>
+<DropdownWrapper behavior={{ placement: "bottom-start" }} bind:visible={isOpen} anchor={buttonEl}>Bottom-left aligned</DropdownWrapper>
+<DropdownWrapper behavior={{ placement: "bottom-end" }} bind:visible={isOpen} anchor={buttonEl}>Bottom-right aligned</DropdownWrapper>
+<DropdownWrapper behavior={{ placement: "top-start" }} bind:visible={isOpen} anchor={buttonEl}>Top-left aligned</DropdownWrapper>
+<DropdownWrapper behavior={{ placement: "top-end" }} bind:visible={isOpen} anchor={buttonEl}>Top-right aligned</DropdownWrapper>
 ```
 
 ## Offset Positioning
@@ -166,15 +207,15 @@ Fine-tune dropdown position with pixel-perfect offset control.
 <DropdownWrapper 
   bind:visible={isOpen} 
   anchor={buttonEl}
-  offset={customOffset}
+  behavior={{ offset: customOffset }}
 >
   <div>Precisely positioned content</div>
 </DropdownWrapper>
 
 <!-- Common offset patterns -->
-<DropdownWrapper offset={{ x: 0, y: 8 }}>Increased vertical gap</DropdownWrapper>
-<DropdownWrapper offset={{ x: -16, y: 4 }}>Left-shifted position</DropdownWrapper>
-<DropdownWrapper offset={{ x: 16, y: 0 }}>Right-shifted position</DropdownWrapper>
+<DropdownWrapper behavior={{ offset: { x: 0, y: 8 } }}>Increased vertical gap</DropdownWrapper>
+<DropdownWrapper behavior={{ offset: { x: -16, y: 4 } }}>Left-shifted position</DropdownWrapper>
+<DropdownWrapper behavior={{ offset: { x: 16, y: 0 } }}>Right-shifted position</DropdownWrapper>
 ```
 
 ## Behavior Control
@@ -191,10 +232,11 @@ Customize interaction behavior for different use cases.
 <DropdownWrapper 
   bind:visible={tooltipVisible}
   anchor={hoverElement}
-  closeOnClickOutside={false}
-  closeOnEscape={true}
-  variant="minimal"
-  size="sm"
+  styling={{ variant: "minimal", size: "sm" }}
+  behavior={{
+    closeOnClickOutside: false,
+    closeOnEscape: true
+  }}
 >
   <div>Tooltip content</div>
 </DropdownWrapper>
@@ -203,9 +245,11 @@ Customize interaction behavior for different use cases.
 <DropdownWrapper 
   bind:visible={menuVisible}
   anchor={menuButton}
-  closeOnClickOutside={true}
-  closeOnEscape={false}
-  variant="elevated"
+  styling={{ variant: "elevated" }}
+  behavior={{
+    closeOnClickOutside: true,
+    closeOnEscape: false
+  }}
 >
   <div>Modal-like menu</div>
 </DropdownWrapper>
@@ -214,8 +258,10 @@ Customize interaction behavior for different use cases.
 <DropdownWrapper 
   bind:visible={persistentVisible}
   anchor={triggerEl}
-  closeOnClickOutside={false}
-  closeOnEscape={false}
+  behavior={{
+    closeOnClickOutside: false,
+    closeOnEscape: false
+  }}
 >
   <div>
     <p>Persistent content</p>
@@ -324,9 +370,13 @@ The DropdownWrapper component is fully accessible by default:
 
 ```svelte
 <DropdownWrapper 
-  variant={isDarkMode ? 'elevated' : 'default'}
-  size={isMobile ? 'sm' : 'md'}
-  placement={isRTL ? 'bottom-end' : 'bottom-start'}
+  styling={{
+    variant: isDarkMode ? 'elevated' : 'default',
+    size: isMobile ? 'sm' : 'md'
+  }}
+  behavior={{
+    placement: isRTL ? 'bottom-end' : 'bottom-start'
+  }}
   bind:visible={isOpen}
   anchor={triggerElement}
 >
@@ -367,7 +417,7 @@ The DropdownWrapper component is fully accessible by default:
   <DropdownWrapper 
     bind:visible={categoryDropdownOpen}
     anchor={categoryButton}
-    variant="outlined"
+    styling={{ variant: "outlined" }}
     on:close={() => categoryDropdownOpen = false}
   >
     <div class="category-options">
@@ -415,8 +465,8 @@ The DropdownWrapper component is fully accessible by default:
 <DropdownWrapper 
   bind:visible={subMenuOpen} 
   anchor={subButton}
-  placement="bottom-end"
-  variant="elevated"
+  styling={{ variant: "elevated" }}
+  behavior={{ placement: "bottom-end" }}
 >
   <div class="sub-menu">
     <button on:click={() => handleAction('sub1')}>Sub Action 1</button>
@@ -436,17 +486,20 @@ The component exports comprehensive TypeScript types:
 ```typescript
 import type { 
   DropdownWrapperProps,
-  Placement,
-  Variant,
-  Size 
+  DropdownWrapperStyling,
+  DropdownWrapperBehavior
 } from '@rief/kit';
 
 const dropdownConfig: DropdownWrapperProps = {
-  variant: 'elevated',
-  size: 'lg',
-  placement: 'auto',
-  closeOnClickOutside: true,
-  closeOnEscape: true
+  styling: {
+    variant: 'elevated',
+    size: 'lg'
+  },
+  behavior: {
+    placement: 'auto',
+    closeOnClickOutside: true,
+    closeOnEscape: true
+  }
 };
 
 // Event handler types

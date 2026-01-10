@@ -67,42 +67,62 @@ The DatePicker component follows a clean, hierarchical structure optimized for u
 
 <!-- Date range picker -->
 <DatePicker 
-  mode="range" 
   bind:rangeValue={dateRange}
+  behavior={{ mode: "range" }}
   on:change={handleDateChange} 
 />
 
 <!-- Multiple date selection -->
 <DatePicker 
-  mode="multiple" 
   bind:multipleValue={multipleDates}
+  behavior={{ mode: "multiple" }}
   on:change={handleDateChange} 
 />
 ```
 
 ## Props
 
+### Core Props
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `value` | `Date \| string \| null` | `null` | Selected date for single mode |
 | `rangeValue` | `[DateValue, DateValue]` | `[null, null]` | Selected date range for range mode |
 | `multipleValue` | `DateValue[]` | `[]` | Selected dates for multiple mode |
-| `mode` | `'single' \| 'range' \| 'multiple'` | `'single'` | Selection mode |
-| `variant` | `'default' \| 'minimal' \| 'rounded' \| 'bordered'` | `'default'` | Visual style variant |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Component size |
-| `minDate` | `Date \| string \| null` | `null` | Minimum selectable date |
-| `maxDate` | `Date \| string \| null` | `null` | Maximum selectable date |
-| `disabledDates` | `DateValue[] \| ((date: Date) => boolean)` | `undefined` | Disabled dates array or function |
-| `firstDayOfWeek` | `0 \| 1` | `0` | First day of week (0=Sunday, 1=Monday) |
-| `showWeekNumbers` | `boolean` | `false` | Show ISO week numbers |
-| `showToday` | `boolean` | `true` | Show today button |
-| `showClear` | `boolean` | `true` | Show clear button |
-| `closeOnSelect` | `boolean` | `true` | Close picker on date selection |
-| `labels` | `DatePickerLabels` | `{}` | Custom labels for internationalization |
-| `className` | `string` | `""` | Additional CSS classes |
-| `disabled` | `boolean` | `false` | Disabled state |
-| `loading` | `boolean` | `false` | Loading state |
-| `locale` | `string` | `'en-US'` | Locale for date formatting |
+
+### Styling Props (`styling` object)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `styling.variant` | `'default' \| 'minimal' \| 'rounded' \| 'bordered'` | `'default'` | Visual style variant |
+| `styling.size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Component size |
+| `styling.className` | `string` | `""` | Additional CSS classes |
+| `styling.style` | `string` | `""` | Additional inline styles |
+
+### Behavior Props (`behavior` object)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `behavior.mode` | `'single' \| 'range' \| 'multiple'` | `'single'` | Selection mode |
+| `behavior.disabled` | `boolean` | `false` | Disabled state |
+| `behavior.loading` | `boolean` | `false` | Loading state |
+| `behavior.minDate` | `Date \| string \| null` | `null` | Minimum selectable date |
+| `behavior.maxDate` | `Date \| string \| null` | `null` | Maximum selectable date |
+| `behavior.disabledDates` | `DateValue[] \| ((date: Date) => boolean)` | `undefined` | Disabled dates array or function |
+| `behavior.firstDayOfWeek` | `0 \| 1` | `0` | First day of week (0=Sunday, 1=Monday) |
+| `behavior.showWeekNumbers` | `boolean` | `false` | Show ISO week numbers |
+| `behavior.showToday` | `boolean` | `true` | Show today button |
+| `behavior.showClear` | `boolean` | `true` | Show clear button |
+| `behavior.closeOnSelect` | `boolean` | `true` | Close picker on date selection |
+| `behavior.labels` | `DatePickerLabels` | `{}` | Custom labels for internationalization |
+| `behavior.locale` | `string` | `'en-US'` | Locale for date formatting |
+
+### Accessibility Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `ariaLabel` | `string` | `undefined` | ARIA label for accessibility |
+| `ariaDescribedBy` | `string` | `undefined` | ARIA described by reference |
 
 ## Variants
 
@@ -110,36 +130,48 @@ The DatePicker component follows a clean, hierarchical structure optimized for u
 Standard date picker with border and background styling.
 
 ```svelte
-<DatePicker variant="default" value={selectedDate} />
+<DatePicker 
+  value={selectedDate}
+  styling={{ variant: "default" }}
+/>
 ```
 
 ### Minimal
 Clean design without borders, suitable for inline usage.
 
 ```svelte
-<DatePicker variant="minimal" value={selectedDate} />
+<DatePicker 
+  value={selectedDate}
+  styling={{ variant: "minimal" }}
+/>
 ```
 
 ### Rounded
 Rounded corners for a softer appearance.
 
 ```svelte
-<DatePicker variant="rounded" value={selectedDate} />
+<DatePicker 
+  value={selectedDate}
+  styling={{ variant: "rounded" }}
+/>
 ```
 
 ### Bordered
 Emphasized border styling for prominent placement.
 
 ```svelte
-<DatePicker variant="bordered" value={selectedDate} />
+<DatePicker 
+  value={selectedDate}
+  styling={{ variant: "bordered" }}
+/>
 ```
 
 ## Sizes
 
 ```svelte
-<DatePicker size="sm" value={smallDate} />
-<DatePicker size="md" value={mediumDate} />
-<DatePicker size="lg" value={largeDate} />
+<DatePicker value={smallDate} styling={{ size: "sm" }} />
+<DatePicker value={mediumDate} styling={{ size: "md" }} />
+<DatePicker value={largeDate} styling={{ size: "lg" }} />
 ```
 
 ## Selection Modes
@@ -158,8 +190,8 @@ Select one date at a time.
 </script>
 
 <DatePicker 
-  mode="single" 
   bind:value={selectedDate}
+  behavior={{ mode: "single" }}
   on:change={handleChange}
 />
 ```
@@ -178,8 +210,8 @@ Select a start and end date.
 </script>
 
 <DatePicker 
-  mode="range" 
   bind:rangeValue={dateRange}
+  behavior={{ mode: "range" }}
   on:change={handleRangeChange}
 />
 ```
@@ -197,8 +229,8 @@ Select multiple individual dates.
 </script>
 
 <DatePicker 
-  mode="multiple" 
   bind:multipleValue={multipleDates}
+  behavior={{ mode: "multiple" }}
   on:change={handleMultipleChange}
 />
 ```
@@ -229,20 +261,22 @@ Control which dates can be selected using various constraint options.
 <!-- Date range constraints -->
 <DatePicker 
   value={selectedDate}
-  minDate={today}
-  maxDate={nextMonth}
+  behavior={{
+    minDate: today,
+    maxDate: nextMonth
+  }}
 />
 
 <!-- Function-based constraints -->
 <DatePicker 
   value={selectedDate}
-  disabledDates={isWeekend}
+  behavior={{ disabledDates: isWeekend }}
 />
 
 <!-- Array of disabled dates -->
 <DatePicker 
   value={selectedDate}
-  disabledDates={holidays}
+  behavior={{ disabledDates: holidays }}
 />
 ```
 
@@ -269,9 +303,11 @@ Customize labels and locale settings for different languages.
 
 <DatePicker 
   value={selectedDate}
-  locale="de-DE"
-  labels={germanLabels}
-  firstDayOfWeek={1}
+  behavior={{
+    locale: "de-DE",
+    labels: germanLabels,
+    firstDayOfWeek: 1
+  }}
 />
 ```
 
@@ -283,8 +319,10 @@ Display ISO week numbers alongside the calendar.
 ```svelte
 <DatePicker 
   value={selectedDate}
-  showWeekNumbers={true}
-  firstDayOfWeek={1}
+  behavior={{
+    showWeekNumbers: true,
+    firstDayOfWeek: 1
+  }}
 />
 ```
 
@@ -309,7 +347,7 @@ Show loading indicator during async operations.
 
 <DatePicker 
   bind:value={selectedDate}
-  {loading}
+  behavior={{ loading }}
   on:change={handleDateChange}
 />
 ```
@@ -320,8 +358,10 @@ Apply custom styles using CSS custom properties.
 ```svelte
 <DatePicker 
   value={selectedDate}
-  className="custom-datepicker"
-  style="--dp-primary-color: #10b981; --dp-border-radius: 1rem;"
+  styling={{
+    className: "custom-datepicker",
+    style: "--dp-primary-color: #10b981; --dp-border-radius: 1rem;"
+  }}
 />
 ```
 
@@ -364,11 +404,13 @@ The DatePicker component is fully accessible by default:
 <!-- Accessible date picker with custom labels -->
 <DatePicker 
   value={selectedDate}
-  labels={{
-    selectMonth: "Choose month",
-    selectYear: "Choose year",
-    prev: "Go to previous month",
-    next: "Go to next month"
+  behavior={{
+    labels: {
+      selectMonth: "Choose month",
+      selectYear: "Choose year",
+      prev: "Go to previous month",
+      next: "Go to next month"
+    }
   }}
   on:change={handleAccessibleChange}
 />
@@ -385,17 +427,18 @@ The component exports comprehensive TypeScript types:
 ```typescript
 import type { 
   DatePickerProps, 
-  DatePickerVariant, 
-  DatePickerSize, 
-  DatePickerMode,
-  DatePickerChangeEvent,
-  DatePickerLabels
+  DatePickerStyling, 
+  DatePickerBehavior
 } from '@rief/kit';
 
 const datePickerConfig: DatePickerProps = {
-  variant: 'default',
-  size: 'md',
-  mode: 'single',
-  value: new Date()
+  value: new Date(),
+  styling: {
+    variant: 'default',
+    size: 'md'
+  },
+  behavior: {
+    mode: 'single'
+  }
 };
 ```

@@ -5,43 +5,57 @@
   import { safeUniqueId, normalizeTableColumn, compareValues } from "@rief/utils";
   import type { TableColumn, TableRow, TableListingProps } from "../types";
 
-  // Type for normalizeTableColumn input (includes index signature)
-  type NormalizeTableColumnInput = { key?: string; field?: string; title?: string; label?: string; name?: string; alias?: string; sortable?: boolean; [key: string]: unknown };
+  // Type for normalizeTableColumn input
+  type NormalizeTableColumnInput = Partial<Pick<TableColumn, 'key' | 'field' | 'title' | 'label' | 'name' | 'alias' | 'sortable'>> & Record<string, unknown>;
 
-  // Props with defaults
+  import type { TableListingProps, TableListingStyling, TableListingBehavior } from "../types.js";
+
+  // Core props
   export let columns: TableListingProps["columns"] = [];
   export let data: TableListingProps["data"] = [];
   export let sort: TableListingProps["sort"] = "";
   export let currentOffset: TableListingProps["currentOffset"] = 0;
   export let limit: TableListingProps["limit"] = 10;
   export let emptyMessage: TableListingProps["emptyMessage"] = "Tidak ada data";
-  export let tableContainerClass: TableListingProps["tableContainerClass"] = "";
-  export let headerClass: TableListingProps["headerClass"] = "";
-  export let rowClass: TableListingProps["rowClass"] = "";
-  export let cellClass: TableListingProps["cellClass"] = "";
-  export let showPagination: TableListingProps["showPagination"] = true;
-  export let paginationSize: TableListingProps["paginationSize"] = "md";
-  export let paginationVariant: TableListingProps["paginationVariant"] = "default";
-  export let paginationShowFirstLast: TableListingProps["paginationShowFirstLast"] = true;
-  export let paginationShowPageInfo: TableListingProps["paginationShowPageInfo"] = false;
-  export let autoResetOffsetOnSort: TableListingProps["autoResetOffsetOnSort"] = true;
-  export let scrollToTopOnPageChange: TableListingProps["scrollToTopOnPageChange"] = true;
-  export let customSortFn: TableListingProps["customSortFn"] = undefined;
-  export let rowClickable: TableListingProps["rowClickable"] = false;
-  export let loading: TableListingProps["loading"] = false;
-  export let selectable: TableListingProps["selectable"] = false;
-  export let selectedRows: TableListingProps["selectedRows"] = [];
-  export let cssVariables: TableListingProps["cssVariables"] = {};
-  export let enableHover: TableListingProps["enableHover"] = true;
-  export let hoverColor: TableListingProps["hoverColor"] = undefined;
   export let tableId: TableListingProps["tableId"] = undefined;
+  export let styling: TableListingProps["styling"] = {};
+  export let behavior: TableListingProps["behavior"] = {};
   export let ariaLabel: TableListingProps["ariaLabel"] = undefined;
-  export let tbodyClass: TableListingProps["tbodyClass"] = "";
-  export let paginationClass: TableListingProps["paginationClass"] = "";
-  export let draggable: TableListingProps["draggable"] = false;
-  export let canDrop: TableListingProps["canDrop"] = undefined;
-  export let serverSide: TableListingProps["serverSide"] = false;
-  export let totalRows: TableListingProps["totalRows"] = undefined;
+  export let ariaDescribedBy: TableListingProps["ariaDescribedBy"] = undefined;
+
+  // Computed props with defaults
+  $: computedStyling = {
+    className: styling.className ?? "",
+    style: styling.style ?? "",
+    tableContainerClass: styling.tableContainerClass ?? "",
+    headerClass: styling.headerClass ?? "",
+    rowClass: styling.rowClass ?? "",
+    cellClass: styling.cellClass ?? "",
+    tbodyClass: styling.tbodyClass ?? "",
+    paginationClass: styling.paginationClass ?? "",
+    cssVariables: styling.cssVariables ?? {},
+    hoverColor: styling.hoverColor ?? undefined
+  };
+
+  $: computedBehavior = {
+    showPagination: behavior.showPagination ?? true,
+    paginationSize: behavior.paginationSize ?? "md",
+    paginationVariant: behavior.paginationVariant ?? "default",
+    paginationShowFirstLast: behavior.paginationShowFirstLast ?? true,
+    paginationShowPageInfo: behavior.paginationShowPageInfo ?? false,
+    autoResetOffsetOnSort: behavior.autoResetOffsetOnSort ?? true,
+    scrollToTopOnPageChange: behavior.scrollToTopOnPageChange ?? true,
+    customSortFn: behavior.customSortFn ?? undefined,
+    rowClickable: behavior.rowClickable ?? false,
+    loading: behavior.loading ?? false,
+    selectable: behavior.selectable ?? false,
+    selectedRows: behavior.selectedRows ?? [],
+    enableHover: behavior.enableHover ?? true,
+    draggable: behavior.draggable ?? false,
+    canDrop: behavior.canDrop ?? undefined,
+    serverSide: behavior.serverSide ?? false,
+    totalRows: behavior.totalRows ?? undefined
+  };
 
   const dispatch = createEventDispatcher<{
     sortChange: { sort: string };
@@ -69,33 +83,34 @@
     });
   };
 
+  // Memoized sort key extraction
+  $: sortKey = sort ? sort.replace(/^[-+]/, "") : "";
+  $: isDescending = sort ? sort.startsWith("-") : false;
+
   // Sorted data based on sort (skip if server-side)
   // Optimized: Only recalculates when sort, data, or loading actually changes
   $: sortedData = (() => {
-    if (serverSide || !sort || data.length === 0 || loading) {
+    if (computedBehavior.serverSide || !sort || data.length === 0 || computedBehavior.loading) {
       return data;
     }
 
-    const sortKey = sort.replace(/^[-+]/, "");
-    const isDescending = sort.startsWith("-");
-
-    if (customSortFn) {
-      return customSortFn(data, sortKey, isDescending);
+    if (computedBehavior.customSortFn) {
+      return computedBehavior.customSortFn(data, sortKey, isDescending);
     }
 
     return defaultSortFn(data, sortKey, isDescending);
   })();
 
   // Total rows: use prop if provided (server-side), otherwise calculate from data
-  $: computedTotalRows = totalRows ?? sortedData.length;
+  $: computedTotalRows = computedBehavior.totalRows ?? sortedData.length;
 
   // Paginated data (skip slicing if server-side)
-  $: paginatedData = serverSide ? data : sortedData.slice(currentOffset ?? 0, (currentOffset ?? 0) + (limit ?? 10));
+  $: paginatedData = computedBehavior.serverSide ? data : sortedData.slice(currentOffset ?? 0, (currentOffset ?? 0) + (limit ?? 10));
 
   // Reset offset when sort changes
   let previousSort = sort;
   $: {
-    if (autoResetOffsetOnSort && previousSort !== sort && !loading) {
+    if (computedBehavior.autoResetOffsetOnSort && previousSort !== sort && !computedBehavior.loading) {
       currentOffset = 0;
       previousSort = sort;
     }
@@ -108,44 +123,52 @@
 
   const handlePageChange = (event: CustomEvent<{ offset: number }>) => {
     dispatch("pageChange", { offset: event.detail.offset });
-    if (scrollToTopOnPageChange) {
+    if (computedBehavior.scrollToTopOnPageChange) {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
   const handleRowClick = (row: TableRow, index: number) => {
-    if (loading) return;
+    if (computedBehavior.loading) return;
     dispatch("rowClick", { row, index });
   };
 
+  const handleRowKeydown = (event: KeyboardEvent, row: TableRow, index: number) => {
+    if (computedBehavior.loading || !computedBehavior.rowClickable) return;
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      handleRowClick(row, index);
+    }
+  };
+
   const handleRowSelect = (row: TableRow, index: number, event: Event) => {
-    if (loading || !selectable) return;
+    if (computedBehavior.loading || !computedBehavior.selectable) return;
     event.stopPropagation();
     const rowId = (row as { id?: string | number }).id ?? index;
-    const isSelected = selectedRows?.includes(rowId) ?? false;
+    const isSelected = computedBehavior.selectedRows?.includes(rowId) ?? false;
     dispatch("rowSelect", { row, index, selected: !isSelected });
   };
 
   // Check if row is selected
   const isRowSelected = (row: TableRow, index: number): boolean => {
-    if (!selectable) return false;
+    if (!computedBehavior.selectable) return false;
     const rowId = (row as { id?: string | number }).id ?? index;
-    return selectedRows?.includes(rowId) ?? false;
+    return computedBehavior.selectedRows?.includes(rowId) ?? false;
   };
 
   // Get row class with all modifiers
   const getRowClass = (row: TableRow, index: number): string => {
     const classes: string[] = ["transition-colors"];
 
-    if (enableHover && !loading) {
+    if (computedBehavior.enableHover && !computedBehavior.loading) {
       classes.push("table-row--hoverable");
     }
 
-    if (rowClickable && !loading) {
+    if (computedBehavior.rowClickable && !computedBehavior.loading) {
       classes.push("table-row--clickable");
     }
 
-    if (selectable) {
+    if (computedBehavior.selectable) {
       classes.push("table-row--selectable");
     }
 
@@ -153,7 +176,7 @@
       classes.push("table-row--selected");
     }
 
-    if (draggable && !loading) {
+    if (computedBehavior.draggable && !computedBehavior.loading) {
       classes.push("table-row--draggable");
     }
 
@@ -162,15 +185,15 @@
     }
 
     if (dragOverRowIndex === index && draggedRowIndex !== index) {
-      const isValidDrop = canDrop && draggedRowData ? canDrop(draggedRowData, row) : true;
+      const isValidDrop = computedBehavior.canDrop && draggedRowData ? computedBehavior.canDrop(draggedRowData, row) : true;
       classes.push(isValidDrop ? "table-row--drag-over" : "table-row--drag-over-invalid");
     }
 
-    if (typeof rowClass === "function") {
-      const customClass = rowClass(row, index);
+    if (typeof computedStyling.rowClass === "function") {
+      const customClass = computedStyling.rowClass(row, index);
       if (customClass) classes.push(customClass);
-    } else if (rowClass) {
-      classes.push(rowClass);
+    } else if (computedStyling.rowClass) {
+      classes.push(computedStyling.rowClass);
     }
 
     return classes.filter(Boolean).join(" ");
@@ -180,11 +203,11 @@
   const getCellClass = (column: TableColumn, row: TableRow): string => {
     const classes: string[] = ["p-4", "text-[--color-text]"];
 
-    if (typeof cellClass === "function") {
-      const customClass = cellClass(column, row);
+    if (typeof computedStyling.cellClass === "function") {
+      const customClass = computedStyling.cellClass(column, row);
       if (customClass) classes.push(customClass);
-    } else if (cellClass) {
-      classes.push(cellClass);
+    } else if (computedStyling.cellClass) {
+      classes.push(computedStyling.cellClass);
     }
 
     if (column.className) {
@@ -201,12 +224,12 @@
   };
 
   // Generate CSS variables string
-  $: cssVarsString = Object.entries(cssVariables || {})
+  $: cssVarsString = Object.entries(computedStyling.cssVariables || {})
     .map(([key, value]) => `--${key}: ${value}`)
     .join("; ");
 
   // Generate hover style
-  $: hoverStyle = hoverColor ? `background-color: ${hoverColor};` : undefined;
+  $: hoverStyle = computedStyling.hoverColor ? `background-color: ${computedStyling.hoverColor};` : undefined;
 
   // Drag and drop state
   let draggedRowIndex: number | null = null;
@@ -215,7 +238,7 @@
 
   // Drag handlers
   const handleDragStart = (event: DragEvent, row: TableRow, index: number) => {
-    if (!draggable || loading) return;
+    if (!computedBehavior.draggable || computedBehavior.loading) return;
     draggedRowIndex = index;
     draggedRowData = row;
 
@@ -228,7 +251,7 @@
   };
 
   const handleDragEnd = (event: DragEvent, row: TableRow, index: number) => {
-    if (!draggable) return;
+    if (!computedBehavior.draggable) return;
     draggedRowIndex = null;
     dragOverRowIndex = null;
     draggedRowData = null;
@@ -236,9 +259,9 @@
   };
 
   const handleDragOver = (event: DragEvent, row: TableRow, index: number) => {
-    if (!draggable || loading || draggedRowIndex === null || draggedRowIndex === index) return;
+    if (!computedBehavior.draggable || computedBehavior.loading || draggedRowIndex === null || draggedRowIndex === index) return;
 
-    const isValidDrop = canDrop ? canDrop(draggedRowData!, row) : true;
+    const isValidDrop = computedBehavior.canDrop ? computedBehavior.canDrop(draggedRowData!, row) : true;
 
     if (isValidDrop) {
       event.preventDefault();
@@ -248,16 +271,16 @@
   };
 
   const handleDragLeave = () => {
-    if (!draggable) return;
+    if (!computedBehavior.draggable) return;
     dragOverRowIndex = null;
   };
 
   const handleDrop = (event: DragEvent, targetRow: TableRow, targetIndex: number) => {
-    if (!draggable || loading || draggedRowIndex === null) return;
+    if (!computedBehavior.draggable || computedBehavior.loading || draggedRowIndex === null) return;
 
     event.preventDefault();
 
-    const isValidDrop = canDrop ? canDrop(draggedRowData!, targetRow) : true;
+    const isValidDrop = computedBehavior.canDrop ? computedBehavior.canDrop(draggedRowData!, targetRow) : true;
 
     if (isValidDrop && draggedRowData) {
       dispatch("drop", {
@@ -275,9 +298,10 @@
 </script>
 
 <div
-  class="table-listing bg-[--color-surface] rounded-lg overflow-hidden border border-[--color-border] {tableContainerClass}"
-  style={cssVarsString || undefined}
+  class="table-listing bg-[--color-surface] rounded-lg overflow-hidden border border-[--color-border] {computedStyling.tableContainerClass || computedStyling.className}"
+  style={cssVarsString || computedStyling.style || undefined}
   id={uniqueTableId}
+  aria-describedby={ariaDescribedBy}
 >
   <div class="table-listing__scroll-wrapper">
     <table
@@ -287,10 +311,10 @@
       aria-colcount={normalizedColumns.length}
     >
       <thead
-        class="table-listing__header bg-[--color-surface-secondary] border-b border-[--color-border] {headerClass}"
+        class="table-listing__header bg-[--color-surface-secondary] border-b border-[--color-border] {computedStyling.headerClass}"
       >
         <tr>
-          {#if selectable}
+          {#if computedBehavior.selectable}
             <th scope="col" class="table-listing__checkbox-header p-4 w-12" aria-label="Select row">
               <slot name="header-checkbox">
                 <!-- Checkbox column header -->
@@ -302,7 +326,7 @@
               name={column.title ?? ""}
               key={column.key ?? ""}
               bind:sort
-              disable={!column.sortable || loading}
+              disable={!column.sortable || computedBehavior.loading}
               on:sorting={handleSort}
               className={column.className ?? ""}
               colClass={column.colClass ?? ""}
@@ -310,10 +334,10 @@
           {/each}
         </tr>
       </thead>
-      <tbody class="table-listing__body divide-y divide-[--color-border] {tbodyClass}">
-        {#if loading}
+      <tbody class="table-listing__body divide-y divide-[--color-border] {computedStyling.tbodyClass}">
+        {#if computedBehavior.loading}
           <tr>
-            <td colspan={normalizedColumns.length + (selectable ? 1 : 0)} class="px-6 py-12 text-center">
+            <td colspan={normalizedColumns.length + (computedBehavior.selectable ? 1 : 0)} class="px-6 py-12 text-center">
               <slot name="loading">
                 <div style="height: 120px; display: flex; align-items: center; justify-content: center">
                   <p class="text-[--color-text-secondary]">Memuat data...</p>
@@ -324,7 +348,7 @@
         {:else if paginatedData.length === 0}
           <tr>
             <td
-              colspan={normalizedColumns.length + (selectable ? 1 : 0)}
+              colspan={normalizedColumns.length + (computedBehavior.selectable ? 1 : 0)}
               style="padding: 16px; color: var(--color-text-secondary); height: 100%"
             >
               <slot name="empty">
@@ -340,19 +364,21 @@
             {@const isSelected = isRowSelected(row, globalIndex)}
             <tr
               class={getRowClass(row, globalIndex)}
-              draggable={draggable && !loading}
-              on:click={() => rowClickable && handleRowClick(row, globalIndex)}
+              draggable={computedBehavior.draggable && !computedBehavior.loading}
+              on:click={() => computedBehavior.rowClickable && handleRowClick(row, globalIndex)}
+              on:keydown={(e) => handleRowKeydown(e, row, globalIndex)}
               on:dragstart={(e) => handleDragStart(e, row, globalIndex)}
               on:dragend={(e) => handleDragEnd(e, row, globalIndex)}
               on:dragover={(e) => handleDragOver(e, row, globalIndex)}
               on:dragleave={handleDragLeave}
               on:drop={(e) => handleDrop(e, row, globalIndex)}
-              role={rowClickable ? "button" : undefined}
-              tabindex={rowClickable ? 0 : undefined}
-              aria-selected={selectable ? isSelected : undefined}
+              role={computedBehavior.rowClickable ? "button" : "row"}
+              tabindex={computedBehavior.rowClickable ? 0 : undefined}
+              aria-selected={computedBehavior.selectable ? isSelected : undefined}
               aria-rowindex={globalIndex + 1}
+              style={hoverStyle || undefined}
             >
-              {#if selectable}
+              {#if computedBehavior.selectable}
                 <td
                   class="table-listing__checkbox-cell p-4 w-12"
                   on:click={(e) => handleRowSelect(row, globalIndex, e)}
@@ -383,16 +409,20 @@
     </table>
   </div>
 
-  {#if showPagination && computedTotalRows > 0 && !loading}
-    <div class="table-listing__pagination px-4 py-4 border-t flex items-center justify-center {paginationClass}">
+  {#if computedBehavior.showPagination && computedTotalRows > 0 && !computedBehavior.loading}
+    <div class="table-listing__pagination px-4 py-4 border-t flex items-center justify-center {computedStyling.paginationClass}">
       <Pagination
         bind:currentOffset
         {limit}
         totalRows={computedTotalRows}
-        size={paginationSize}
-        variant={paginationVariant}
-        showFirstLast={paginationShowFirstLast}
-        showPageInfo={paginationShowPageInfo}
+        styling={{
+          size: computedBehavior.paginationSize,
+          variant: computedBehavior.paginationVariant
+        }}
+        behavior={{
+          showFirstLast: computedBehavior.paginationShowFirstLast,
+          showPageInfo: computedBehavior.paginationShowPageInfo
+        }}
         on:pageChange={handlePageChange}
       />
     </div>

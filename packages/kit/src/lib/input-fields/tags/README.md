@@ -65,46 +65,77 @@ The Tags component uses a flexible layout that adapts to content with an inline 
 <Tags 
   bind:tags={myTags}
   label="Categories"
-  placeholder="Add categories..."
-  required
-  maxTags={10}
-  onlyUnique
+  validation={{ required: true }}
+  behavior={{
+    placeholder: "Add categories...",
+    maxTags: 10,
+    onlyUnique: true
+  }}
 />
 ```
 
 ## Props
 
+### Core Props
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `tags` | `Array<string \| number \| object>` | `[]` | Array of tags (reactive, two-way binding) |
-| `placeholder` | `string` | `""` | Placeholder text for input field |
-| `label` | `string` | `""` | Label text displayed above input |
 | `name` | `string` | `"svelte-tags-input"` | HTML name attribute for form submission |
 | `id` | `string` | `""` | HTML id attribute (auto-generated if not provided) |
-| `required` | `boolean` | `false` | Mark field as required with visual indicator |
-| `isError` | `boolean` | `false` | Display error state styling |
-| `disable` | `boolean` | `false` | Disable all interactions |
-| `readonly` | `boolean` | `false` | Make input read-only (tags can still be removed) |
-| `maxTags` | `number \| false` | `false` | Maximum number of tags allowed |
-| `onlyUnique` | `boolean` | `false` | Prevent duplicate tags |
-| `minChars` | `number` | `0` | Minimum characters required before autocomplete triggers |
-| `numberOnly` | `boolean` | `false` | Restrict input to numbers only |
-| `allowDecimal` | `boolean` | `false` | Allow decimal numbers (requires numberOnly=true) |
-| `autoComplete` | `Array \| Function \| false` | `false` | Autocomplete source (array, sync function, or async function) |
-| `autoCompleteKey` | `string \| false` | `false` | Key to extract value from object-based autocomplete items |
-| `autoCompleteMarkupKey` | `string \| false` | `false` | Key to use for highlighted markup in autocomplete |
-| `autoCompleteShowKey` | `string \| false` | `false` | Key to display in tags when using object-based tags |
-| `onlyAutocomplete` | `boolean` | `false` | Only allow tags from autocomplete suggestions |
-| `allowPaste` | `boolean` | `false` | Enable paste functionality to add multiple tags |
-| `allowDrop` | `boolean` | `false` | Enable drag-and-drop functionality |
-| `splitWith` | `string` | `","` | Delimiter for splitting pasted/dropped text |
-| `addKeys` | `Array<number>` | `[13]` | Key codes that trigger tag addition (default: Enter) |
-| `removeKeys` | `Array<number>` | `[8]` | Key codes that trigger tag removal (default: Backspace) |
-| `allowBlur` | `boolean` | `false` | Add tag on blur if input has value |
-| `onTagClick` | `Function` | `() => {}` | Callback function when a tag is clicked |
-| `debounceMs` | `number` | `500` | Debounce delay for autocomplete search (milliseconds) |
-| `labelClass` | `string` | `""` | Additional CSS classes for label |
-| `wrapperClass` | `string` | `""` | Additional CSS classes for wrapper |
+| `label` | `string` | `""` | Label text displayed above input |
+
+### Styling Props (`styling` object)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `styling.size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Component size variant |
+| `styling.variant` | `'default' \| 'filled' \| 'outlined'` | `'default'` | Visual style variant |
+| `styling.className` | `string` | `""` | Additional CSS classes for root element |
+| `styling.style` | `string` | `""` | Additional inline styles |
+| `styling.labelClass` | `string` | `""` | Additional CSS classes for label |
+| `styling.wrapperClass` | `string` | `""` | Additional CSS classes for wrapper |
+| `styling.hoverColor` | `string` | `undefined` | Custom hover background color |
+
+### Validation Props (`validation` object)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `validation.required` | `boolean` | `false` | Mark field as required with visual indicator |
+| `validation.isError` | `boolean` | `false` | Display error state styling |
+
+### Behavior Props (`behavior` object)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `behavior.disabled` | `boolean` | `false` | Disable all interactions |
+| `behavior.readonly` | `boolean` | `false` | Make input read-only (tags can still be removed) |
+| `behavior.placeholder` | `string` | `""` | Placeholder text for input field |
+| `behavior.maxTags` | `number \| false` | `false` | Maximum number of tags allowed |
+| `behavior.onlyUnique` | `boolean` | `false` | Prevent duplicate tags |
+| `behavior.minChars` | `number` | `0` | Minimum characters required before autocomplete triggers |
+| `behavior.numberOnly` | `boolean` | `false` | Restrict input to numbers only |
+| `behavior.allowDecimal` | `boolean` | `false` | Allow decimal numbers (requires numberOnly=true) |
+| `behavior.autoComplete` | `Array \| Function \| false` | `false` | Autocomplete source (array, sync function, or async function) |
+| `behavior.autoCompleteKey` | `string \| false` | `false` | Key to extract value from object-based autocomplete items |
+| `behavior.autoCompleteMarkupKey` | `string \| false` | `false` | Key to use for highlighted markup in autocomplete |
+| `behavior.autoCompleteShowKey` | `string \| false` | `false` | Key to display in tags when using object-based tags |
+| `behavior.onlyAutocomplete` | `boolean` | `false` | Only allow tags from autocomplete suggestions |
+| `behavior.allowPaste` | `boolean` | `false` | Enable paste functionality to add multiple tags |
+| `behavior.allowDrop` | `boolean` | `false` | Enable drag-and-drop functionality |
+| `behavior.splitWith` | `string` | `","` | Delimiter for splitting pasted/dropped text |
+| `behavior.addKeys` | `Array<number>` | `[13]` | Key codes that trigger tag addition (default: Enter) |
+| `behavior.removeKeys` | `Array<number>` | `[8]` | Key codes that trigger tag removal (default: Backspace) |
+| `behavior.allowBlur` | `boolean` | `false` | Add tag on blur if input has value |
+| `behavior.onTagClick` | `Function` | `() => {}` | Callback function when a tag is clicked |
+| `behavior.debounceMs` | `number` | `500` | Debounce delay for autocomplete search (milliseconds) |
+
+### Accessibility Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `ariaLabel` | `string` | `undefined` | ARIA label for accessibility |
+| `ariaDescribedBy` | `string` | `undefined` | ARIA described by reference |
 
 ## Autocomplete
 
@@ -122,8 +153,10 @@ The Tags component supports three types of autocomplete sources:
 
 <Tags 
   bind:tags={tags}
-  autoComplete={suggestions}
-  placeholder="Select a language..."
+  behavior={{
+    autoComplete: suggestions,
+    placeholder: "Select a language..."
+  }}
 />
 ```
 
@@ -145,9 +178,11 @@ The Tags component supports three types of autocomplete sources:
 
 <Tags 
   bind:tags={tags}
-  autoComplete={searchLanguages}
-  minChars={2}
-  placeholder="Search languages..."
+  behavior={{
+    autoComplete: searchLanguages,
+    minChars: 2,
+    placeholder: "Search languages..."
+  }}
 />
 ```
 
@@ -167,9 +202,11 @@ The Tags component supports three types of autocomplete sources:
 
 <Tags 
   bind:tags={tags}
-  autoComplete={searchAPI}
-  minChars={3}
-  placeholder="Search..."
+  behavior={{
+    autoComplete: searchAPI,
+    minChars: 3,
+    placeholder: "Search..."
+  }}
 />
 ```
 
@@ -190,10 +227,12 @@ The Tags component supports three types of autocomplete sources:
 
 <Tags 
   bind:tags={tags}
-  autoComplete={users}
-  autoCompleteKey="name"
-  autoCompleteShowKey="name"
-  placeholder="Select users..."
+  behavior={{
+    autoComplete: users,
+    autoCompleteKey: "name",
+    autoCompleteShowKey: "name",
+    placeholder: "Select users..."
+  }}
 />
 ```
 
@@ -263,10 +302,12 @@ Enable paste and drag-and-drop functionality to add multiple tags at once:
 ```svelte
 <Tags 
   bind:tags={tags}
-  allowPaste
-  allowDrop
-  splitWith=","
-  placeholder="Paste or drop comma-separated values..."
+  behavior={{
+    allowPaste: true,
+    allowDrop: true,
+    splitWith: ",",
+    placeholder: "Paste or drop comma-separated values..."
+  }}
 />
 ```
 
@@ -293,8 +334,10 @@ Customize how autocomplete items are displayed:
 ```svelte
 <Tags 
   bind:tags={tags}
-  autoComplete={users}
-  autoCompleteKey="name"
+  behavior={{
+    autoComplete: users,
+    autoCompleteKey: "name"
+  }}
 >
   <div slot="default" let:element>
     <div class="user-item">
@@ -318,8 +361,10 @@ The Tags component supports comprehensive keyboard navigation:
 ```svelte
 <Tags 
   bind:tags={tags}
-  addKeys={[13, 9]}  <!-- Enter and Tab -->
-  removeKeys={[8]}   <!-- Backspace -->
+  behavior={{
+    addKeys: [13, 9],  // Enter and Tab
+    removeKeys: [8]     // Backspace
+  }}
 />
 ```
 
@@ -370,7 +415,7 @@ Dispatched during autocomplete search with the current input value.
 
 <Tags 
   bind:tags={tags}
-  autoComplete={searchFunction}
+  behavior={{ autoComplete: searchFunction }}
   on:input={handleInput}
 />
 ```
@@ -398,8 +443,8 @@ The Tags component is fully accessible by default:
 <Tags 
   bind:tags={tags}
   label="Categories"
-  required
-  placeholder="Add categories..."
+  validation={{ required: true }}
+  behavior={{ placeholder: "Add categories..." }}
   id="categories-input"
   name="categories"
 />
@@ -434,10 +479,12 @@ The Tags component is fully accessible by default:
 
 <Tags 
   bind:tags={tags}
-  autoComplete={searchAPI}
-  minChars={2}
-  debounceMs={300}
-  placeholder="Search and add tags..."
+  behavior={{
+    autoComplete: searchAPI,
+    minChars: 2,
+    debounceMs: 300,
+    placeholder: "Search and add tags..."
+  }}
 />
 ```
 
@@ -461,11 +508,13 @@ The Tags component is fully accessible by default:
   <Tags 
     bind:tags={formTags}
     label="Tags"
-    required
-    maxTags={10}
-    onlyUnique
-    disable={isSubmitting}
-    placeholder="Add up to 10 unique tags..."
+    validation={{ required: true }}
+    behavior={{
+      maxTags: 10,
+      onlyUnique: true,
+      disabled: isSubmitting,
+      placeholder: "Add up to 10 unique tags..."
+    }}
   />
   
   <button type="submit" disabled={isSubmitting}>
@@ -487,16 +536,18 @@ The Tags component is fully accessible by default:
 {#if mode === 'simple'}
   <Tags 
     bind:tags={tags}
-    placeholder="Add tags..."
+    behavior={{ placeholder: "Add tags..." }}
   />
 {:else}
   <Tags 
     bind:tags={tags}
-    autoComplete={suggestions}
-    maxTags={20}
-    onlyUnique
-    allowPaste
-    placeholder="Advanced tag input..."
+    behavior={{
+      autoComplete: suggestions,
+      maxTags: 20,
+      onlyUnique: true,
+      allowPaste: true,
+      placeholder: "Advanced tag input..."
+    }}
   />
 {/if}
 ```
@@ -517,8 +568,10 @@ The Tags component is fully accessible by default:
 
 <Tags 
   bind:tags={tags}
-  onTagClick={handleTagClick}
-  placeholder="Click tags for details..."
+  behavior={{
+    onTagClick: handleTagClick,
+    placeholder: "Click tags for details..."
+  }}
 />
 ```
 
@@ -543,10 +596,12 @@ interface TagItem {
 
 const tagsConfig: TagsProps = {
   tags: [] as TagItem[],
-  autoCompleteKey: 'name',
-  autoCompleteShowKey: 'name',
-  maxTags: 10,
-  onlyUnique: true
+  behavior: {
+    autoCompleteKey: 'name',
+    autoCompleteShowKey: 'name',
+    maxTags: 10,
+    onlyUnique: true
+  }
 };
 ```
 

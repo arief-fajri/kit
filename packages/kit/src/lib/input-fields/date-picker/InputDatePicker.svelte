@@ -14,55 +14,56 @@
   } from "./types.js";
   import { toDate, formatDate } from "./composables/useDateUtils.js";
 
+  import type { DatePickerProps, DatePickerStyling, DatePickerValidation, DatePickerBehavior } from "./types.js";
+
   // Core props
   export let value: DatePickerProps["value"] = null;
   export let rangeValue: DatePickerProps["rangeValue"] = [null, null];
   export let multipleValue: DatePickerProps["multipleValue"] = [];
-  export let mode: DatePickerProps["mode"] = "single";
   export let label: string = "";
   export let name: string = "";
   export let id: string = "";
-
-  // DatePicker props
-  export let minDate: DatePickerProps["minDate"] = null;
-  export let maxDate: DatePickerProps["maxDate"] = null;
-  export let disabledDates: DatePickerProps["disabledDates"] = undefined;
-  export let firstDayOfWeek: DatePickerProps["firstDayOfWeek"] = 0;
-  export let showWeekNumbers: DatePickerProps["showWeekNumbers"] = false;
-  export let showToday: DatePickerProps["showToday"] = true;
-  export let showClear: DatePickerProps["showClear"] = true;
-  export let labels: DatePickerProps["labels"] = {};
-  export let className: DatePickerProps["className"] = "";
-  export let locale: DatePickerProps["locale"] = "en-US";
-
-  // Grouped props
-  export let styling: DatePickerStyling = {};
-  export let validation: DatePickerValidation = {};
-  export let behavior: DatePickerBehavior = {};
+  export let styling: DatePickerProps["styling"] = {};
+  export let validation: DatePickerProps["validation"] = {};
+  export let behavior: DatePickerProps["behavior"] = {};
+  export let ariaLabel: DatePickerProps["ariaLabel"] = undefined;
+  export let ariaDescribedBy: DatePickerProps["ariaDescribedBy"] = undefined;
 
   // Computed props with defaults
   $: computedStyling = {
-    size: styling.size || "md",
-    variant: styling.variant || "default",
-    wrapperClass: styling.wrapperClass || "",
-    triggerClass: styling.triggerClass || "",
-    labelClass: styling.labelClass || "",
-    wrapperStyle: styling.wrapperStyle || ""
+    size: styling.size ?? "md",
+    variant: styling.variant ?? "default",
+    className: styling.className ?? "",
+    style: styling.style ?? "",
+    wrapperClass: styling.wrapperClass ?? "",
+    triggerClass: styling.triggerClass ?? "",
+    labelClass: styling.labelClass ?? "",
+    wrapperStyle: styling.wrapperStyle ?? ""
   };
 
   $: computedValidation = {
     required: validation.required ?? false,
     isError: validation.isError ?? false,
-    errorMessage: validation.errorMessage || ""
+    errorMessage: validation.errorMessage ?? ""
   };
 
   $: computedBehavior = {
+    mode: behavior.mode ?? "single",
     disabled: behavior.disabled ?? false,
-    closeOnSelect: behavior.closeOnSelect ?? true,
-    placement: behavior.placement || "bottom-start",
-    isFullAnchorWidth: behavior.isFullAnchorWidth ?? false,
     loading: behavior.loading ?? false,
-    placeholder: behavior.placeholder || "Select date"
+    minDate: behavior.minDate ?? null,
+    maxDate: behavior.maxDate ?? null,
+    disabledDates: behavior.disabledDates ?? undefined,
+    firstDayOfWeek: behavior.firstDayOfWeek ?? 0,
+    showWeekNumbers: behavior.showWeekNumbers ?? false,
+    showToday: behavior.showToday ?? true,
+    showClear: behavior.showClear ?? true,
+    labels: behavior.labels ?? {},
+    locale: behavior.locale ?? "en-US",
+    closeOnSelect: behavior.closeOnSelect ?? true,
+    placement: behavior.placement ?? "bottom-start",
+    isFullAnchorWidth: behavior.isFullAnchorWidth ?? false,
+    placeholder: behavior.placeholder ?? "Select date"
   };
 
   const dispatch = createEventDispatcher<{ change: DatePickerChangeEvent }>();
@@ -73,23 +74,23 @@
 
   // Display text based on mode
   $: displayText = (() => {
-    if (mode === "single") {
+    if (computedBehavior.mode === "single") {
       const date = toDate(value);
-      return date ? formatDate(date, locale) : computedBehavior.placeholder;
-    } else if (mode === "range") {
+      return date ? formatDate(date, computedBehavior.locale) : computedBehavior.placeholder;
+    } else if (computedBehavior.mode === "range") {
       const [start, end] = rangeValue || [null, null];
       const startDate = toDate(start);
       const endDate = toDate(end);
       if (startDate && endDate) {
-        return `${formatDate(startDate, locale)} - ${formatDate(endDate, locale)}`;
+        return `${formatDate(startDate, computedBehavior.locale)} - ${formatDate(endDate, computedBehavior.locale)}`;
       } else if (startDate) {
-        return formatDate(startDate, locale);
+        return formatDate(startDate, computedBehavior.locale);
       }
       return computedBehavior.placeholder;
     } else {
       if (multipleValue && multipleValue.length > 0) {
         return multipleValue
-          .map((d) => formatDate(toDate(d), locale))
+          .map((d) => formatDate(toDate(d), computedBehavior.locale))
           .filter(Boolean)
           .join(", ");
       }
@@ -167,9 +168,9 @@
       aria-expanded={openDropdown}
       aria-haspopup="dialog"
       aria-controls={id ? `${id}-calendar` : undefined}
-      aria-label={label || computedBehavior.placeholder}
+      aria-label={ariaLabel || label || computedBehavior.placeholder}
       aria-invalid={computedValidation.isError}
-      aria-describedby={computedValidation.isError && id ? `${id}-error` : undefined}
+      aria-describedby={ariaDescribedBy || (computedValidation.isError && id ? `${id}-error` : undefined)}
       tabindex={computedBehavior.disabled ? -1 : 0}
     >
       <span
@@ -199,7 +200,7 @@
     </button>
 
     {#if name}
-      <input type="hidden" {name} {id} value={mode === "single" ? (value ? toDate(value)?.toISOString() : "") : ""} />
+      <input type="hidden" {name} {id} value={computedBehavior.mode === "single" ? (value ? toDate(value)?.toISOString() : "") : ""} />
     {/if}
 
     <DropdownWrapper
@@ -218,24 +219,29 @@
         {value}
         {rangeValue}
         {multipleValue}
-        {mode}
-        variant={computedStyling.variant === "filled" || computedStyling.variant === "outlined"
-          ? "default"
-          : computedStyling.variant}
-        size={computedStyling.size}
-        {minDate}
-        {maxDate}
-        {disabledDates}
-        {firstDayOfWeek}
-        {showWeekNumbers}
-        {showToday}
-        {showClear}
-        closeOnSelect={computedBehavior.closeOnSelect}
-        {labels}
-        {className}
-        disabled={computedBehavior.disabled}
-        loading={computedBehavior.loading}
-        {locale}
+        styling={{
+          variant: computedStyling.variant === "filled" || computedStyling.variant === "outlined"
+            ? "default"
+            : computedStyling.variant,
+          size: computedStyling.size,
+          className: computedStyling.className,
+          style: computedStyling.style
+        }}
+        behavior={{
+          mode: computedBehavior.mode,
+          disabled: computedBehavior.disabled,
+          loading: computedBehavior.loading,
+          minDate: computedBehavior.minDate,
+          maxDate: computedBehavior.maxDate,
+          disabledDates: computedBehavior.disabledDates,
+          firstDayOfWeek: computedBehavior.firstDayOfWeek,
+          showWeekNumbers: computedBehavior.showWeekNumbers,
+          showToday: computedBehavior.showToday,
+          showClear: computedBehavior.showClear,
+          closeOnSelect: computedBehavior.closeOnSelect,
+          labels: computedBehavior.labels,
+          locale: computedBehavior.locale
+        }}
         on:change={handleDateChange}
       />
     </DropdownWrapper>

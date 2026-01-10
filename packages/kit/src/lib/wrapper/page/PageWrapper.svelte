@@ -1,17 +1,30 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
-  import type { PageWrapperProps, PageWrapperScrollEventDetail } from '../../types.js';
+  import type { PageWrapperProps, PageWrapperStyling, PageWrapperBehavior } from '../../types.js';
 
-  export let center: PageWrapperProps['center'] = false;
-  export let wrapperClassName: PageWrapperProps['wrapperClassName'] = "";
-  export let wrapperStyle: PageWrapperProps['wrapperStyle'] = "";
-  export let contentClassName: PageWrapperProps['contentClassName'] = "";
-  export let contentStyle: PageWrapperProps['contentStyle'] = "";
-  export let footerClassName: PageWrapperProps['footerClassName'] = "";
-  export let footerStyle: PageWrapperProps['footerStyle'] = "";
+  export let styling: PageWrapperProps['styling'] = {};
+  export let behavior: PageWrapperProps['behavior'] = {};
   export let pageElm: PageWrapperProps['pageElm'];
   export let contentElm: PageWrapperProps['contentElm'];
   export let footerElm: PageWrapperProps['footerElm'];
+  export let ariaLabel: PageWrapperProps['ariaLabel'] = undefined;
+  export let ariaDescribedBy: PageWrapperProps['ariaDescribedBy'] = undefined;
+
+  // Computed props with defaults
+  $: computedStyling = {
+    className: styling.className ?? "",
+    style: styling.style ?? "",
+    wrapperClassName: styling.wrapperClassName ?? "",
+    wrapperStyle: styling.wrapperStyle ?? "",
+    contentClassName: styling.contentClassName ?? "",
+    contentStyle: styling.contentStyle ?? "",
+    footerClassName: styling.footerClassName ?? "",
+    footerStyle: styling.footerStyle ?? ""
+  };
+
+  $: computedBehavior = {
+    center: behavior.center ?? false
+  };
 
   const dispatch = createEventDispatcher<{
     scroll: PageWrapperScrollEventDetail;
@@ -33,18 +46,20 @@
 </script>
 
 <div
-  class="page-wrapper {wrapperClassName}"
-  class:center-content={center}
+  class="page-wrapper {computedStyling.wrapperClassName || computedStyling.className}"
+  class:center-content={computedBehavior.center}
   bind:this={pageElm}
-  style={wrapperStyle}
+  style={computedStyling.wrapperStyle || computedStyling.style || undefined}
+  aria-label={ariaLabel}
+  aria-describedby={ariaDescribedBy}
   on:scroll={handleScroll}
 >
-  <div class="page-content {contentClassName}" style={contentStyle} bind:this={contentElm}>
+  <div class="page-content {computedStyling.contentClassName}" style={computedStyling.contentStyle || undefined} bind:this={contentElm}>
     <slot />
   </div>
 
   {#if $$slots.footer}
-    <footer class="page-footer {footerClassName}" style={footerStyle} bind:this={footerElm}>
+    <footer class="page-footer {computedStyling.footerClassName}" style={computedStyling.footerStyle || undefined} bind:this={footerElm}>
       <slot name="footer" />
     </footer>
   {/if}

@@ -45,10 +45,12 @@ The BaseLayoutWrapper creates a two-layer container structure optimized for full
 
 <!-- With custom styling -->
 <BaseLayoutWrapper 
-  layoutClassName="my-layout"
-  bodyClassName="my-content"
-  layoutStyle="background: #f0f0f0;"
-  bodyStyle="padding: 2rem;"
+  styling={{
+    layoutClassName: "my-layout",
+    bodyClassName: "my-content",
+    layoutStyle: "background: #f0f0f0;",
+    bodyStyle: "padding: 2rem;"
+  }}
 >
   <div>Custom styled content</div>
 </BaseLayoutWrapper>
@@ -56,12 +58,29 @@ The BaseLayoutWrapper creates a two-layer container structure optimized for full
 
 ## Props
 
+### Core Props
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `layoutClassName` | `string` | `""` | Additional CSS classes for the outer layout container |
-| `layoutStyle` | `string` | `""` | Inline styles for the outer layout container |
-| `bodyClassName` | `string` | `""` | Additional CSS classes for the inner body container |
-| `bodyStyle` | `string` | `""` | Inline styles for the inner body container |
+| *(No core props - BaseLayoutWrapper uses only styling)* | | | |
+
+### Styling Props (`styling` object)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `styling.className` | `string` | `""` | Additional CSS classes for root element |
+| `styling.style` | `string` | `""` | Additional inline styles |
+| `styling.layoutClassName` | `string` | `""` | Additional CSS classes for the outer layout container |
+| `styling.layoutStyle` | `string` | `""` | Inline styles for the outer layout container |
+| `styling.bodyClassName` | `string` | `""` | Additional CSS classes for the inner body container |
+| `styling.bodyStyle` | `string` | `""` | Inline styles for the inner body container |
+
+### Accessibility Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `ariaLabel` | `string` | `undefined` | ARIA label for accessibility |
+| `ariaDescribedBy` | `string` | `undefined` | ARIA described by reference |
 
 ## CSS Custom Properties
 
@@ -88,8 +107,10 @@ These are automatically updated when the window is resized.
 
 ```svelte
 <BaseLayoutWrapper 
-  layoutStyle="background: linear-gradient(to bottom, #667eea 0%, #764ba2 100%);"
-  bodyStyle="padding: 2rem; max-width: 1200px; margin: 0 auto;"
+  styling={{
+    layoutStyle: "background: linear-gradient(to bottom, #667eea 0%, #764ba2 100%);",
+    bodyStyle: "padding: 2rem; max-width: 1200px; margin: 0 auto;"
+  }}
 >
   <div>Centered content with gradient background</div>
 </BaseLayoutWrapper>

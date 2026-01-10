@@ -11,6 +11,8 @@
   export let name: string = "";
   export let id: string = "";
   export let textareaRef: HTMLTextAreaElement | undefined = undefined;
+  export let ariaLabel: string | undefined = undefined;
+  export let ariaDescribedBy: string | undefined = undefined;
 
   // Generate unique ID if not provided (SSR-safe)
   let textareaId: string = id || safeUniqueId("textarea-");
@@ -172,9 +174,10 @@
         readonly={computedBehavior.readonly}
         autocomplete={computedBehavior.autocomplete}
         style={computedLayout.maxHeight ? `max-height: ${computedLayout.maxHeight}px` : ""}
+        aria-label={ariaLabel}
         aria-invalid={computedValidation.isError}
         aria-required={computedValidation.required}
-        aria-describedby={computedValidation.errorMessage ? `${textareaId}-error` : undefined}
+        aria-describedby={ariaDescribedBy || (computedValidation.errorMessage ? `${textareaId}-error` : undefined)}
         on:input={handleInput}
         on:keydown={handleKeydown}
         on:focus={() => dispatch("focus")}

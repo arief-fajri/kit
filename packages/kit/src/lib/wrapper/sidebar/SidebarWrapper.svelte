@@ -4,7 +4,9 @@
 	import type {
 		SidebarWrapperProps,
 		SidebarResizeEventDetail,
-		SidebarDragEventDetail
+		SidebarDragEventDetail,
+		SidebarWrapperStyling,
+		SidebarWrapperBehavior
 	} from '../../types.js';
 
 	const dispatch = createEventDispatcher<{
@@ -13,25 +15,35 @@
 		dragend: SidebarDragEventDetail;
 	}>();
 
-	// Props
-	export let collapsed: SidebarWrapperProps['collapsed'] = false;
-	export let collapseWidth: SidebarWrapperProps['collapseWidth'] = '0';
-	export let isDraggable: SidebarWrapperProps['isDraggable'] = false;
-	export let defaultWidth: SidebarWrapperProps['defaultWidth'] = 321;
-	export let draglinePosition: SidebarWrapperProps['draglinePosition'] = 'left';
-	export let minWidth: SidebarWrapperProps['minWidth'] = 320;
-	export let maxWidth: SidebarWrapperProps['maxWidth'] = '25%';
-	export let persistWidth: SidebarWrapperProps['persistWidth'] = false;
-	export let storageKey: SidebarWrapperProps['storageKey'] = 'sidebar-width';
-	export let sidebarClassName: SidebarWrapperProps['sidebarClassName'] = '';
-	export let sidebarStyle: SidebarWrapperProps['sidebarStyle'] = '';
+	// Core props
+	export let styling: SidebarWrapperProps['styling'] = {};
+	export let behavior: SidebarWrapperProps['behavior'] = {};
 	export let ariaLabel: SidebarWrapperProps['ariaLabel'] = undefined;
+	export let ariaDescribedBy: SidebarWrapperProps['ariaDescribedBy'] = undefined;
 	export let sidebarElm: SidebarWrapperProps['sidebarElm'] = undefined;
 
-	// Ensure minWidth has a value
-	$: minWidthValue = minWidth ?? 320;
+	// Computed props with defaults
+	$: computedStyling = {
+		className: styling.className ?? "",
+		style: styling.style ?? "",
+		sidebarClassName: styling.sidebarClassName ?? "",
+		sidebarStyle: styling.sidebarStyle ?? ""
+	};
 
-	export let className: string = '';
+	$: computedBehavior = {
+		collapsed: behavior.collapsed ?? false,
+		collapseWidth: behavior.collapseWidth ?? '0',
+		isDraggable: behavior.isDraggable ?? false,
+		defaultWidth: behavior.defaultWidth ?? 321,
+		draglinePosition: behavior.draglinePosition ?? 'left',
+		minWidth: behavior.minWidth ?? 320,
+		maxWidth: behavior.maxWidth ?? '25%',
+		persistWidth: behavior.persistWidth ?? false,
+		storageKey: behavior.storageKey ?? 'sidebar-width'
+	};
+
+	// Ensure minWidth has a value
+	$: minWidthValue = computedBehavior.minWidth ?? 320;
 
 	// Internal state
 	let sidebarElem: HTMLElement;
@@ -45,8 +57,8 @@
 			return minWidthValue;
 		}
 
-		if (maxWidth && typeof window !== 'undefined') {
-			const maxWidthValue = parseMaxWidth(maxWidth, sidebarElem?.parentElement);
+		if (computedBehavior.maxWidth && typeof window !== 'undefined') {
+			const maxWidthValue = parseMaxWidth(computedBehavior.maxWidth, sidebarElem?.parentElement);
 			if (maxWidthValue && widthPx > maxWidthValue) {
 				return maxWidthValue;
 			}
@@ -68,8 +80,8 @@
 
 	// Load persisted width from localStorage
 	onMount(() => {
-		if (persistWidth && typeof window !== 'undefined' && storageKey) {
-			const key = storageKey;
+		if (computedBehavior.persistWidth && typeof window !== 'undefined' && computedBehavior.storageKey) {
+			const key = computedBehavior.storageKey;
 			const savedWidth = localStorage.getItem(key);
 			if (savedWidth) {
 				const widthNum = Number(savedWidth);
@@ -82,8 +94,8 @@
 
 	// Save width to localStorage
 	function saveWidth(width: number): void {
-		if (persistWidth && typeof window !== 'undefined' && storageKey) {
-			const key = storageKey;
+		if (computedBehavior.persistWidth && typeof window !== 'undefined' && computedBehavior.storageKey) {
+			const key = computedBehavior.storageKey;
 			localStorage.setItem(key, width.toString());
 		}
 	}
@@ -95,7 +107,7 @@
 
 	// Reactive width update
 	$: if (sidebarWidth && sidebarElem) {
-		const pos = draglinePosition ?? 'left';
+		const pos = computedBehavior.draglinePosition ?? 'left';
 		if (['left', 'right'].includes(pos)) {
 			const widthStr = sidebarWidth.replace('px', '');
 			const widthNum = Number(widthStr);
@@ -115,7 +127,7 @@
 	// Handle drag start
 	function handleDragStart(): void {
 		isDragging = true;
-		const pos = draglinePosition ?? 'left';
+		const pos = computedBehavior.draglinePosition ?? 'left';
 		if (['left', 'right'].includes(pos) && sidebarElem) {
 			initialWidth = sidebarElem.offsetWidth;
 			dispatch('dragstart', { initialWidth });
@@ -124,7 +136,7 @@
 
 	// Handle dragging
 	function handleDragging(e: CustomEvent<{ diffX: number; diffY: number }>): void {
-		const pos = draglinePosition ?? 'left';
+		const pos = computedBehavior.draglinePosition ?? 'left';
 		let newWidth = initialWidth;
 		if (pos === 'left') {
 			newWidth = initialWidth - e.detail.diffX;
@@ -151,25 +163,26 @@
 
 	// Computed styles
 	$: computedStyle = `
-    ${maxWidth && isDraggable ? `max-width: ${maxWidth};` : ''}
+    ${computedBehavior.maxWidth && computedBehavior.isDraggable ? `max-width: ${computedBehavior.maxWidth};` : ''}
     ${
-			collapsed
-				? `width: ${collapseWidth};`
+			computedBehavior.collapsed
+				? `width: ${computedBehavior.collapseWidth};`
 				: sidebarWidth
 					? `width: ${sidebarWidth};`
-					: `width: ${defaultWidth}px;`
+					: `width: ${computedBehavior.defaultWidth}px;`
 		}
-    ${sidebarStyle}
+    ${computedStyling.sidebarStyle || computedStyling.style || ''}
   `;
 </script>
 
 <aside
 	bind:this={sidebarElem}
-	class="sidebar {className} {sidebarClassName}"
-	class:sidebar--collapsed={collapsed}
-	class:sidebar--draggable={isDraggable}
+	class="sidebar {computedStyling.className} {computedStyling.sidebarClassName}"
+	class:sidebar--collapsed={computedBehavior.collapsed}
+	class:sidebar--draggable={computedBehavior.isDraggable}
 	style={computedStyle}
 	aria-label={ariaLabel}
+	aria-describedby={ariaDescribedBy}
 >
 	<slot />
 
@@ -177,8 +190,8 @@
 		<div class="sidebar__drag-overlay"></div>
 	{/if}
 
-	{#if isDraggable && !collapsed}
-		<div class="sidebar__drag-handle sidebar__drag-handle--{draglinePosition}">
+	{#if computedBehavior.isDraggable && !computedBehavior.collapsed}
+		<div class="sidebar__drag-handle sidebar__drag-handle--{computedBehavior.draglinePosition}">
 			<DragLine
 				on:dragstart={handleDragStart}
 				on:dragging={handleDragging}
@@ -186,7 +199,7 @@
 			>
 				<div
 					class="sidebar__drag-handle-indicator"
-					style={draglinePosition === 'left'
+					style={computedBehavior.draglinePosition === 'left'
 						? 'left: calc(50% - 4px);'
 						: 'right: calc(-50% - 4px);'}
 				>

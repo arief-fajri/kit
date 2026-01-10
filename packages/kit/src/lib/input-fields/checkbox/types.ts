@@ -16,7 +16,9 @@ export interface FocusEventDetail {
 	originalEvent: FocusEvent;
 }
 
-export interface CheckboxStyling {
+import type { BaseStyling, BaseBehavior, BaseAccessibility } from "../../types.js";
+
+export interface CheckboxStyling extends BaseStyling {
 	/** Checkbox size variant */
 	size?: CheckboxSize;
 	/** Checkbox visual variant */
@@ -31,9 +33,7 @@ export interface CheckboxStyling {
 	wrapperStyle?: string;
 }
 
-export interface CheckboxBehavior {
-	/** Disabled state */
-	disabled?: boolean;
+export interface CheckboxBehavior extends BaseBehavior {
 	/** Readonly state */
 	readonly?: boolean;
 	/** Required field indicator */
@@ -42,7 +42,7 @@ export interface CheckboxBehavior {
 	stopPropagation?: boolean;
 }
 
-export interface CheckboxProps {
+export interface CheckboxProps extends BaseAccessibility {
 	/** Unique identifier for the checkbox input */
 	id?: string;
 	/** HTML name attribute for form handling */

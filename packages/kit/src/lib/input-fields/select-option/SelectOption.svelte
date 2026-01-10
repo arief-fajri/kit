@@ -24,6 +24,8 @@
     | ((query: FetchQuery, callback: (result: SelectOptionItem[], total?: number) => void) => void)
     | null = null;
   export let limit: number = 15;
+  export let ariaLabel: string | undefined = undefined;
+  export let ariaDescribedBy: string | undefined = undefined;
 
   // Grouped props
   export let styling: SelectOptionStyling = {};
@@ -361,9 +363,9 @@
       aria-expanded={openDropdown}
       aria-haspopup="listbox"
       aria-controls={id ? `${id}-listbox` : undefined}
-      aria-label={label || computedBehavior.placeholder}
+      aria-label={ariaLabel || label || computedBehavior.placeholder}
       aria-invalid={computedValidation.isError}
-      aria-describedby={computedValidation.isError && id ? `${id}-error` : undefined}
+      aria-describedby={ariaDescribedBy || (computedValidation.isError && id ? `${id}-error` : undefined)}
       tabindex={computedBehavior.disabled ? -1 : 0}
     >
       {#if openDropdown && computedBehavior.isSearchable}
@@ -447,7 +449,7 @@
               openDropdown = !openDropdown;
             }
           }}
-          aria-label={label || computedBehavior.placeholder}
+          aria-label={ariaLabel || label || computedBehavior.placeholder}
         >
           <slot>
             <div class="select-option__trigger-content">

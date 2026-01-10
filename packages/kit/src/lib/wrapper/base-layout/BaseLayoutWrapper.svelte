@@ -1,10 +1,19 @@
 <script lang="ts">
   import type { BaseLayoutWrapperProps } from "../../types.js";
 
-  export let layoutClassName: BaseLayoutWrapperProps["layoutClassName"] = "";
-  export let layoutStyle: BaseLayoutWrapperProps["layoutStyle"] = "";
-  export let bodyClassName: BaseLayoutWrapperProps["bodyClassName"] = "";
-  export let bodyStyle: BaseLayoutWrapperProps["bodyStyle"] = "";
+  export let styling: BaseLayoutWrapperProps["styling"] = {};
+  export let ariaLabel: BaseLayoutWrapperProps["ariaLabel"] = undefined;
+  export let ariaDescribedBy: BaseLayoutWrapperProps["ariaDescribedBy"] = undefined;
+
+  // Computed props with defaults
+  $: computedStyling = {
+    className: styling.className ?? "",
+    style: styling.style ?? "",
+    layoutClassName: styling.layoutClassName ?? "",
+    layoutStyle: styling.layoutStyle ?? "",
+    bodyClassName: styling.bodyClassName ?? "",
+    bodyStyle: styling.bodyStyle ?? ""
+  };
 
   let innerHeight: number = 0;
   let innerWidth: number = 0;
@@ -16,15 +25,15 @@
   }
 
   // Computed style strings
-  $: layoutStyles = `--base-layout-height: ${innerHeight || 0}px; --base-layout-width: ${innerWidth || 0}px; ${layoutStyle}`;
-  $: bodyStyles = bodyStyle || "";
+  $: layoutStyles = `--base-layout-height: ${innerHeight || 0}px; --base-layout-width: ${innerWidth || 0}px; ${computedStyling.layoutStyle || computedStyling.style || ""}`;
+  $: bodyStyles = computedStyling.bodyStyle || "";
 </script>
 
 <svelte:window bind:innerHeight bind:innerWidth />
 
-<div class="base-layout {layoutClassName}" style={layoutStyles}>
+<div class="base-layout {computedStyling.layoutClassName || computedStyling.className}" style={layoutStyles} aria-label={ariaLabel} aria-describedby={ariaDescribedBy}>
   <slot name="header" />
-  <div class="base-layout__body {bodyClassName}" style={bodyStyles}>
+  <div class="base-layout__body {computedStyling.bodyClassName}" style={bodyStyles}>
     <slot name="body" />
   </div>
   <slot name="footer" />
