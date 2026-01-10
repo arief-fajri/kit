@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from "svelte";
-  import { clickOutside } from "../../helpers/click-outside";
+  import { clickOutside } from "@rief/utils";
   import DropdownWrapper from "../../wrapper/dropdown/DropdownWrapper.svelte";
   import Button from "../../button/Button.svelte";
   import InputText from "../text/InputText.svelte";
@@ -129,11 +129,10 @@
     }
   }
 
-  // Get display text for selected values
-  $: displayText =
-    listValueSelected.length > 0
-      ? listValueSelected.map((item) => item.label || String(item.value)).join(", ")
-      : computedBehavior.placeholder;
+  // Get display text for selected values (optimized)
+  $: displayText = listValueSelected.length > 0
+    ? listValueSelected.map((item) => item.label || String(item.value)).join(", ")
+    : computedBehavior.placeholder;
 
   // Get option label
   function getOptionLabel(option: SelectOptionItem): string {

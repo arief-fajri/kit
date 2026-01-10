@@ -7,7 +7,17 @@
   export let value: string = "";
   export let placeholder: string = "";
   export let label: string = "";
+  export let name: string = "";
+  export let id: string = "";
   export let textareaRef: HTMLTextAreaElement | undefined = undefined;
+
+  // Generate unique ID if not provided (SSR-safe)
+  let textareaId: string = id || (typeof window !== "undefined" ? `textarea-${Math.random().toString(36).substr(2, 9)}` : "");
+  onMount(() => {
+    if (!id && !textareaId) {
+      textareaId = `textarea-${Math.random().toString(36).substr(2, 9)}`;
+    }
+  });
 
   // Grouped props
   export let styling: TextAreaStyling = {};
@@ -127,7 +137,7 @@
 <div class="textarea textarea--{computedStyling.variant} textarea--{computedStyling.size}">
   <slot name="label">
     {#if label}
-      <label class="textarea__label {computedStyling.labelClass}" for="textarea-field">
+      <label class="textarea__label {computedStyling.labelClass}" for={textareaId}>
         {label}
         {#if computedValidation.required}
           <span class="textarea__required">*</span>
@@ -146,7 +156,8 @@
       <slot name="prefix" />
 
       <textarea
-        id="textarea-field"
+        id={textareaId}
+        {name}
         bind:this={textareaRef}
         class="textarea__field {computedStyling.inputClass}"
         value={value || ""}
@@ -157,7 +168,8 @@
         autocomplete={computedBehavior.autocomplete}
         style={computedLayout.maxHeight ? `max-height: ${computedLayout.maxHeight}px` : ""}
         aria-invalid={computedValidation.isError}
-        aria-describedby={computedValidation.errorMessage ? "error-message" : undefined}
+        aria-required={computedValidation.required}
+        aria-describedby={computedValidation.errorMessage ? `${textareaId}-error` : undefined}
         on:input={handleInput}
         on:keydown={handleKeydown}
         on:focus={() => dispatch("focus")}
@@ -190,7 +202,7 @@
 
     <slot name="error">
       {#if computedValidation.isError && computedValidation.errorMessage}
-        <div class="textarea__error" id="error-message" transition:slide>
+        <div class="textarea__error" id="{textareaId}-error" transition:slide>
           {computedValidation.errorMessage}
         </div>
       {/if}

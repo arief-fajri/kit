@@ -135,7 +135,6 @@
 			// sidebarWidth = initialWidth + e.detail.diffX + 'px';
 		}
 
-		console.log(newWidth, minWidthValue);
 		if (newWidth > minWidthValue) {
 			sidebarWidth = newWidth + 'px';
 		}

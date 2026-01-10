@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount, tick, createEventDispatcher } from "svelte";
   import { sineOut } from "svelte/easing";
-  import { portal } from "../../helpers/portal";
+  import { portal } from "@rief/utils";
 
   // Types
   type Placement = "bottom-start" | "bottom-end" | "top-start" | "top-end" | "auto";

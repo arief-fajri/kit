@@ -1,4 +1,5 @@
 // Import default styles
+// LET USER CHOOSE
 // import './default-style.css';
 
 // Export all components
@@ -10,6 +11,7 @@ export { default as Switch } from './input-fields/switch/Switch.svelte';
 export { default as TextArea } from './input-fields/textarea/TextArea.svelte';
 export { default as SelectOption } from './input-fields/select-option/SelectOption.svelte';
 export { default as DatePicker } from './input-fields/date-picker/DatePicker.svelte';
+export { default as InputDatePicker } from './input-fields/date-picker/InputDatePicker.svelte';
 export { default as Tags } from './input-fields/tags/Tags.svelte';
 export { default as Accordion } from './accordion/Accordion.svelte';
 export { default as DropdownWrapper } from './wrapper/dropdown/DropdownWrapper.svelte';
@@ -18,6 +20,11 @@ export { default as PageWrapper } from './wrapper/page/PageWrapper.svelte';
 export { default as SidebarWrapper } from './wrapper/sidebar/SidebarWrapper.svelte';
 export { default as DragLine } from './drag-line/DragLine.svelte';
 export { default as Drawer } from './drawer/Drawer.svelte';
+export { default as Card } from './card/Card.svelte';
+export { default as Pagination } from './pagination/Pagination.svelte';
+export { default as SortHeader } from './table/SortHeader.svelte';
+export { default as TableListing } from './table/TableListing.svelte';
+export { default as TableLoading } from './table/TableLoading.svelte';
 
 // Export types from types.ts
 export type { 
@@ -62,7 +69,26 @@ export type {
   AccordionItem,
   AccordionStyling,
   AccordionBehavior,
-  AccordionContent
+  AccordionContent,
+  CardProps,
+  CardVariant,
+  CardSize,
+  CardPadding,
+  PaginationProps,
+  PaginationSize,
+  PaginationVariant,
+  PaginationEvents,
+  TableColumn,
+  TableRow,
+  TableHeaderRow,
+  TableProps,
+  TableData,
+  TableEvents,
+  SortOrder,
+  SortConfig,
+  DataLoadParams,
+  FilterCriteria,
+  ProcessedHeaderCell
 } from './types.js';
 
 // Export Checkbox types
@@ -92,5 +118,17 @@ export type {
   DatePickerChangeEvent,
   DateValue,
   DateRangeValue,
-  DateMultipleValue
+  DateMultipleValue,
+  InputDatePickerVariant,
+  DatePickerStyling,
+  DatePickerValidation,
+  DatePickerBehavior
 } from './input-fields/date-picker/types.js';
+
+// Re-export form utilities from @rief/utils
+export {
+  getFormData,
+  getFormDataAsObject,
+  validateRequiredFields,
+  getFormErrors
+} from '@rief/utils';

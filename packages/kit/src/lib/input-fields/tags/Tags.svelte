@@ -23,6 +23,7 @@
     keydown: { event: KeyboardEvent };
     paste: { event: ClipboardEvent };
     drop: { event: DragEvent };
+    error: { message: string; code?: string };
   }>();
 
   // Constants
@@ -192,7 +193,10 @@
     let currentObjTags: TagItem | undefined;
     if (typeof currentTag === "object" && currentTag !== null) {
       if (!autoCompleteKey) {
-        console.error("'autoCompleteKey' is necessary if 'autoComplete' result is an array of objects");
+        dispatch("error", { 
+          message: "'autoCompleteKey' is necessary if 'autoComplete' result is an array of objects",
+          code: "MISSING_AUTOCOMPLETE_KEY"
+        });
         return;
       }
 
@@ -383,7 +387,10 @@
           autoCompleteValues = autoComplete(value) as AutoCompleteArray;
         }
       } catch (error) {
-        console.error("Error in autocomplete function:", error);
+        dispatch("error", {
+          message: error instanceof Error ? error.message : "Error in autocomplete function",
+          code: "AUTOCOMPLETE_ERROR"
+        });
         isLoading = false;
         return;
       }
@@ -393,7 +400,10 @@
       try {
         autoCompleteValues = await autoCompleteValues;
       } catch (error) {
-        console.error("Error resolving autocomplete promise:", error);
+        dispatch("error", {
+          message: error instanceof Error ? error.message : "Error resolving autocomplete promise",
+          code: "AUTOCOMPLETE_PROMISE_ERROR"
+        });
         isLoading = false;
         return;
       }
@@ -404,7 +414,10 @@
 
     if (autoCompleteValues !== null && autoCompleteValues.length && typeof autoCompleteValues[0] === "object") {
       if (!autoCompleteKey) {
-        console.error("'autoCompleteKey' is necessary if 'autoComplete' result is an array of objects");
+        dispatch("error", {
+          message: "'autoCompleteKey' is necessary if 'autoComplete' result is an array of objects",
+          code: "MISSING_AUTOCOMPLETE_KEY"
+        });
         return;
       }
       matchs = matchs.map((matchTag) => {

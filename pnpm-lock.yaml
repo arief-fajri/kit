@@ -74,6 +74,10 @@ importers:
         version: 5.4.21
 
   packages/kit:
+    dependencies:
+      '@rief/utils':
+        specifier: workspace:*
+        version: link:../utils
     devDependencies:
       '@sveltejs/adapter-auto':
         specifier: ^3.0.0
@@ -126,16 +130,10 @@ importers:
 
   packages/ui:
     dependencies:
-      '@rief/utils':
-        specifier: '*'
-        version: link:../utils
       lucide-svelte:
         specifier: ^0.562.0
         version: 0.562.0(svelte@4.2.20)
     devDependencies:
-      '@sveltejs/adapter-auto':
-        specifier: ^3.0.0
-        version: 3.3.1(@sveltejs/kit@2.48.5)
       '@sveltejs/kit':
         specifier: ^2.0.0
         version: 2.48.5(@sveltejs/vite-plugin-svelte@3.1.2)(svelte@4.2.20)(vite@5.4.21)

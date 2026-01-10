@@ -24,7 +24,17 @@
   export let value: string = "";
   export let placeholder: string = "";
   export let label: string = "";
+  export let name: string = "";
+  export let id: string = "";
   export let inputRef: HTMLInputElement | undefined = undefined;
+
+  // Generate unique ID if not provided (SSR-safe)
+  let inputId: string = id || (typeof window !== "undefined" ? `input-${Math.random().toString(36).substr(2, 9)}` : "");
+  onMount(() => {
+    if (!id && !inputId) {
+      inputId = `input-${Math.random().toString(36).substr(2, 9)}`;
+    }
+  });
 
   // Grouped props
   export let styling: InputTextStyling = {};
@@ -205,7 +215,7 @@
 <div class="input-text input-text--{computedStyling.variant} input-text--{computedStyling.size}">
   <slot name="label">
     {#if label}
-      <label class="input-text__label {computedStyling.labelClass}" for="input-field">
+      <label class="input-text__label {computedStyling.labelClass}" for={inputId}>
         {label}
         {#if computedValidation.required}
           <span class="input-text__required">*</span>
@@ -222,10 +232,11 @@
     >
       <slot name="prefix" />
 
-      <!-- id="input-field" -->
       <input
         bind:this={inputRef}
         type={localType}
+        id={inputId}
+        {name}
         class="input-text__field {computedStyling.inputClass}"
         value={value || ""}
         {placeholder}
@@ -233,7 +244,8 @@
         readonly={computedBehavior.readonly}
         autocomplete={computedBehavior.autocomplete}
         aria-invalid={computedValidation.isError}
-        aria-describedby={computedValidation.errorMessage ? "error-message" : undefined}
+        aria-required={computedValidation.required}
+        aria-describedby={computedValidation.errorMessage ? `${inputId}-error` : undefined}
         on:change
         on:keydown={handleKeydown}
         on:focus={() => dispatch("focus")}
@@ -304,7 +316,7 @@
 
     <slot name="error">
       {#if computedValidation.isError && computedValidation.errorMessage}
-        <div class="input-text__error" id="error-message" transition:slide>
+        <div class="input-text__error" id="{inputId}-error" transition:slide>
           {computedValidation.errorMessage}
         </div>
       {/if}
