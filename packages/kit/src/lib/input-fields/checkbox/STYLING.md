@@ -105,6 +105,8 @@ Override Checkbox component defaults globally:
   --checkbox-checkmark-error: var(--color-danger);
   
   /* === SIZES === */
+  /* Note: Size is controlled via inline style `--checkbox-size` prop.
+     The following are optional size-specific overrides you can define: */
   /* Extra Small */
   --checkbox-size-xs: 0.75rem;
   --checkbox-gap-xs: 0.25rem;

@@ -58,7 +58,7 @@ Override Drawer component defaults globally:
   --drawer-border-radius: 12px;
   
   /* === DRAG HANDLE === */
-  --drawer-handle-width: 8px;
+  --drawer-handle-width: 6px;
   --color-primary-200: #bfdbfe;
 }
 ```
@@ -107,7 +107,7 @@ Override styles for a specific drawer instance:
 
 | Property | Default | Description |
 |----------|---------|-------------|
-| `--drawer-handle-width` | `8px` | Width of drag handle |
+| `--drawer-handle-width` | `6px` | Width of drag handle |
 | `--color-primary-200` | `#bfdbfe` | Color of handle indicator |
 
 ## Theming Examples
@@ -150,6 +150,7 @@ The drawer automatically applies position-specific classes:
 - `.drawer-panel--bottom` - Bottom position
 - `.drawer-panel--left` - Left position
 - `.drawer-panel--right` - Right position
+- `.drawer-panel--center` - Center position
 
 You can target specific positions:
 

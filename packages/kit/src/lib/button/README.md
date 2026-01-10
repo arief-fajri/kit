@@ -76,6 +76,7 @@ The Button component follows a flexible layout hierarchy that adapts based on st
 | `fillColor` | `string` | `undefined` | Custom background color |
 | `textColor` | `string` | `undefined` | Custom text color |
 | `outlineColor` | `string` | `undefined` | Custom border color |
+| `customStyle` | `string` | `""` | Additional inline styles (CSS string) |
 | `ariaLabel` | `string` | `undefined` | Accessibility label |
 | `stopPropagation` | `boolean` | `false` | Stop event propagation |
 

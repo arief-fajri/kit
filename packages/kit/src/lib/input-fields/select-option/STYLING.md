@@ -87,8 +87,11 @@ Override SelectOption component defaults globally:
   --select-option-text: var(--color-text, #111827);
   --select-option-text-placeholder: var(--color-text-muted, #9ca3af);
   --select-option-text-disabled: var(--color-text-disabled, #d1d5db);
+  --select-option-text-selected: var(--color-text, #111827);
   --select-option-label: var(--color-text-secondary, #374151);
   --select-option-error-text: var(--color-error, #ef4444);
+  --select-option-check-color: var(--color-primary, #3b82f6);
+  --select-option-bg-selected: var(--color-surface-hover, #f9fafb);
   
   /* === SPACING === */
   /* Small */

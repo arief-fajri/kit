@@ -4,12 +4,13 @@
   import DropdownWrapper from "../../wrapper/dropdown/DropdownWrapper.svelte";
   import Button from "../../button/Button.svelte";
   import InputText from "../text/InputText.svelte";
-  import type { 
-    SelectOptionProps, 
-    SelectOptionItem, 
-    SelectOptionStyling, 
-    SelectOptionValidation, 
-    SelectOptionBehavior 
+  import type {
+    SelectOptionProps,
+    SelectOptionItem,
+    SelectOptionStyling,
+    SelectOptionValidation,
+    SelectOptionBehavior,
+    FetchQuery
   } from "../../types.js";
 
   // Core props
@@ -19,6 +20,10 @@
   export let label: string = "";
   export let name: string = "";
   export let id: string = "";
+  export let fetchFn:
+    | ((query: FetchQuery, callback: (result: SelectOptionItem[], total?: number) => void) => void)
+    | null = null;
+  export let limit: number = 15;
 
   // Grouped props
   export let styling: SelectOptionStyling = {};
@@ -27,18 +32,18 @@
 
   // Computed props with defaults
   $: computedStyling = {
-    size: styling.size || 'md',
-    variant: styling.variant || 'default',
-    wrapperClass: styling.wrapperClass || '',
-    inputClass: styling.inputClass || '',
-    labelClass: styling.labelClass || '',
-    wrapperStyle: styling.wrapperStyle || ''
+    size: styling.size || "md",
+    variant: styling.variant || "default",
+    wrapperClass: styling.wrapperClass || "",
+    inputClass: styling.inputClass || "",
+    labelClass: styling.labelClass || "",
+    wrapperStyle: styling.wrapperStyle || ""
   };
 
   $: computedValidation = {
     required: validation.required ?? false,
     isError: validation.isError ?? false,
-    errorMessage: validation.errorMessage || ''
+    errorMessage: validation.errorMessage || ""
   };
 
   $: computedBehavior = {
@@ -48,9 +53,12 @@
     closeOnSelect: behavior.closeOnSelect ?? true,
     debounceMs: behavior.debounceMs ?? 300,
     maxHeight: behavior.maxHeight ?? 240,
-    placeholder: behavior.placeholder || 'Select an option',
-    emptyMessage: behavior.emptyMessage || 'No items found',
-    loading: behavior.loading ?? false
+    placeholder: behavior.placeholder || "Select an option",
+    emptyMessage: behavior.emptyMessage || "No items found",
+    loading: behavior.loading ?? false,
+    placement: behavior.placement ?? "bottom-start",
+    dropdownClass: behavior.dropdownClass ?? "",
+    isFullAnchorWidth: behavior.isFullAnchorWidth ?? true
   };
 
   const dispatch = createEventDispatcher<{
@@ -74,20 +82,58 @@
   let inputRef: HTMLInputElement | undefined = undefined;
   let focusedIndex = -1;
 
+  // Fetch state
+  let _options: SelectOptionItem[] = [];
+  let offset = 0;
+  let total = 0;
+  let loading = false;
+  let hasAttemptedLoad = false;
+
   // Initialize with defaultValue or value
+  // Track if we're updating internally to avoid reactive loop
+  let isInternalUpdate = false;
+  let previousValueKey: string | null = null;
+
+  // Helper to get a unique key for a value
+  function getValueKey(val: SelectOptionItem | SelectOptionItem[] | null): string {
+    if (val === null || val === undefined) return "null";
+    const arr = Array.isArray(val) ? val : [val];
+    return arr
+      .map((v) => String(v.value))
+      .sort()
+      .join("|");
+  }
+
   $: {
-    if (defaultValue !== null && listValueSelected.length === 0) {
-      listValueSelected = Array.isArray(defaultValue) ? defaultValue : [defaultValue];
-    }
-    if (value !== null) {
-      listValueSelected = Array.isArray(value) ? value : [value];
+    // Skip if this is an internal update
+    if (!isInternalUpdate) {
+      // Handle defaultValue only on initial mount when listValueSelected is empty
+      if (defaultValue !== null && listValueSelected.length === 0) {
+        listValueSelected = Array.isArray(defaultValue) ? defaultValue : [defaultValue];
+        previousValueKey = getValueKey(defaultValue);
+      }
+
+      // Only update listValueSelected if value prop has actually changed
+      const currentValueKey = getValueKey(value);
+      if (value !== null && currentValueKey !== previousValueKey) {
+        listValueSelected = Array.isArray(value) ? value : [value];
+        previousValueKey = currentValueKey;
+      } else if (value === null && previousValueKey !== "null") {
+        // Clear selection when value becomes null
+        listValueSelected = [];
+        previousValueKey = "null";
+      }
+    } else {
+      // Reset the flag after skipping
+      isInternalUpdate = false;
     }
   }
 
   // Get display text for selected values
-  $: displayText = listValueSelected.length > 0
-    ? listValueSelected.map(item => item.label || String(item.value)).join(", ")
-    : computedBehavior.placeholder;
+  $: displayText =
+    listValueSelected.length > 0
+      ? listValueSelected.map((item) => item.label || String(item.value)).join(", ")
+      : computedBehavior.placeholder;
 
   // Get option label
   function getOptionLabel(option: SelectOptionItem): string {
@@ -98,11 +144,30 @@
   function filterOptions(query: string): SelectOptionItem[] {
     if (!query) return options;
     const lowerQuery = query.toLowerCase();
-    return options.filter(option => {
+    return options.filter((option) => {
       const label = getOptionLabel(option).toLowerCase();
       const value = String(option.value).toLowerCase();
       return label.includes(lowerQuery) || value.includes(lowerQuery);
     });
+  }
+
+  // Load options (fetch or filter)
+  function loadOptions() {
+    if (fetchFn) {
+      // Prevent multiple simultaneous loads
+      if (loading) return;
+      loading = true;
+      hasAttemptedLoad = true;
+      const isInitialLoad = offset === 0;
+      fetchFn({ search: inputSearch, offset, limit }, (result, totalCount?: number) => {
+        _options = isInitialLoad ? result : [..._options, ...result];
+        total = totalCount || 0;
+        loading = false;
+        listOptions = _options;
+      });
+    } else {
+      listOptions = filterOptions(inputSearch);
+    }
   }
 
   // Handle search input
@@ -110,8 +175,16 @@
     inputSearch = input;
     if (timer) clearTimeout(timer);
     timer = setTimeout(() => {
-      listOptions = filterOptions(inputSearch);
-      dispatch('search', { query: inputSearch });
+      if (fetchFn) {
+        offset = 0;
+        _options = [];
+        total = 0;
+        hasAttemptedLoad = false;
+        loadOptions();
+      } else {
+        listOptions = filterOptions(inputSearch);
+      }
+      dispatch("search", { query: inputSearch });
     }, computedBehavior.debounceMs);
   }
 
@@ -119,12 +192,15 @@
   function handleSelect(option: SelectOptionItem) {
     if (computedBehavior.disabled || option.disabled) return;
 
-    const found = listValueSelected.find(item => item.value === option.value);
-    
+    // Mark as internal update to prevent reactive statement from overwriting
+    isInternalUpdate = true;
+
+    const found = listValueSelected.find((item) => item.value === option.value);
+
     if (found) {
       // Deselect
-      listValueSelected = listValueSelected.filter(item => item.value !== option.value);
-      dispatch('deselect', { option });
+      listValueSelected = listValueSelected.filter((item) => item.value !== option.value);
+      dispatch("deselect", { option });
     } else {
       // Select
       if (computedBehavior.isMultiOption) {
@@ -135,20 +211,35 @@
           openDropdown = false;
         }
       }
-      dispatch('select', { option, isMulti: computedBehavior.isMultiOption });
+      dispatch("select", { option, isMulti: computedBehavior.isMultiOption });
     }
 
-    const updateValue = computedBehavior.isMultiOption ? listValueSelected : (listValueSelected[0] || null);
-    dispatch('update', updateValue);
+    const updateValue = computedBehavior.isMultiOption ? listValueSelected : listValueSelected[0] || null;
+    dispatch("update", updateValue);
+
+    // Update previousValueKey to match the new state
+    previousValueKey = getValueKey(updateValue);
   }
 
   // Handle clear
   function handleClear() {
+    // Mark as internal update to prevent reactive statement from overwriting
+    isInternalUpdate = true;
     inputSearch = "";
     listValueSelected = [];
-    listOptions = options;
-    dispatch('clear');
-    dispatch('update', computedBehavior.isMultiOption ? [] : null);
+    offset = 0;
+    _options = [];
+    total = 0;
+    hasAttemptedLoad = false;
+    if (fetchFn) {
+      loadOptions();
+    } else {
+      listOptions = options;
+    }
+    dispatch("clear");
+    const updateValue = computedBehavior.isMultiOption ? [] : null;
+    dispatch("update", updateValue);
+    previousValueKey = getValueKey(updateValue);
   }
 
   // Handle keyboard navigation
@@ -156,8 +247,8 @@
     if (computedBehavior.disabled) return;
 
     switch (event.key) {
-      case 'Enter':
-      case ' ':
+      case "Enter":
+      case " ":
         if (openDropdown && focusedIndex >= 0 && listOptions[focusedIndex]) {
           event.preventDefault();
           handleSelect(listOptions[focusedIndex]);
@@ -166,14 +257,14 @@
           openDropdown = true;
         }
         break;
-      case 'Escape':
+      case "Escape":
         if (openDropdown) {
           event.preventDefault();
           openDropdown = false;
           focusedIndex = -1;
         }
         break;
-      case 'ArrowDown':
+      case "ArrowDown":
         event.preventDefault();
         if (!openDropdown) {
           openDropdown = true;
@@ -181,13 +272,13 @@
           focusedIndex = Math.min(focusedIndex + 1, listOptions.length - 1);
         }
         break;
-      case 'ArrowUp':
+      case "ArrowUp":
         event.preventDefault();
         if (openDropdown) {
           focusedIndex = Math.max(focusedIndex - 1, -1);
         }
         break;
-      case 'Tab':
+      case "Tab":
         if (openDropdown) {
           openDropdown = false;
         }
@@ -195,33 +286,60 @@
     }
   }
 
-  // Watch for dropdown state changes
-  $: if (openDropdown) {
-    listOptions = filterOptions(inputSearch);
-    dispatch('open');
-  } else {
-    dispatch('close');
-    inputSearch = "";
-    listOptions = options;
-    focusedIndex = -1;
+  // Watch for options prop changes (only when not using fetchFn)
+  $: if (!fetchFn && options) {
+    if (openDropdown) {
+      listOptions = filterOptions(inputSearch);
+    } else {
+      listOptions = options;
+    }
+  }
+
+  // Watch for dropdown state changes - only trigger load on openDropdown change, not on other dependencies
+  let previousOpenDropdown = false;
+  $: {
+    if (openDropdown !== previousOpenDropdown) {
+      previousOpenDropdown = openDropdown;
+      if (openDropdown) {
+        if (fetchFn && _options.length === 0 && !loading && !hasAttemptedLoad) {
+          loadOptions();
+        } else if (!fetchFn) {
+          listOptions = filterOptions(inputSearch);
+        }
+        dispatch("open");
+      } else {
+        dispatch("close");
+        inputSearch = "";
+        if (!fetchFn) {
+          listOptions = options;
+        }
+        focusedIndex = -1;
+        // Reset hasAttemptedLoad when dropdown closes to allow retry on next open
+        if (fetchFn) {
+          hasAttemptedLoad = false;
+        }
+      }
+    }
   }
 
   onMount(() => {
-    listOptions = options;
+    if (fetchFn) {
+      hasAttemptedLoad = false;
+      loadOptions();
+    } else {
+      listOptions = options;
+    }
   });
 </script>
 
-<div 
+<div
   class="select-option select-option--{computedStyling.variant} select-option--{computedStyling.size}"
   class:select-option--error={computedValidation.isError}
   class:select-option--disabled={computedBehavior.disabled}
 >
   <slot name="label">
     {#if label}
-      <label 
-        class="select-option__label {computedStyling.labelClass}" 
-        for={id || name}
-      >
+      <label class="select-option__label {computedStyling.labelClass}" for={id || name}>
         {label}
         {#if computedValidation.required}
           <span class="select-option__required">*</span>
@@ -230,7 +348,7 @@
     {/if}
   </slot>
 
-  <div 
+  <div
     class="select-option__container {computedStyling.wrapperClass}"
     style={computedStyling.wrapperStyle}
     bind:clientWidth={parentWidth}
@@ -239,8 +357,6 @@
     <div
       class="select-option__wrapper"
       bind:this={triggerElement}
-      use:clickOutside
-      on:outclick={() => openDropdown = false}
       on:keydown={handleKeydown}
       role="combobox"
       aria-expanded={openDropdown}
@@ -250,8 +366,8 @@
       tabindex={computedBehavior.disabled ? -1 : 0}
     >
       {#if openDropdown && computedBehavior.isSearchable}
-      <InputText
-        value={inputSearch}
+        <InputText
+          value={inputSearch}
           placeholder={computedBehavior.placeholder}
           styling={{
             size: computedStyling.size,
@@ -264,11 +380,11 @@
             autoFocus: true,
             disabled: computedBehavior.disabled
           }}
-        bind:inputRef
+          bind:inputRef
           on:input={(e) => handleSearch(e.detail)}
         >
           <div slot="suffix" class="select-option__actions">
-          {#if inputSearch?.length}
+            {#if inputSearch?.length}
               <button
                 type="button"
                 class="select-option__clear-btn"
@@ -276,12 +392,22 @@
                 on:click={handleClear}
                 tabindex="-1"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="10"/>
-                  <path d="m15 9-6 6m0-6 6 6"/>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="m15 9-6 6m0-6 6 6" />
                 </svg>
               </button>
-          {/if}
+            {/if}
             <button
               type="button"
               class="select-option__chevron"
@@ -294,12 +420,22 @@
               }}
               tabindex="-1"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="m6 9 6 6 6-6"/>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="m6 9 6 6 6-6" />
               </svg>
             </button>
-        </div>
-      </InputText>
+          </div>
+        </InputText>
       {:else}
         <button
           type="button"
@@ -307,44 +443,61 @@
           disabled={computedBehavior.disabled}
           on:click={() => {
             if (!computedBehavior.disabled) {
-            openDropdown = !openDropdown;
+              openDropdown = !openDropdown;
             }
           }}
           aria-label={label || computedBehavior.placeholder}
         >
-          <span class="select-option__trigger-text" class:select-option__trigger-text--placeholder={!listValueSelected.length}>
-            {displayText}
-          </span>
-          <span 
-            class="select-option__chevron"
-            class:select-option__chevron--open={openDropdown}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="m6 9 6 6 6-6"/>
-            </svg>
-          </span>
+          <slot>
+            <div class="select-option__trigger-content">
+              <slot name="prefix" />
+              <span
+                class="select-option__trigger-text"
+                class:select-option__trigger-text--placeholder={!listValueSelected.length}
+              >
+                {displayText}
+              </span>
+            </div>
+            <span class="select-option__chevron" class:select-option__chevron--open={openDropdown}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </span>
+          </slot>
         </button>
       {/if}
 
-      <DropdownWrapper 
-        bind:visible={openDropdown} 
+      <DropdownWrapper
+        bind:visible={openDropdown}
+        class={computedBehavior.dropdownClass}
         anchor={triggerElement}
-        placement="bottom-start"
-        size={computedStyling.size === 'sm' ? 'sm' : computedStyling.size === 'lg' ? 'lg' : 'md'}
+        placement={computedBehavior.placement}
+        size={computedStyling.size === "sm" ? "sm" : computedStyling.size === "lg" ? "lg" : "md"}
         closeOnClickOutside={true}
         closeOnEscape={true}
+        isFullAnchorWidth={computedBehavior.isFullAnchorWidth}
         on:close={() => {
           openDropdown = false;
         }}
       >
-        <div 
+        <div
           class="select-option__dropdown"
           id={id ? `${id}-listbox` : undefined}
           role="listbox"
-          aria-label={label || 'Options'}
+          aria-label={label || "Options"}
           style={`max-height: ${computedBehavior.maxHeight}px;`}
         >
-          {#if computedBehavior.loading}
+          {#if (computedBehavior.loading || loading) && offset === 0 && _options.length === 0}
             <slot name="loading">
               <div class="select-option__loading">
                 {#each { length: 3 } as _}
@@ -354,35 +507,91 @@
             </slot>
           {:else if listOptions?.length}
             {#each listOptions as item, index}
-              <slot name="option" {item} isSelected={listValueSelected.some(sel => sel.value === item.value)}>
+              <slot name="option" {item} isSelected={listValueSelected.some((sel) => sel.value === item.value)}>
                 <div
                   class="select-option__item"
                   class:select-option__item--focused={focusedIndex === index}
                   class:select-option__item--disabled={item.disabled}
-                  class:select-option__item--selected={listValueSelected.some(sel => sel.value === item.value)}
+                  class:select-option__item--selected={listValueSelected.some((sel) => sel.value === item.value)}
                 >
-              <Button
+                  <button
+                    class="select-option__item-button"
+                    disabled={item.disabled}
+                    on:click={() => {
+                      if (item.disabled) return;
+                      handleSelect(item);
+                    }}
+                  >
+                    <span class="select-option__item-label">{getOptionLabel(item)}</span>
+                    {#if listValueSelected.some((sel) => sel.value === item.value)}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="select-option__check-icon"
+                      >
+                        <path d="M20 6 9 17l-5-5" />
+                      </svg>
+                    {/if}
+                  </button>
+                  <!-- <Button
                     variant="text"
-                    state={listValueSelected.some(sel => sel.value === item.value) ? 'selected' : 'default'}
+                    semantic="secondary"
+                    state={listValueSelected.some((sel) => sel.value === item.value) ? "selected" : "default"}
                     className="select-option__item-button"
+                    customStyle="width: 100%; text-align: left"
                     disabled={item.disabled}
                     on:click={() => handleSelect(item)}
                   >
                     <span class="select-option__item-label">{getOptionLabel(item)}</span>
-                    {#if listValueSelected.some(sel => sel.value === item.value)}
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="select-option__check-icon">
-                        <path d="M20 6 9 17l-5-5"/>
+                    {#if listValueSelected.some((sel) => sel.value === item.value)}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="select-option__check-icon"
+                      >
+                        <path d="M20 6 9 17l-5-5" />
                       </svg>
                     {/if}
-                  </Button>
+                  </Button> -->
                 </div>
               </slot>
             {/each}
+            {#if loading && offset > 0}
+              <div class="select-option__load-more-loader">
+                <div class="select-option__skeleton"></div>
+              </div>
+            {:else if !loading && total > _options.length && fetchFn}
+              <button
+                type="button"
+                class="select-option__load-more"
+                on:click={() => {
+                  offset += limit;
+                  loadOptions();
+                }}
+              >
+                <span>Load More</span>
+                <span class="select-option__load-more-count">{_options.length} of {total}</span>
+              </button>
+            {/if}
           {:else}
             <slot name="empty">
               <div class="select-option__empty">
                 <p>{computedBehavior.emptyMessage}</p>
-            </div>
+              </div>
             </slot>
           {/if}
         </div>
@@ -400,56 +609,8 @@
 </div>
 
 <style lang="postcss">
-  /* CSS Custom Properties - Design Tokens */
   .select-option {
-    /* Layout */
-    --select-option-width: 100%;
-    --select-option-display: flex;
-    --select-option-flex-direction: column;
-    --select-option-gap: 0.25rem;
-    
-    /* Colors */
-    --select-option-bg: var(--color-surface, #ffffff);
-    --select-option-bg-hover: var(--color-surface-hover, #f9fafb);
-    --select-option-border: var(--color-border, #e5e7eb);
-    --select-option-border-focus: var(--color-primary, #3b82f6);
-    --select-option-border-error: var(--color-error, #ef4444);
-    --select-option-text: var(--color-text, #111827);
-    --select-option-text-placeholder: var(--color-text-muted, #9ca3af);
-    --select-option-text-disabled: var(--color-text-disabled, #d1d5db);
-    --select-option-label: var(--color-text-secondary, #374151);
-    --select-option-error-text: var(--color-error, #ef4444);
-    
-    /* Spacing */
-    --select-option-padding-x-sm: 0.5rem;
-    --select-option-padding-x-md: 0.75rem;
-    --select-option-padding-x-lg: 1rem;
-    --select-option-padding-y-sm: 0.375rem;
-    --select-option-padding-y-md: 0.5rem;
-    --select-option-padding-y-lg: 0.625rem;
-    
-    /* Sizes */
-    --select-option-height-sm: 2rem;
-    --select-option-height-md: 2.5rem;
-    --select-option-height-lg: 3rem;
-    --select-option-font-size-sm: 0.875rem;
-    --select-option-font-size-md: 1rem;
-    --select-option-font-size-lg: 1.125rem;
-    
-    /* Border & Radius */
-    --select-option-border-radius: var(--radius, 0.375rem);
-    --select-option-border-width: 1px;
-    
-    /* Shadow */
-    --select-option-shadow-focus: var(--shadow-focus, 0 0 0 3px rgb(59 130 246 / 0.1));
-    
-    /* Transitions */
-    --select-option-transition: all 0.15s ease-in-out;
-    
-    width: var(--select-option-width);
-    display: var(--select-option-display);
-    flex-direction: var(--select-option-flex-direction);
-    gap: var(--select-option-gap);
+    width: 100%;
     font-family: inherit;
   }
 
@@ -458,12 +619,12 @@
     display: block;
     font-size: 0.875rem;
     font-weight: 500;
-    color: var(--select-option-label);
+    color: var(--select-option-label, var(--color-text-secondary, #374151));
     margin-bottom: 0.25rem;
   }
 
   .select-option__required {
-    color: var(--select-option-error-text);
+    color: var(--select-option-error-text, var(--color-error, #ef4444));
     margin-left: 0.125rem;
   }
 
@@ -486,26 +647,33 @@
     justify-content: space-between;
     gap: 0.5rem;
     width: 100%;
-    padding: var(--select-option-padding-y-md) var(--select-option-padding-x-md);
-    height: var(--select-option-height-md);
-    font-size: var(--select-option-font-size-md);
-    background: var(--select-option-bg);
-    border: var(--select-option-border-width) solid var(--select-option-border);
-    border-radius: var(--select-option-border-radius);
-    color: var(--select-option-text);
+    padding: var(--select-option-padding-y-md, 0.5rem) var(--select-option-padding-x-md, 0.75rem);
+    height: var(--select-option-height-md, 2.5rem);
+    font-size: var(--select-option-font-size-md, 1rem);
+    background: var(--select-option-bg, var(--color-surface, #ffffff));
+    border: var(--select-option-border-width, 1px) solid var(--select-option-border, var(--color-border, #e5e7eb));
+    border-radius: var(--select-option-border-radius, var(--radius, 0.375rem));
+    color: var(--select-option-text, var(--color-text, #111827));
     text-align: left;
     cursor: pointer;
-    transition: var(--select-option-transition);
+    transition: var(--select-option-transition, all 0.15s ease-in-out);
+  }
+
+  .select-option__trigger-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
   }
 
   .select-option__trigger:focus-visible {
     outline: none;
-    border-color: var(--select-option-border-focus);
-    box-shadow: var(--select-option-shadow-focus);
+    border-color: var(--select-option-border-focus, var(--color-primary, #3b82f6));
+    box-shadow: var(--select-option-shadow-focus, var(--shadow-focus, 0 0 0 3px rgb(59 130 246 / 0.1)));
   }
 
   .select-option__trigger:hover:not(:disabled) {
-    background: var(--select-option-bg-hover);
+    background: var(--select-option-bg-hover, var(--color-surface-hover, #f9fafb));
   }
 
   .select-option__trigger:disabled {
@@ -522,7 +690,7 @@
   }
 
   .select-option__trigger-text--placeholder {
-    color: var(--select-option-text-placeholder);
+    color: var(--select-option-text-placeholder, var(--color-text-muted, #9ca3af));
     font-style: italic;
   }
 
@@ -532,7 +700,7 @@
   }
 
   .select-option__search-input {
-    padding: 0 var(--select-option-padding-x-md) !important;
+    padding: 0 var(--select-option-padding-x-md, 0.75rem) !important;
   }
 
   /* Actions */
@@ -549,15 +717,15 @@
     justify-content: center;
     background: transparent;
     border: none;
-    color: var(--select-option-text-placeholder);
+    color: var(--select-option-text-placeholder, var(--color-text-muted, #9ca3af));
     cursor: pointer;
     padding: 0.25rem;
-    transition: var(--select-option-transition);
+    transition: var(--select-option-transition, all 0.15s ease-in-out);
   }
 
   .select-option__clear-btn:hover,
   .select-option__chevron:hover {
-    color: var(--select-option-text);
+    color: var(--select-option-text, var(--color-text, #111827));
   }
 
   .select-option__chevron {
@@ -575,17 +743,46 @@
     padding: 0.25rem;
   }
 
+  .select-option__dropdown > * + * {
+    margin-top: 0.25rem; /* 4px */
+  }
+
   /* Option Item */
   .select-option__item {
     width: 100%;
     justify-content: space-between;
     text-align: left;
-    padding: var(--select-option-padding-y-sm) var(--select-option-padding-x-md) !important;
-    border-radius: var(--select-option-border-radius) !important;
+    padding: var(--select-option-padding-y-sm, 0.375rem) var(--select-option-padding-x-md, 0.75rem) !important;
+    border-radius: var(--select-option-border-radius, var(--radius, 0.375rem)) !important;
   }
 
+  .select-option__item:hover {
+    background: var(--select-option-bg-selected, var(--color-surface-hover, #f9fafb));
+  }
   .select-option__item--focused {
-    background: var(--select-option-bg-hover);
+    background: var(--select-option-bg-hover, var(--color-surface-hover, #f9fafb));
+  }
+
+  .select-option__item--selected {
+    background: var(--select-option-bg-selected, var(--color-surface-hover, #f9fafb));
+  }
+
+  .select-option__item--selected .select-option__item-label {
+    color: var(--select-option-text-selected, var(--color-text, #111827));
+  }
+
+  .select-option__item--selected .select-option__item-button {
+    background: var(--select-option-bg-selected, var(--color-surface-hover, #f9fafb));
+    color: var(--select-option-text-selected, var(--color-text, #111827));
+  }
+
+  .select-option__item-button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    padding: 0.5rem 0;
   }
 
   .select-option__item--disabled {
@@ -598,12 +795,14 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    color: var(--select-option-text, var(--color-text, #111827));
   }
 
   .select-option__check-icon {
     width: 1rem;
     height: 1rem;
-    color: var(--select-option-border-focus);
+    color: var(--select-option-check-color, var(--color-primary, #3b82f6));
+    flex-shrink: 0;
   }
 
   /* Loading */
@@ -642,14 +841,51 @@
     align-items: center;
     justify-content: center;
     padding: 1rem;
-    color: var(--select-option-text-placeholder);
+    color: var(--select-option-text-placeholder, var(--color-text-muted, #9ca3af));
     font-style: italic;
     text-align: center;
   }
 
+  /* Load More */
+  .select-option__load-more {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem;
+    border-top: 1px solid var(--select-option-border, var(--color-border, #e5e7eb));
+    background: transparent;
+    color: var(--select-option-text, var(--color-text, #111827));
+    cursor: pointer;
+    transition: var(--select-option-transition, all 0.15s ease-in-out);
+    font-size: 0.875rem;
+  }
+
+  .select-option__load-more:hover {
+    background: var(--select-option-bg-hover, var(--color-surface-hover, #f9fafb));
+  }
+
+  .select-option__load-more-count {
+    font-size: 0.75rem;
+    color: var(--select-option-text-placeholder, var(--color-text-muted, #9ca3af));
+  }
+
+  .select-option__load-more-loader {
+    padding: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid var(--select-option-border, var(--color-border, #e5e7eb));
+  }
+
+  .select-option__load-more-loader .select-option__skeleton {
+    width: 100%;
+    height: 0.75rem;
+  }
+
   /* Error Message */
   .select-option__error {
-    color: var(--select-option-error-text);
+    color: var(--select-option-error-text, var(--color-error, #ef4444));
     font-size: 0.875rem;
     margin-top: 0.25rem;
     font-style: italic;
@@ -658,11 +894,11 @@
   /* Error State */
   .select-option--error .select-option__trigger,
   .select-option--error .select-option__search-wrapper {
-    border-color: var(--select-option-border-error);
+    border-color: var(--select-option-border-error, var(--color-error, #ef4444));
   }
 
   .select-option--error .select-option__trigger:focus-visible {
-    border-color: var(--select-option-border-error);
+    border-color: var(--select-option-border-error, var(--color-error, #ef4444));
     box-shadow: 0 0 0 3px rgb(239 68 68 / 0.1);
   }
 
@@ -674,15 +910,15 @@
 
   /* Size Variants */
   .select-option--sm .select-option__trigger {
-    height: var(--select-option-height-sm);
-    padding: var(--select-option-padding-y-sm) var(--select-option-padding-x-sm);
-    font-size: var(--select-option-font-size-sm);
+    height: var(--select-option-height-sm, 2rem);
+    padding: var(--select-option-padding-y-sm, 0.375rem) var(--select-option-padding-x-sm, 0.5rem);
+    font-size: var(--select-option-font-size-sm, 0.875rem);
   }
 
   .select-option--lg .select-option__trigger {
-    height: var(--select-option-height-lg);
-    padding: var(--select-option-padding-y-lg) var(--select-option-padding-x-lg);
-    font-size: var(--select-option-font-size-lg);
+    height: var(--select-option-height-lg, 3rem);
+    padding: var(--select-option-padding-y-lg, 0.625rem) var(--select-option-padding-x-lg, 1rem);
+    font-size: var(--select-option-font-size-lg, 1.125rem);
   }
 
   /* Variant Styles */
@@ -692,8 +928,8 @@
   }
 
   .select-option--filled .select-option__trigger:focus-visible {
-    background: var(--select-option-bg);
-    border-color: var(--select-option-border-focus);
+    background: var(--select-option-bg, var(--color-surface, #ffffff));
+    border-color: var(--select-option-border-focus, var(--color-primary, #3b82f6));
   }
 
   .select-option--outlined .select-option__trigger {

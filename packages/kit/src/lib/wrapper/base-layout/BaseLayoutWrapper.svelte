@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { BaseLayoutWrapperProps } from '../../types.js';
+  import type { BaseLayoutWrapperProps } from "../../types.js";
 
-  export let layoutClassName: BaseLayoutWrapperProps['layoutClassName'] = "";
-  export let layoutStyle: BaseLayoutWrapperProps['layoutStyle'] = "";
-  export let bodyClassName: BaseLayoutWrapperProps['bodyClassName'] = "";
-  export let bodyStyle: BaseLayoutWrapperProps['bodyStyle'] = "";
+  export let layoutClassName: BaseLayoutWrapperProps["layoutClassName"] = "";
+  export let layoutStyle: BaseLayoutWrapperProps["layoutStyle"] = "";
+  export let bodyClassName: BaseLayoutWrapperProps["bodyClassName"] = "";
+  export let bodyStyle: BaseLayoutWrapperProps["bodyStyle"] = "";
 
   let innerHeight: number = 0;
   let innerWidth: number = 0;
@@ -20,18 +20,22 @@
   $: bodyStyles = bodyStyle || "";
 </script>
 
-<svelte:window bind:innerHeight={innerHeight} bind:innerWidth={innerWidth}/>
+<svelte:window bind:innerHeight bind:innerWidth />
 
 <div class="base-layout {layoutClassName}" style={layoutStyles}>
+  <slot name="header" />
   <div class="base-layout__body {bodyClassName}" style={bodyStyles}>
-    <slot />
+    <slot name="body" />
   </div>
+  <slot name="footer" />
 </div>
 
 <style lang="postcss">
   .base-layout {
     position: fixed;
-    display: flex;
+    /* display: flex; */
+    width: 100vw;
+    height: 100vh;
     width: var(--base-layout-width, 100vw);
     height: var(--base-layout-height, 100vh);
     left: 0;

@@ -1,15 +1,22 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from "svelte";
   import { slide } from "svelte/transition";
-  import type { InputTextProps, InputTextStyling, InputTextValidation, InputTextBehavior, InputType } from "../../types.js";
-  import { 
-    applyMask, 
-    removeMask, 
-    getPatternLength, 
+  import type {
+    InputTextProps,
+    InputTextStyling,
+    InputTextValidation,
+    InputTextBehavior,
+    InputType
+  } from "../../types.js";
+  import {
+    applyMask,
+    removeMask,
+    getPatternLength,
     getPatternSeparators,
     formatNumber,
     sanitizeNumericInput,
-    shouldPreventInput
+    shouldPreventInput,
+    parseAndFormatNumber
   } from "./utils.js";
 
   // Core props
@@ -26,20 +33,20 @@
 
   // Computed props with defaults
   $: computedStyling = {
-    size: styling.size || 'md',
-    variant: styling.variant || 'default',
-    inputClass: styling.inputClass || '',
-    wrapperClass: styling.wrapperClass || '',
-    labelClass: styling.labelClass || '',
-    wrapperStyle: styling.wrapperStyle || ''
+    size: styling.size || "md",
+    variant: styling.variant || "default",
+    inputClass: styling.inputClass || "",
+    wrapperClass: styling.wrapperClass || "",
+    labelClass: styling.labelClass || "",
+    wrapperStyle: styling.wrapperStyle || ""
   };
 
   $: computedValidation = {
     required: validation.required ?? false,
     isError: validation.isError ?? false,
-    errorMessage: validation.errorMessage || '',
+    errorMessage: validation.errorMessage || "",
     maxLength: validation.maxLength ?? null,
-    pattern: validation.pattern || '',
+    pattern: validation.pattern || "",
     showMaxLengthCounter: validation.showMaxLengthCounter ?? false
   };
 
@@ -50,7 +57,7 @@
     clearable: behavior.clearable ?? false,
     useKeyup: behavior.useKeyup ?? true,
     useNumberFormat: behavior.useNumberFormat ?? true,
-    autocomplete: behavior.autocomplete || ''
+    autocomplete: behavior.autocomplete || ""
   };
 
   // Internal state
@@ -75,7 +82,7 @@
   $: if (value && !firstLoad) {
     firstLoad = true;
     if (type === "number" && computedBehavior.useNumberFormat) {
-      value = formatNumber(value, "en-US", true);
+      value = formatNumber(value, "id-ID", true);
     }
   }
 
@@ -93,22 +100,23 @@
 
     dispatch("keydown", { key, event: e });
 
-    if (shouldPreventInput(
-      key, 
-      _value, 
-      computedValidation.maxLength, 
-      computedValidation.pattern, 
-      patternLength, 
-      type, 
-      e
-    )) {
+    if (
+      shouldPreventInput(key, _value, computedValidation.maxLength, computedValidation.pattern, patternLength, type, e)
+    ) {
       e.preventDefault();
     }
   };
 
   const handlePaste = (e: ClipboardEvent) => {
     const pastedText = e.clipboardData?.getData("text") || "";
-    const newValue = value + pastedText;
+    let newValue = value + pastedText;
+
+    if (type === "number" && computedBehavior.useNumberFormat) {
+      // For number inputs, parse and format the pasted value
+      const result = parseAndFormatNumber(newValue, "id-ID");
+      newValue = result.display;
+    }
+
     if (computedValidation.maxLength && newValue.length > computedValidation.maxLength) {
       e.preventDefault();
     }
@@ -119,21 +127,34 @@
 
     const target = e.target as HTMLInputElement;
     const { value: _value } = target;
-    const key = (e as KeyboardEvent).key || '';
+    const key = (e as KeyboardEvent).key || "";
     let newValue = value;
+
+    // Store cursor position before formatting
+    // const cursorPos = target.selectionStart || 0;
 
     if (!computedValidation.pattern) {
       if (type === "number") {
-        const sanitized = sanitizeNumericInput(_value);
-        const numValue = sanitized ? parseFloat(sanitized) : 0;
         if (computedBehavior.useNumberFormat) {
-          newValue = formatNumber(numValue, "id-ID", true);
+          const result = parseAndFormatNumber(_value, "id-ID");
+          newValue = result.display;
+
+          // Update input value
+          target.value = newValue;
+
+          // Adjust cursor position to account for formatting changes
+          // const newCursorPos = Math.max(0, Math.min(cursorPos + result.cursorAdjustment, newValue.length));
+          // target.setSelectionRange(newCursorPos, newCursorPos);
         } else {
-          newValue = _value;
+          // No formatting, just sanitize
+          const sanitized = sanitizeNumericInput(_value);
+          newValue = sanitized || "";
+          target.value = newValue;
         }
       } else {
         newValue = _value;
       }
+
       value = newValue;
     } else {
       const temp = removeMask(_value);
@@ -174,6 +195,10 @@
     if (computedValidation.pattern) {
       patternLength = getPatternLength(computedValidation.pattern);
     }
+
+    if (type === "number") {
+      localType = "tel";
+    }
   });
 </script>
 
@@ -188,27 +213,27 @@
       </label>
     {/if}
   </slot>
-  
+
   <div class="input-text__container" class:input-text__container--error={computedValidation.isError}>
-    <div 
-      class="input-text__wrapper {computedStyling.wrapperClass}" 
-      style={computedStyling.wrapperStyle} 
+    <div
+      class="input-text__wrapper {computedStyling.wrapperClass}"
+      style={computedStyling.wrapperStyle}
       class:input-text__wrapper--disabled={computedBehavior.disabled}
     >
       <slot name="prefix" />
-      
+
+      <!-- id="input-field" -->
       <input
-        id="input-field"
         bind:this={inputRef}
         type={localType}
         class="input-text__field {computedStyling.inputClass}"
         value={value || ""}
-        placeholder={placeholder}
+        {placeholder}
         disabled={computedBehavior.disabled}
         readonly={computedBehavior.readonly}
         autocomplete={computedBehavior.autocomplete}
         aria-invalid={computedValidation.isError}
-        aria-describedby={computedValidation.errorMessage ? 'error-message' : undefined}
+        aria-describedby={computedValidation.errorMessage ? "error-message" : undefined}
         on:change
         on:keydown={handleKeydown}
         on:focus={() => dispatch("focus")}
@@ -236,11 +261,11 @@
           </svg>
         </button>
       {/if}
-      
+
       {#if passwordView}
-        <button 
+        <button
           type="button"
-          class="input-text__action-btn" 
+          class="input-text__action-btn"
           aria-label={localType === "password" ? "Show password" : "Hide password"}
           on:click={toggleType}
         >
@@ -268,7 +293,7 @@
         </button>
       {/if}
     </div>
-    
+
     <slot name="helper">
       {#if computedValidation.showMaxLengthCounter && computedValidation.maxLength}
         <div class="input-text__counter">
@@ -276,7 +301,7 @@
         </div>
       {/if}
     </slot>
-    
+
     <slot name="error">
       {#if computedValidation.isError && computedValidation.errorMessage}
         <div class="input-text__error" id="error-message" transition:slide>
@@ -288,30 +313,7 @@
 </div>
 
 <style>
-  /* CSS Custom Properties for theming */
   .input-text {
-    --input-text-bg: var(--color-surface, #ffffff);
-    --input-text-border: var(--color-border, #d1d5db);
-    --input-text-border-focus: var(--color-primary, #3b82f6);
-    --input-text-border-error: var(--color-error, #ef4444);
-    --input-text-text: var(--color-text, #111827);
-    --input-text-text-placeholder: var(--color-text-muted, #6b7280);
-    --input-text-label: var(--color-text-secondary, #374151);
-    --input-text-error-text: var(--color-error, #ef4444);
-    --input-text-radius: var(--radius, 0.375rem);
-    --input-text-shadow-focus: var(--shadow-focus, 0 0 0 3px rgb(59 130 246 / 0.1));
-    
-    /* Size variables */
-    --input-text-height-sm: 2rem;
-    --input-text-height-md: 2.5rem;
-    --input-text-height-lg: 3rem;
-    --input-text-padding-x-sm: 0.5rem;
-    --input-text-padding-x-md: 0.75rem;
-    --input-text-padding-x-lg: 1rem;
-    --input-text-font-size-sm: 0.875rem;
-    --input-text-font-size-md: 1rem;
-    --input-text-font-size-lg: 1.125rem;
-    
     width: 100%;
     font-family: inherit;
   }
@@ -321,12 +323,12 @@
     display: block;
     font-size: 0.875rem;
     font-weight: 500;
-    color: var(--input-text-label);
+    color: var(--input-text-label, var(--color-text-secondary, #374151));
     margin-bottom: 0.25rem;
   }
 
   .input-text__required {
-    color: var(--input-text-error-text);
+    color: var(--input-text-error-text, var(--color-error, #ef4444));
     margin-left: 0.125rem;
   }
 
@@ -339,18 +341,20 @@
   .input-text__wrapper {
     display: flex;
     align-items: center;
-    background: var(--input-text-bg);
-    border: 1px solid var(--input-text-border);
-    border-radius: var(--input-text-radius);
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    gap: 0.25rem;
-    padding: 0 var(--input-text-padding-x-md);
-    height: var(--input-text-height-md);
+    background: var(--input-text-bg, var(--color-surface, #ffffff));
+    border: 1px solid var(--input-text-border, var(--color-border, #d1d5db));
+    border-radius: var(--input-text-radius, var(--radius, 0.375rem));
+    transition:
+      border-color 0.15s ease-in-out,
+      box-shadow 0.15s ease-in-out;
+    /* gap: 0.25rem; */
+    height: var(--input-text-height-md, 2.5rem);
+    overflow: hidden;
   }
 
   .input-text__wrapper:focus-within {
-    border-color: var(--input-text-border-focus);
-    box-shadow: var(--input-text-shadow-focus);
+    border-color: var(--input-text-border-focus, var(--color-primary, #3b82f6));
+    box-shadow: var(--input-text-shadow-focus, var(--shadow-focus, 0 0 0 3px rgb(59 130 246 / 0.1)));
   }
 
   .input-text__wrapper--disabled {
@@ -360,11 +364,11 @@
   }
 
   .input-text__container--error .input-text__wrapper {
-    border-color: var(--input-text-border-error);
+    border-color: var(--input-text-border-error, var(--color-error, #ef4444));
   }
 
   .input-text__container--error .input-text__wrapper:focus-within {
-    border-color: var(--input-text-border-error);
+    border-color: var(--input-text-border-error, var(--color-error, #ef4444));
     box-shadow: 0 0 0 3px rgb(239 68 68 / 0.1);
   }
 
@@ -374,16 +378,18 @@
     background: transparent;
     border: none;
     outline: none;
-    color: var(--input-text-text);
-    font-size: var(--input-text-font-size-md);
+    color: var(--input-text-text, var(--color-text, #111827));
+    font-size: var(--input-text-font-size-md, 1rem);
     line-height: 1.5;
-    padding: 0;
+    padding: 0 var(--input-text-padding-x-md, 0.75rem);
     width: 100%;
     min-width: 0;
+    height: 100%;
+    overflow-x: auto;
   }
 
   .input-text__field::placeholder {
-    color: var(--input-text-text-placeholder);
+    color: var(--input-text-text-placeholder, var(--color-text-muted, #6b7280));
     font-style: italic;
   }
 
@@ -410,34 +416,38 @@
     justify-content: center;
     background: transparent;
     border: none;
-    color: var(--input-text-text-placeholder);
+    color: var(--input-text-text-placeholder, var(--color-text-muted, #6b7280));
     cursor: pointer;
     padding: 0.25rem;
-    border-radius: calc(var(--input-text-radius) * 0.5);
-    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+    height: 100%;
+    aspect-ratio: 1/1;
+    /* border-radius: calc(var(--input-text-radius, var(--radius, 0.375rem)) * 0.5); */
+    transition:
+      color 0.15s ease-in-out,
+      background-color 0.15s ease-in-out;
   }
 
   .input-text__action-btn:hover {
-    color: var(--input-text-text);
+    color: var(--input-text-text, var(--color-text, #111827));
     background: var(--color-surface-hover, #f3f4f6);
   }
 
   .input-text__action-btn:focus {
     outline: none;
-    box-shadow: 0 0 0 2px var(--input-text-border-focus);
+    /* box-shadow: 0 0 0 2px var(--input-text-border-focus, var(--color-primary, #3b82f6)); */
   }
 
   /* Helper text and counter */
   .input-text__counter {
     font-size: 0.75rem;
-    color: var(--input-text-text-placeholder);
+    color: var(--input-text-text-placeholder, var(--color-text-muted, #6b7280));
     text-align: right;
     margin-top: 0.25rem;
   }
 
   /* Error message */
   .input-text__error {
-    color: var(--input-text-error-text);
+    color: var(--input-text-error-text, var(--color-error, #ef4444));
     font-size: 0.875rem;
     margin-top: 0.25rem;
     font-style: italic;
@@ -445,21 +455,21 @@
 
   /* Size variants */
   .input-text--sm .input-text__wrapper {
-    height: var(--input-text-height-sm);
-    padding: 0 var(--input-text-padding-x-sm);
+    height: var(--input-text-height-sm, 2rem);
+    /* padding: 0 var(--input-text-padding-x-sm, 0.5rem); */
   }
 
   .input-text--sm .input-text__field {
-    font-size: var(--input-text-font-size-sm);
+    font-size: var(--input-text-font-size-sm, 0.875rem);
   }
 
   .input-text--lg .input-text__wrapper {
-    height: var(--input-text-height-lg);
-    padding: 0 var(--input-text-padding-x-lg);
+    height: var(--input-text-height-lg, 3rem);
+    padding: 0 var(--input-text-padding-x-lg, 1rem);
   }
 
   .input-text--lg .input-text__field {
-    font-size: var(--input-text-font-size-lg);
+    font-size: var(--input-text-font-size-lg, 1.125rem);
   }
 
   /* Style variants */
@@ -469,16 +479,16 @@
   }
 
   .input-text--filled .input-text__wrapper:focus-within {
-    background: var(--input-text-bg);
-    border-color: var(--input-text-border-focus);
+    background: var(--input-text-bg, var(--color-surface, #ffffff));
+    border-color: var(--input-text-border-focus, var(--color-primary, #3b82f6));
   }
 
   .input-text--outlined .input-text__wrapper {
     background: transparent;
-    border: 2px solid var(--input-text-border);
+    border: 2px solid var(--input-text-border, var(--color-border, #d1d5db));
   }
 
   .input-text--outlined .input-text__wrapper:focus-within {
-    border-color: var(--input-text-border-focus);
+    border-color: var(--input-text-border-focus, var(--color-primary, #3b82f6));
   }
 </style>

@@ -17,18 +17,18 @@
 
   // Computed props with defaults
   $: computedStyling = {
-    size: styling.size || 'md',
-    variant: styling.variant || 'default',
-    inputClass: styling.inputClass || '',
-    wrapperClass: styling.wrapperClass || '',
-    labelClass: styling.labelClass || '',
-    wrapperStyle: styling.wrapperStyle || ''
+    size: styling.size || "md",
+    variant: styling.variant || "default",
+    inputClass: styling.inputClass || "",
+    wrapperClass: styling.wrapperClass || "",
+    labelClass: styling.labelClass || "",
+    wrapperStyle: styling.wrapperStyle || ""
   };
 
   $: computedValidation = {
     required: validation.required ?? false,
     isError: validation.isError ?? false,
-    errorMessage: validation.errorMessage || '',
+    errorMessage: validation.errorMessage || "",
     maxLength: validation.maxLength ?? null,
     showMaxLengthCounter: validation.showMaxLengthCounter ?? false
   };
@@ -38,7 +38,7 @@
     readonly: behavior.readonly ?? false,
     autoFocus: behavior.autoFocus ?? false,
     clearable: behavior.clearable ?? false,
-    autocomplete: behavior.autocomplete || '',
+    autocomplete: behavior.autocomplete || "",
     excludedKeys: behavior.excludedKeys || []
   };
 
@@ -77,9 +77,9 @@
     const newValue = value + pastedText;
     if (computedValidation.maxLength && newValue.length > computedValidation.maxLength) {
       e.preventDefault();
-      dispatch("paste-rejected", { 
-        reason: "exceeds-max-length", 
-        maxLength: computedValidation.maxLength 
+      dispatch("paste-rejected", {
+        reason: "exceeds-max-length",
+        maxLength: computedValidation.maxLength
       });
     }
   };
@@ -135,29 +135,29 @@
       </label>
     {/if}
   </slot>
-  
+
   <div class="textarea__container" class:textarea__container--error={computedValidation.isError}>
-    <div 
-      class="textarea__wrapper {computedStyling.wrapperClass}" 
-      style={computedStyling.wrapperStyle} 
+    <div
+      class="textarea__wrapper {computedStyling.wrapperClass}"
+      style={computedStyling.wrapperStyle}
       class:textarea__wrapper--disabled={computedBehavior.disabled}
       class:textarea__wrapper--auto-resize={computedLayout.autoResize && !computedLayout.fixedHeight}
     >
       <slot name="prefix" />
-      
+
       <textarea
         id="textarea-field"
         bind:this={textareaRef}
         class="textarea__field {computedStyling.inputClass}"
         value={value || ""}
-        placeholder={placeholder}
+        {placeholder}
         rows={computedLayout.rows}
         disabled={computedBehavior.disabled}
         readonly={computedBehavior.readonly}
         autocomplete={computedBehavior.autocomplete}
         style={computedLayout.maxHeight ? `max-height: ${computedLayout.maxHeight}px` : ""}
         aria-invalid={computedValidation.isError}
-        aria-describedby={computedValidation.errorMessage ? 'error-message' : undefined}
+        aria-describedby={computedValidation.errorMessage ? "error-message" : undefined}
         on:input={handleInput}
         on:keydown={handleKeydown}
         on:focus={() => dispatch("focus")}
@@ -169,12 +169,7 @@
       <slot name="suffix" />
 
       {#if computedBehavior.clearable && value}
-        <button
-          type="button"
-          class="textarea__action-btn"
-          aria-label="Clear textarea"
-          on:click={clearValue}
-        >
+        <button type="button" class="textarea__action-btn" aria-label="Clear textarea" on:click={clearValue}>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
             <path
               fill="currentColor"
@@ -184,7 +179,7 @@
         </button>
       {/if}
     </div>
-    
+
     <slot name="helper">
       {#if computedValidation.showMaxLengthCounter && computedValidation.maxLength}
         <div class="textarea__counter">
@@ -192,7 +187,7 @@
         </div>
       {/if}
     </slot>
-    
+
     <slot name="error">
       {#if computedValidation.isError && computedValidation.errorMessage}
         <div class="textarea__error" id="error-message" transition:slide>
@@ -204,30 +199,7 @@
 </div>
 
 <style>
-  /* CSS Custom Properties for theming */
   .textarea {
-    --textarea-bg: var(--color-surface, #ffffff);
-    --textarea-border: var(--color-border, #d1d5db);
-    --textarea-border-focus: var(--color-primary, #3b82f6);
-    --textarea-border-error: var(--color-error, #ef4444);
-    --textarea-text: var(--color-text, #111827);
-    --textarea-text-placeholder: var(--color-text-muted, #6b7280);
-    --textarea-label: var(--color-text-secondary, #374151);
-    --textarea-error-text: var(--color-error, #ef4444);
-    --textarea-radius: var(--radius, 0.375rem);
-    --textarea-shadow-focus: var(--shadow-focus, 0 0 0 3px rgb(59 130 246 / 0.1));
-    
-    /* Size variables */
-    --textarea-padding-x-sm: 0.5rem;
-    --textarea-padding-x-md: 0.75rem;
-    --textarea-padding-x-lg: 1rem;
-    --textarea-padding-y-sm: 0.375rem;
-    --textarea-padding-y-md: 0.5rem;
-    --textarea-padding-y-lg: 0.625rem;
-    --textarea-font-size-sm: 0.875rem;
-    --textarea-font-size-md: 1rem;
-    --textarea-font-size-lg: 1.125rem;
-    
     width: 100%;
     font-family: inherit;
   }
@@ -237,12 +209,12 @@
     display: block;
     font-size: 0.875rem;
     font-weight: 500;
-    color: var(--textarea-label);
+    color: var(--textarea-label, var(--color-text-secondary, #374151));
     margin-bottom: 0.25rem;
   }
 
   .textarea__required {
-    color: var(--textarea-error-text);
+    color: var(--textarea-error-text, var(--color-error, #ef4444));
     margin-left: 0.125rem;
   }
 
@@ -254,18 +226,20 @@
   /* Wrapper */
   .textarea__wrapper {
     display: flex;
-    background: var(--textarea-bg);
-    border: 1px solid var(--textarea-border);
-    border-radius: var(--textarea-radius);
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    background: var(--textarea-bg, var(--color-surface, #ffffff));
+    border: 1px solid var(--textarea-border, var(--color-border, #d1d5db));
+    border-radius: var(--textarea-radius, var(--radius, 0.375rem));
+    transition:
+      border-color 0.15s ease-in-out,
+      box-shadow 0.15s ease-in-out;
     gap: 0.25rem;
-    padding: var(--textarea-padding-y-md) var(--textarea-padding-x-md);
+    padding: var(--textarea-padding-y-md, 0.5rem) var(--textarea-padding-x-md, 0.75rem);
     position: relative;
   }
 
   .textarea__wrapper:focus-within {
-    border-color: var(--textarea-border-focus);
-    box-shadow: var(--textarea-shadow-focus);
+    border-color: var(--textarea-border-focus, var(--color-primary, #3b82f6));
+    box-shadow: var(--textarea-shadow-focus, var(--shadow-focus, 0 0 0 3px rgb(59 130 246 / 0.1)));
   }
 
   .textarea__wrapper--disabled {
@@ -275,11 +249,11 @@
   }
 
   .textarea__container--error .textarea__wrapper {
-    border-color: var(--textarea-border-error);
+    border-color: var(--textarea-border-error, var(--color-error, #ef4444));
   }
 
   .textarea__container--error .textarea__wrapper:focus-within {
-    border-color: var(--textarea-border-error);
+    border-color: var(--textarea-border-error, var(--color-error, #ef4444));
     box-shadow: 0 0 0 3px rgb(239 68 68 / 0.1);
   }
 
@@ -315,17 +289,18 @@
     background: transparent;
     border: none;
     outline: none;
-    color: var(--textarea-text);
-    font-size: var(--textarea-font-size-md);
+    color: var(--textarea-text, var(--color-text, #111827));
+    font-size: var(--textarea-font-size-md, 1rem);
     line-height: 1.5;
     resize: vertical;
     width: 100%;
     min-width: 0;
     font-family: inherit;
+    resize: none;
   }
 
   .textarea__field::placeholder {
-    color: var(--textarea-text-placeholder);
+    color: var(--textarea-text-placeholder, var(--color-text-muted, #6b7280));
     font-style: italic;
   }
 
@@ -344,35 +319,37 @@
     justify-content: center;
     background: transparent;
     border: none;
-    color: var(--textarea-text-placeholder);
+    color: var(--textarea-text-placeholder, var(--color-text-muted, #6b7280));
     cursor: pointer;
     padding: 0.25rem;
-    border-radius: calc(var(--textarea-radius) * 0.5);
-    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+    border-radius: calc(var(--textarea-radius, var(--radius, 0.375rem)) * 0.5);
+    transition:
+      color 0.15s ease-in-out,
+      background-color 0.15s ease-in-out;
     margin-top: 0.125rem;
   }
 
   .textarea__action-btn:hover {
-    color: var(--textarea-text);
+    color: var(--textarea-text, var(--color-text, #111827));
     background: var(--color-surface-hover, #f3f4f6);
   }
 
   .textarea__action-btn:focus {
     outline: none;
-    box-shadow: 0 0 0 2px var(--textarea-border-focus);
+    box-shadow: 0 0 0 2px var(--textarea-border-focus, var(--color-primary, #3b82f6));
   }
 
   /* Helper text and counter */
   .textarea__counter {
     font-size: 0.75rem;
-    color: var(--textarea-text-placeholder);
+    color: var(--textarea-text-placeholder, var(--color-text-muted, #6b7280));
     text-align: right;
     margin-top: 0.25rem;
   }
 
   /* Error message */
   .textarea__error {
-    color: var(--textarea-error-text);
+    color: var(--textarea-error-text, var(--color-error, #ef4444));
     font-size: 0.875rem;
     margin-top: 0.25rem;
     font-style: italic;
@@ -380,19 +357,19 @@
 
   /* Size variants */
   .textarea--sm .textarea__wrapper {
-    padding: var(--textarea-padding-y-sm) var(--textarea-padding-x-sm);
+    padding: var(--textarea-padding-y-sm, 0.375rem) var(--textarea-padding-x-sm, 0.5rem);
   }
 
   .textarea--sm .textarea__field {
-    font-size: var(--textarea-font-size-sm);
+    font-size: var(--textarea-font-size-sm, 0.875rem);
   }
 
   .textarea--lg .textarea__wrapper {
-    padding: var(--textarea-padding-y-lg) var(--textarea-padding-x-lg);
+    padding: var(--textarea-padding-y-lg, 0.625rem) var(--textarea-padding-x-lg, 1rem);
   }
 
   .textarea--lg .textarea__field {
-    font-size: var(--textarea-font-size-lg);
+    font-size: var(--textarea-font-size-lg, 1.125rem);
   }
 
   /* Style variants */
@@ -402,16 +379,16 @@
   }
 
   .textarea--filled .textarea__wrapper:focus-within {
-    background: var(--textarea-bg);
-    border-color: var(--textarea-border-focus);
+    background: var(--textarea-bg, var(--color-surface, #ffffff));
+    border-color: var(--textarea-border-focus, var(--color-primary, #3b82f6));
   }
 
   .textarea--outlined .textarea__wrapper {
     background: transparent;
-    border: 2px solid var(--textarea-border);
+    border: 2px solid var(--textarea-border, var(--color-border, #d1d5db));
   }
 
   .textarea--outlined .textarea__wrapper:focus-within {
-    border-color: var(--textarea-border-focus);
+    border-color: var(--textarea-border-focus, var(--color-primary, #3b82f6));
   }
 </style>

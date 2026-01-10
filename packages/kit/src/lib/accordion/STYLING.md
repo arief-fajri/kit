@@ -75,12 +75,10 @@ Override Accordion component defaults globally:
   --accordion-icon-color-hover: var(--color-primary, #3b82f6);
   
   /* === FILLED VARIANT === */
-  --accordion-bg-filled: var(--color-surface, #ffffff);
-  --accordion-bg-filled-hover: var(--color-surface-hover, #f3f4f6);
+  /* Note: Uses --accordion-bg and --accordion-bg-hover */
   
   /* === OUTLINED VARIANT === */
-  --accordion-border-outlined: var(--color-border, #d1d5db);
-  --accordion-border-outlined-width: 1px;
+  /* Note: Uses --accordion-border-color and --accordion-border-width */
   
   /* === SIZES === */
   /* Small */
@@ -108,8 +106,8 @@ Override Accordion component defaults globally:
   --accordion-transition-easing: ease;
   
   /* === BORDER === */
-  --accordion-border-radius: var(--radius-md, 0.375rem);
   --accordion-border-width: 1px;
+  --accordion-border-color: var(--color-border, #d1d5db);
 }
 ```
 
@@ -129,8 +127,6 @@ Override Accordion component defaults globally:
   /* Dark theme accordion overrides */
   --accordion-bg: transparent;
   --accordion-bg-hover: rgba(55, 65, 81, 0.5);
-  --accordion-bg-filled: var(--color-surface);
-  --accordion-bg-filled-hover: var(--color-surface-hover);
   --accordion-text: var(--color-text);
   --accordion-text-hover: var(--color-primary);
   --accordion-text-subtitle: var(--color-text-muted);
@@ -237,7 +233,6 @@ Target specific accordion instances:
 .faq-accordion {
   --accordion-bg: var(--color-surface);
   --accordion-bg-hover: var(--color-surface-hover);
-  --accordion-border-radius: var(--radius-lg);
   --accordion-padding-x: 1rem;
 }
 
@@ -246,7 +241,6 @@ Target specific accordion instances:
   --accordion-bg-hover: rgba(59, 130, 246, 0.1);
   --accordion-text: var(--color-on-surface);
   --accordion-text-hover: var(--color-primary);
-  --accordion-border-radius: var(--radius-sm);
 }
 ```
 
@@ -258,6 +252,7 @@ Target specific accordion instances:
   --accordion-bg: rgba(59, 130, 246, 0.05);
   --accordion-border-color: var(--color-primary);
   --accordion-text: var(--color-primary);
+  --accordion-text-hover: var(--color-primary);
 }
 
 /* Custom disabled state */
@@ -380,7 +375,6 @@ $: accordionStyles = Object.entries(accordionTheme[theme])
   --ds-space-2: 0.5rem;
   --ds-space-3: 0.75rem;
   --ds-space-4: 1rem;
-  --ds-radius-md: 0.375rem;
   --ds-text-sm: 0.875rem;
   --ds-text-base: 1rem;
   
@@ -389,7 +383,6 @@ $: accordionStyles = Object.entries(accordionTheme[theme])
   --accordion-icon-color-hover: var(--ds-color-primary-600);
   --accordion-padding-x-md: var(--ds-space-2);
   --accordion-padding-y-md: var(--ds-space-2);
-  --accordion-border-radius: var(--ds-radius-md);
   --accordion-font-size-md: var(--ds-text-base);
   --accordion-font-size-sm: var(--ds-text-sm);
 }
@@ -404,7 +397,6 @@ $: accordionStyles = Object.entries(accordionTheme[theme])
 .accordion-tailwind {
   --accordion-text: theme('colors.gray.900');
   --accordion-text-hover: theme('colors.blue.600');
-  --accordion-border-radius: theme('borderRadius.md');
   --accordion-padding-x: theme('spacing.4');
   --accordion-padding-y: theme('spacing.2');
 }
@@ -413,7 +405,6 @@ $: accordionStyles = Object.entries(accordionTheme[theme])
 .accordion-bootstrap {
   --accordion-text: var(--bs-body-color);
   --accordion-text-hover: var(--bs-primary);
-  --accordion-border-radius: var(--bs-border-radius);
   --accordion-padding-x: var(--bs-gutter-x);
   --accordion-padding-y: var(--bs-gutter-y);
 }
@@ -441,6 +432,8 @@ $: accordionStyles = Object.entries(accordionTheme[theme])
 | `--accordion-padding-y-sm` | `0.25rem` | Vertical padding (small) |
 | `--accordion-padding-y-md` | `0.5rem` | Vertical padding (medium) |
 | `--accordion-padding-y-lg` | `0.75rem` | Vertical padding (large) |
+| `--accordion-padding-x` | *computed* | Computed horizontal padding (set by size variant, can be overridden) |
+| `--accordion-padding-y` | *computed* | Computed vertical padding (set by size variant, can be overridden) |
 | `--accordion-gap` | `0` | Gap between elements |
 
 ### Typography Properties
@@ -450,8 +443,9 @@ $: accordionStyles = Object.entries(accordionTheme[theme])
 | `--accordion-font-size-sm` | `0.875rem` | Font size (small) |
 | `--accordion-font-size-md` | `1rem` | Font size (medium) |
 | `--accordion-font-size-lg` | `1.125rem` | Font size (large) |
+| `--accordion-font-size` | *computed* | Computed font size (set by size variant, can be overridden) |
 | `--accordion-font-weight` | `400` | Font weight (normal) |
-| `--accordion-font-weight-bold` | `500` | Font weight (bold) |
+| `--accordion-font-weight-bold` | `500` | Font weight (bold, used when expanded) |
 | `--accordion-line-height` | `1.5` | Line height |
 
 ### Color Properties
@@ -463,9 +457,11 @@ $: accordionStyles = Object.entries(accordionTheme[theme])
 | `--accordion-text` | `var(--color-text, #111827)` | Text color |
 | `--accordion-text-hover` | `var(--color-primary, #3b82f6)` | Text hover color |
 | `--accordion-text-subtitle` | `var(--color-text-muted, #6b7280)` | Subtitle text color |
-| `--accordion-border-color` | `var(--color-border, #d1d5db)` | Border color |
+| `--accordion-border-color` | `var(--color-border, #d1d5db)` | Border color (used for underline) |
 | `--accordion-icon-color` | `var(--color-text, #111827)` | Icon color |
 | `--accordion-icon-color-hover` | `var(--color-primary, #3b82f6)` | Icon hover color |
+| `--accordion-bg` | `transparent` | Background color (used in filled variant) |
+| `--accordion-bg-hover` | `var(--color-surface-hover, #f3f4f6)` | Background hover color (used in filled variant) |
 
 ### Transition Properties
 
@@ -478,8 +474,8 @@ $: accordionStyles = Object.entries(accordionTheme[theme])
 
 | Property | Default | Description |
 |---------|---------|-------------|
-| `--accordion-border-radius` | `var(--radius-md, 0.375rem)` | Border radius |
-| `--accordion-border-width` | `1px` | Border width |
+| `--accordion-border-width` | `1px` | Border width (used for underline) |
+| `--accordion-border-color` | `var(--color-border, #d1d5db)` | Border color (used for underline) |
 
 ## Best Practices
 
@@ -506,7 +502,6 @@ Here's a complete example integrating all concepts:
   /* Accordion defaults */
   --accordion-text-hover: var(--color-primary);
   --accordion-icon-color-hover: var(--color-primary);
-  --accordion-border-radius: 0.375rem;
   --accordion-font-weight: 400;
 }
 

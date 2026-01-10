@@ -348,7 +348,7 @@ Dispatched whenever the tags array changes (add, remove, or modify).
 ```svelte
 <script>
   function handleTagsChange(event) {
-    const updatedTags = event.detail;
+    const updatedTags = event.detail.tags;
     console.log('Tags updated:', updatedTags);
   }
 </script>
@@ -356,14 +356,14 @@ Dispatched whenever the tags array changes (add, remove, or modify).
 <Tags bind:tags={tags} on:tags={handleTagsChange} />
 ```
 
-### `keyup` Event
+### `input` Event
 
 Dispatched during autocomplete search with the current input value.
 
 ```svelte
 <script>
-  function handleKeyup(event) {
-    const searchValue = event.detail;
+  function handleInput(event) {
+    const searchValue = event.detail.value;
     console.log('Searching for:', searchValue);
   }
 </script>
@@ -371,9 +371,18 @@ Dispatched during autocomplete search with the current input value.
 <Tags 
   bind:tags={tags}
   autoComplete={searchFunction}
-  on:keyup={handleKeyup}
+  on:input={handleInput}
 />
 ```
+
+### Other Events
+
+The Tags component also supports native input events:
+- `on:focus` - Fired when input gains focus
+- `on:blur` - Fired when input loses focus
+- `on:paste` - Fired when content is pasted (if allowPaste is true)
+- `on:drop` - Fired when content is dropped (if allowDrop is true)
+- `on:keydown` - Fired on key press
 
 ## Accessibility
 

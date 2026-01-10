@@ -1,11 +1,11 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
-  import type { DatePickerMode, DateValue, DateRangeValue, DateMultipleValue } from './types.js';
-  import { useCalendarGrid, getWeekdayHeaders, getWeekNumber } from './composables/useCalendarGrid.js';
-  import { toDate, sameDay } from './composables/useDateUtils.js';
+  import type { DatePickerMode, DateValue, DateRangeValue, DateMultipleValue } from "./types.js";
+  import { useCalendarGrid, getWeekdayHeaders, getWeekNumber } from "./composables/useCalendarGrid.js";
+  import { toDate, sameDay } from "./composables/useDateUtils.js";
 
-  const dispatch = createEventDispatcher<{ 
-    datechange: { date: Date; type: 'select' | 'range-start' | 'range-end' } 
+  const dispatch = createEventDispatcher<{
+    datechange: { date: Date; type: "select" | "range-start" | "range-end" };
   }>();
 
   export let month: number;
@@ -13,7 +13,7 @@
   export let value: DateValue = null;
   export let rangeValue: DateRangeValue = [null, null];
   export let multipleValue: DateMultipleValue = [];
-  export let mode: DatePickerMode = 'single';
+  export let mode: DatePickerMode = "single";
   export let isAllowed: (date: Date) => boolean = () => true;
   export let firstDayOfWeek: 0 | 1 = 0;
   export let showWeekNumbers = false;
@@ -22,22 +22,22 @@
   // Convert props to internal format
   $: selectedDates = (() => {
     const dates: Date[] = [];
-    
-    if (mode === 'single' && value) {
+
+    if (mode === "single" && value) {
       const date = toDate(value);
       if (date) dates.push(date);
-    } else if (mode === 'multiple' && multipleValue) {
-      multipleValue.forEach(v => {
+    } else if (mode === "multiple" && multipleValue) {
+      multipleValue.forEach((v) => {
         const date = toDate(v);
         if (date) dates.push(date);
       });
     }
-    
+
     return dates;
   })();
 
   $: dateRange = (() => {
-    if (mode === 'range' && rangeValue) {
+    if (mode === "range" && rangeValue) {
       const start = toDate(rangeValue[0]);
       const end = toDate(rangeValue[1]);
       return [start, end] as [Date | null, Date | null];
@@ -60,21 +60,21 @@
   $: weekdays = getWeekdayHeaders(firstDayOfWeek, weekdayLabels);
 
   // Handle cell click
-  const handleCellClick = (cell: typeof cells[0]) => {
+  const handleCellClick = (cell: (typeof cells)[0]) => {
     if (!cell.value || !cell.allowed) return;
-    
+
     const date = new Date(year, month, cell.value);
-    
-    if (mode === 'range') {
+
+    if (mode === "range") {
       // Determine if this should be start or end of range
       const [start, end] = dateRange;
       if (!start || (start && end)) {
-        dispatch('datechange', { date, type: 'range-start' });
+        dispatch("datechange", { date, type: "range-start" });
       } else {
-        dispatch('datechange', { date, type: 'range-end' });
+        dispatch("datechange", { date, type: "range-end" });
       }
     } else {
-      dispatch('datechange', { date, type: 'select' });
+      dispatch("datechange", { date, type: "select" });
     }
   };
 
@@ -119,28 +119,30 @@
             {getWeekNumberForRow(weekIndex)}
           </div>
         {/if}
-        
+
         {#each Array(7) as _, dayIndex}
           {@const cellIndex = weekIndex * 7 + dayIndex}
           {@const cell = cells[cellIndex]}
-          
+
           {#if cell}
-            <button
-              class="calendar-grid__cell"
-              class:calendar-grid__cell--empty={!cell.value}
-              class:calendar-grid__cell--disabled={!cell.allowed}
-              class:calendar-grid__cell--selected={cell.selected}
-              class:calendar-grid__cell--today={cell.isToday}
-              class:calendar-grid__cell--in-range={cell.inRange}
-              class:calendar-grid__cell--range-start={cell.isRangeStart}
-              class:calendar-grid__cell--range-end={cell.isRangeEnd}
-              type="button"
-              on:click={() => handleCellClick(cell)}
-              disabled={!cell.allowed || !cell.value}
-              aria-label={cell.value ? `${cell.value} ${year}-${month + 1}` : ''}
-            >
-              {cell.value || ''}
-            </button>
+            <div class="calendar-grid__wrapper-cell">
+              <button
+                class="calendar-grid__cell"
+                class:calendar-grid__cell--empty={!cell.value}
+                class:calendar-grid__cell--disabled={!cell.allowed}
+                class:calendar-grid__cell--selected={cell.selected}
+                class:calendar-grid__cell--today={cell.isToday}
+                class:calendar-grid__cell--in-range={cell.inRange}
+                class:calendar-grid__cell--range-start={cell.isRangeStart}
+                class:calendar-grid__cell--range-end={cell.isRangeEnd}
+                type="button"
+                on:click={() => handleCellClick(cell)}
+                disabled={!cell.allowed || !cell.value}
+                aria-label={cell.value ? `${cell.value} ${year}-${month + 1}` : ""}
+              >
+                {cell.value || ""}
+              </button>
+            </div>
           {:else}
             <div class="calendar-grid__cell calendar-grid__cell--empty"></div>
           {/if}
@@ -161,7 +163,7 @@
     gap: var(--dp-cell-gap, 1px);
     margin-bottom: var(--dp-spacing-sm, 0.5rem);
     border-bottom: 1px solid var(--dp-border-color, #e5e7eb);
-    padding-bottom: var(--dp-spacing-sm, 0.5rem);
+    padding: 0.25rem;
   }
 
   .calendar-grid__header--with-week-numbers {
@@ -183,6 +185,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--dp-cell-gap, 1px);
+    padding: 0.25rem;
   }
 
   .calendar-grid__week {
@@ -203,6 +206,12 @@
     font-size: var(--dp-font-size-sm, 0.875rem);
     color: var(--dp-text-muted, #6b7280);
     min-width: var(--dp-cell-size, 2.5rem);
+  }
+
+  .calendar-grid__wrapper-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .calendar-grid__cell {
@@ -264,7 +273,7 @@
   }
 
   .calendar-grid__cell--today:not(.calendar-grid__cell--selected)::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: 2px;
     left: 50%;

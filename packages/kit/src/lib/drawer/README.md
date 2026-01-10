@@ -4,7 +4,7 @@ A flexible, accessible drawer/sidebar component for Svelte applications. The Dra
 
 ## Features
 
-- 🎯 **4 Positions**: top, bottom, left, right
+- 🎯 **5 Positions**: top, bottom, left, right, center
 - 🎨 **Customizable Styling**: Extensive CSS custom properties
 - 🖱️ **Drag-to-Resize**: Resizable width for left/right drawers
 - ⌨️ **Keyboard Support**: ESC key to close
@@ -39,9 +39,9 @@ A flexible, accessible drawer/sidebar component for Svelte applications. The Dra
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `visible` | `boolean` | `false` | Controls drawer visibility |
-| `position` | `'top' \| 'bottom' \| 'left' \| 'right'` | `'right'` | Drawer slide position |
+| `position` | `'top' \| 'bottom' \| 'left' \| 'right' \| 'center'` | `'right'` | Drawer slide position |
 | `preventClose` | `boolean` | `false` | Prevent closing when clicking overlay |
-| `bgPanel` | `string` | `"#F6F6F6"` | Background color of panel |
+| `bgPanel` | `string` | `"var(--color-surface, #F6F6F6)"` | Background color of panel |
 | `isDraggable` | `boolean` | `true` | Enable drag-to-resize (left/right only) |
 | `className` | `string` | `""` | Additional CSS classes |
 | `overlay` | `boolean` | `true` | Show overlay backdrop |
@@ -86,6 +86,15 @@ Drawer slides up from the bottom.
 </Drawer>
 ```
 
+### Center
+Drawer appears in the center of the screen with scale animation.
+
+```svelte
+<Drawer visible={true} position="center">
+  <div>Content</div>
+</Drawer>
+```
+
 ## Events
 
 ### `open`
@@ -104,7 +113,7 @@ Dispatched when drawer opens.
 **Event Detail:**
 ```typescript
 {
-  position: 'top' | 'bottom' | 'left' | 'right';
+  position: 'top' | 'bottom' | 'left' | 'right' | 'center';
   timestamp: number;
 }
 ```
@@ -125,7 +134,7 @@ Dispatched when drawer closes.
 **Event Detail:**
 ```typescript
 {
-  position: 'top' | 'bottom' | 'left' | 'right';
+  position: 'top' | 'bottom' | 'left' | 'right' | 'center';
   timestamp: number;
   reason: 'overlay' | 'escape' | 'programmatic';
 }

@@ -3,35 +3,42 @@
   import { scale } from "svelte/transition";
 
   import CalendarGrid from "./CalendarGrid.svelte";
-  import type { DatePickerProps, DatePickerChangeEvent, DatePickerMode, DateValue, DateRangeValue, DateMultipleValue } from './types.js';
-  import { DEFAULT_LABELS, SHORT_MONTH_NAMES } from './constants.js';
-  import { toDate, datesEqual, normalizeRange, formatDate } from './composables/useDateUtils.js';
-  import { useDateValidation } from './composables/useDateValidation.js';
+  import type {
+    DatePickerProps,
+    DatePickerChangeEvent,
+    DatePickerMode,
+    DateValue,
+    DateRangeValue,
+    DateMultipleValue
+  } from "./types.js";
+  import { DEFAULT_LABELS, SHORT_MONTH_NAMES } from "./constants.js";
+  import { toDate, datesEqual, normalizeRange, formatDate } from "./composables/useDateUtils.js";
+  import { useDateValidation } from "./composables/useDateValidation.js";
 
   type DisplayMode = "calendar" | "month" | "year";
 
   const dispatch = createEventDispatcher<{ change: DatePickerChangeEvent }>();
 
   // Props with defaults
-  export let variant: DatePickerProps['variant'] = "default";
-  export let size: DatePickerProps['size'] = "md";
-  export let value: DatePickerProps['value'] = null;
-  export let rangeValue: DatePickerProps['rangeValue'] = [null, null];
-  export let multipleValue: DatePickerProps['multipleValue'] = [];
-  export let mode: DatePickerProps['mode'] = "single";
-  export let minDate: DatePickerProps['minDate'] = null;
-  export let maxDate: DatePickerProps['maxDate'] = null;
-  export let disabledDates: DatePickerProps['disabledDates'] = undefined;
-  export let firstDayOfWeek: DatePickerProps['firstDayOfWeek'] = 0;
-  export let showWeekNumbers: DatePickerProps['showWeekNumbers'] = false;
-  export let showToday: DatePickerProps['showToday'] = true;
-  export let showClear: DatePickerProps['showClear'] = true;
-  export const closeOnSelect: DatePickerProps['closeOnSelect'] = true;
-  export let labels: DatePickerProps['labels'] = {};
-  export let className: DatePickerProps['className'] = "";
-  export let disabled: DatePickerProps['disabled'] = false;
-  export let loading: DatePickerProps['loading'] = false;
-  export let locale: DatePickerProps['locale'] = 'en-US';
+  export let variant: DatePickerProps["variant"] = "default";
+  export let size: DatePickerProps["size"] = "md";
+  export let value: DatePickerProps["value"] = null;
+  export let rangeValue: DatePickerProps["rangeValue"] = [null, null];
+  export let multipleValue: DatePickerProps["multipleValue"] = [];
+  export let mode: DatePickerProps["mode"] = "single";
+  export let minDate: DatePickerProps["minDate"] = null;
+  export let maxDate: DatePickerProps["maxDate"] = null;
+  export let disabledDates: DatePickerProps["disabledDates"] = undefined;
+  export let firstDayOfWeek: DatePickerProps["firstDayOfWeek"] = 0;
+  export let showWeekNumbers: DatePickerProps["showWeekNumbers"] = false;
+  export let showToday: DatePickerProps["showToday"] = true;
+  export let showClear: DatePickerProps["showClear"] = true;
+  export const closeOnSelect: DatePickerProps["closeOnSelect"] = true;
+  export let labels: DatePickerProps["labels"] = {};
+  export let className: DatePickerProps["className"] = "";
+  export let disabled: DatePickerProps["disabled"] = false;
+  export let loading: DatePickerProps["loading"] = false;
+  export let locale: DatePickerProps["locale"] = "en-US";
 
   // Generate CSS custom properties for style overrides
   $: customStyles = (() => {
@@ -53,15 +60,15 @@
 
   // Current date for navigation
   $: currentDate = (() => {
-    if (mode === 'single' && value) {
+    if (mode === "single" && value) {
       const date = toDate(value);
       return date || new Date();
     }
-    if (mode === 'range' && rangeValue && rangeValue[0]) {
+    if (mode === "range" && rangeValue && rangeValue[0]) {
       const date = toDate(rangeValue[0]);
       return date || new Date();
     }
-    if (mode === 'multiple' && multipleValue && multipleValue.length > 0) {
+    if (mode === "multiple" && multipleValue && multipleValue.length > 0) {
       const date = toDate(multipleValue[0]);
       return date || new Date();
     }
@@ -78,40 +85,40 @@
   $: years = Array.from({ length: 12 }, (_, i) => year - 5 + i);
 
   // Handle date selection
-  const handleDateChange = (event: CustomEvent<{ date: Date; type: 'select' | 'range-start' | 'range-end' }>) => {
+  const handleDateChange = (event: CustomEvent<{ date: Date; type: "select" | "range-start" | "range-end" }>) => {
     if (disabled || loading) return;
-    
+
     const { date, type } = event.detail;
-    
-    if (mode === 'single') {
+
+    if (mode === "single") {
       const changeEvent: DatePickerChangeEvent = {
         value: date,
-        mode: 'single',
+        mode: "single",
         formatted: formatDate(date, locale)
       };
       dispatch("change", changeEvent);
-    } else if (mode === 'range') {
+    } else if (mode === "range") {
       let newRange: DateRangeValue;
-      
-      if (type === 'range-start' || !rangeValue || !rangeValue[0] || (rangeValue[0] && rangeValue[1])) {
+
+      if (type === "range-start" || !rangeValue || !rangeValue[0] || (rangeValue[0] && rangeValue[1])) {
         newRange = [date, null];
       } else {
         newRange = normalizeRange([rangeValue[0], date]);
       }
-      
+
       const changeEvent: DatePickerChangeEvent = {
         value: newRange,
-        mode: 'range',
-        formatted: newRange.map(d => formatDate(toDate(d), locale))
+        mode: "range",
+        formatted: newRange.map((d) => formatDate(toDate(d), locale))
       };
       dispatch("change", changeEvent);
-    } else if (mode === 'multiple') {
+    } else if (mode === "multiple") {
       const currentMultiple = [...(multipleValue || [])];
-      const existingIndex = currentMultiple.findIndex(d => {
+      const existingIndex = currentMultiple.findIndex((d) => {
         const existing = toDate(d);
         return existing && datesEqual(existing, date);
       });
-      
+
       let newMultiple: DateMultipleValue;
       if (existingIndex >= 0) {
         // Remove if already selected
@@ -120,11 +127,11 @@
         // Add to selection
         newMultiple = [...currentMultiple, date];
       }
-      
+
       const changeEvent: DatePickerChangeEvent = {
         value: newMultiple,
-        mode: 'multiple',
-        formatted: newMultiple.map(d => formatDate(toDate(d), locale))
+        mode: "multiple",
+        formatted: newMultiple.map((d) => formatDate(toDate(d), locale))
       };
       dispatch("change", changeEvent);
     }
@@ -159,36 +166,77 @@
 
   // Today button handler
   const goToToday = () => {
+    if (disabled || loading) return;
+
     const today = new Date();
     month = today.getMonth();
     year = today.getFullYear();
     display = "calendar";
+
+    // Dispatch change event based on mode
+    let changeEvent: DatePickerChangeEvent;
+
+    if (mode === "single") {
+      changeEvent = {
+        value: today,
+        mode: "single",
+        formatted: formatDate(today, locale)
+      };
+    } else if (mode === "range") {
+      // Set today as start date (replace existing range)
+      changeEvent = {
+        value: [today, null],
+        mode: "range",
+        formatted: [formatDate(today, locale), ""]
+      };
+    } else {
+      // Multiple mode: add today to selection (or toggle if exists)
+      const currentMultiple = [...(multipleValue || [])];
+      const existingIndex = currentMultiple.findIndex((d) => {
+        const existing = toDate(d);
+        return existing && datesEqual(existing, today);
+      });
+
+      let newMultiple: DateMultipleValue;
+      if (existingIndex >= 0) {
+        // Remove if already selected
+        newMultiple = currentMultiple.filter((_, i) => i !== existingIndex);
+      } else {
+        // Add to selection
+        newMultiple = [...currentMultiple, today];
+      }
+
+      changeEvent = {
+        value: newMultiple,
+        mode: "multiple",
+        formatted: newMultiple.map((d) => formatDate(toDate(d), locale))
+      };
+    }
+
+    dispatch("change", changeEvent);
   };
 
   // Clear button handler
   const clearSelection = () => {
     if (disabled || loading) return;
-    
+
     let changeEvent: DatePickerChangeEvent;
-    
-    if (mode === 'single') {
-      changeEvent = { value: null, mode: 'single', formatted: '' };
-    } else if (mode === 'range') {
-      changeEvent = { value: [null, null], mode: 'range', formatted: ['', ''] };
+
+    if (mode === "single") {
+      changeEvent = { value: null, mode: "single", formatted: "" };
+    } else if (mode === "range") {
+      changeEvent = { value: [null, null], mode: "range", formatted: ["", ""] };
     } else {
-      changeEvent = { value: [], mode: 'multiple', formatted: [] };
+      changeEvent = { value: [], mode: "multiple", formatted: [] };
     }
-    
+
     dispatch("change", changeEvent);
   };
 
   // Root CSS classes
-  $: rootClasses = [
-    "date-picker",
-    `date-picker--${variant}`,
-    `date-picker--${size}`,
-    className
-  ].filter(Boolean).join(" ");
+  $: rootClasses = ["date-picker", `date-picker--${variant}`, `date-picker--${size}`, className]
+    .filter(Boolean)
+    .join(" ");
 </script>
 
 <div
@@ -200,9 +248,23 @@
 >
   {#if loading}
     <div class="date-picker__loading">
-      <svg class="date-picker__spinner" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
-        <path fill="currentColor" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z" opacity=".25"/>
-        <path fill="currentColor" d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"/>
+      <svg
+        class="date-picker__spinner"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path
+          fill="currentColor"
+          d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,19a8,8,0,1,1,8-8A8,8,0,0,1,12,20Z"
+          opacity=".25"
+        />
+        <path
+          fill="currentColor"
+          d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"
+        />
       </svg>
     </div>
   {:else}
@@ -212,7 +274,7 @@
           <button
             class="date-picker__nav-button date-picker__nav-button--month"
             type="button"
-            on:click={() => display = "month"}
+            on:click={() => (display = "month")}
             aria-label={mergedLabels.selectMonth}
             {disabled}
           >
@@ -222,14 +284,14 @@
         <button
           class="date-picker__nav-button date-picker__nav-button--year"
           type="button"
-          on:click={() => display = "year"}
+          on:click={() => (display = "year")}
           aria-label={mergedLabels.selectYear}
           {disabled}
         >
           {year}
         </button>
       </div>
-      
+
       <div class="date-picker__controls">
         {#if showToday}
           <button
@@ -241,7 +303,7 @@
             {mergedLabels.today}
           </button>
         {/if}
-        
+
         {#if showClear}
           <button
             class="date-picker__control-button date-picker__control-button--clear"
@@ -252,7 +314,7 @@
             {mergedLabels.clear}
           </button>
         {/if}
-        
+
         <button
           class="date-picker__nav-button date-picker__nav-button--prev"
           type="button"
@@ -271,7 +333,7 @@
             />
           </svg>
         </button>
-        
+
         <button
           class="date-picker__nav-button date-picker__nav-button--next"
           type="button"
@@ -293,7 +355,7 @@
       </div>
     </div>
 
-    <div class="date-picker__content" bind:clientHeight={height}>
+    <div class="date-picker__content transition-container" bind:clientHeight={height}>
       {#if display === "calendar"}
         <div transition:scale class="date-picker__calendar">
           <CalendarGrid
@@ -356,13 +418,13 @@
     --dp-display: block;
     --dp-position: relative;
     --dp-width: 100%;
-    
+
     /* Spacing */
-    --dp-padding: var(--dp-padding-md, 1rem);
+    --dp-padding: var(--dp-padding-md, 0.5rem);
     --dp-gap: var(--dp-gap-md, 0.5rem);
     --dp-cell-size: var(--dp-cell-size-md, 2.5rem);
     --dp-cell-gap: 1px;
-    
+
     /* Typography */
     --dp-font-family: inherit;
     --dp-font-size: var(--dp-font-size-md, 1rem);
@@ -370,41 +432,41 @@
     --dp-font-weight-normal: 400;
     --dp-font-weight-medium: 500;
     --dp-line-height: 1.5;
-    
+
     /* Colors - Default */
     --dp-bg: var(--dp-bg-default, #ffffff);
     --dp-text-color: var(--dp-text-default, #374151);
     --dp-text-muted: var(--dp-text-muted-default, #6b7280);
     --dp-text-disabled: var(--dp-text-disabled-default, #9ca3af);
-    
+
     --dp-border-color: var(--dp-border-default, #e5e7eb);
     --dp-border-radius: var(--dp-border-radius-md, 0.375rem);
     --dp-border-width: 1px;
-    
+
     --dp-primary-color: var(--dp-primary-default, #3b82f6);
     --dp-primary-hover: var(--dp-primary-hover-default, #2563eb);
     --dp-primary-text: var(--dp-primary-text-default, #ffffff);
-    
+
     --dp-secondary-bg: var(--dp-secondary-default, #f3f4f6);
     --dp-secondary-hover: var(--dp-secondary-hover-default, #e5e7eb);
-    
+
     --dp-cell-hover-bg: rgba(59, 130, 246, 0.1);
     --dp-cell-hover-color: #1d4ed8;
     --dp-range-bg: rgba(59, 130, 246, 0.1);
     --dp-range-color: #1d4ed8;
     --dp-today-color: #ef4444;
-    
+
     /* Focus */
     --dp-focus-ring-color: var(--dp-focus-ring-default, #3b82f6);
     --dp-focus-ring-width: 2px;
     --dp-focus-ring-offset: 2px;
-    
+
     /* Transitions */
     --dp-transition: all 0.2s ease-in-out;
-    
+
     /* Disabled */
     --dp-disabled-opacity: 0.5;
-    
+
     /* Base styles */
     display: var(--dp-display);
     position: var(--dp-position);
@@ -419,7 +481,7 @@
 
   /* Size variants */
   .date-picker--sm {
-    --dp-padding: var(--dp-padding-sm, 0.75rem);
+    --dp-padding: var(--dp-padding-sm, 0.375rem);
     --dp-gap: var(--dp-gap-sm, 0.375rem);
     --dp-cell-size: var(--dp-cell-size-sm, 2rem);
     --dp-font-size: var(--dp-font-size-sm, 0.875rem);
@@ -427,7 +489,7 @@
   }
 
   .date-picker--md {
-    --dp-padding: var(--dp-padding-md, 1rem);
+    --dp-padding: var(--dp-padding-md, 0.5rem);
     --dp-gap: var(--dp-gap-md, 0.5rem);
     --dp-cell-size: var(--dp-cell-size-md, 2.5rem);
     --dp-font-size: var(--dp-font-size-md, 1rem);
@@ -435,7 +497,7 @@
   }
 
   .date-picker--lg {
-    --dp-padding: var(--dp-padding-lg, 1.25rem);
+    --dp-padding: var(--dp-padding-lg, 0.75rem);
     --dp-gap: var(--dp-gap-lg, 0.75rem);
     --dp-cell-size: var(--dp-cell-size-lg, 3rem);
     --dp-font-size: var(--dp-font-size-lg, 1.125rem);
@@ -477,7 +539,7 @@
     align-items: center;
     padding: var(--dp-padding);
     border-bottom: var(--dp-border-width) solid var(--dp-border-color);
-    margin-bottom: var(--dp-gap);
+    /* margin-bottom: var(--dp-gap); */
   }
 
   .date-picker__navigation {
@@ -562,8 +624,10 @@
 
   /* Content area */
   .date-picker__content {
-    padding: 0 var(--dp-padding) var(--dp-padding);
-    min-height: 200px;
+    /* padding: 0 var(--dp-padding) var(--dp-padding); */
+    /* padding: 0.25rem; */
+    min-width: 360px;
+    min-height: 260px;
     position: relative;
   }
 
@@ -579,6 +643,7 @@
     grid-template-rows: repeat(3, 1fr);
     gap: var(--dp-gap);
     height: 100%;
+    padding: 0.25rem;
   }
 
   .date-picker__month-button {
@@ -618,6 +683,7 @@
     grid-template-rows: repeat(3, 1fr);
     gap: var(--dp-gap);
     height: 100%;
+    padding: 0.25rem;
   }
 
   .date-picker__year-button {
@@ -672,5 +738,16 @@
     to {
       transform: rotate(360deg);
     }
+  }
+
+  .transition-container {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
+  }
+
+  .transition-container > * {
+    grid-row: 1;
+    grid-column: 1;
   }
 </style>

@@ -106,6 +106,8 @@ The SelectOption component follows a flexible, slot-based architecture that supp
 | `label` | `string` | `""` | Label text displayed above select |
 | `name` | `string` | `""` | Field name for form integration |
 | `id` | `string` | `""` | Field ID for label association |
+| `fetchFn` | `Function \| null` | `null` | Async function to fetch options dynamically |
+| `limit` | `number` | `15` | Number of options to fetch per request (when using fetchFn) |
 | `styling` | `SelectOptionStyling` | `{}` | Styling configuration object |
 | `validation` | `SelectOptionValidation` | `{}` | Validation rules and error handling |
 | `behavior` | `SelectOptionBehavior` | `{}` | Behavioral configuration options |
@@ -142,6 +144,9 @@ The SelectOption component follows a flexible, slot-based architecture that supp
 | `placeholder` | `string` | `"Select an option"` | Placeholder text when no selection |
 | `emptyMessage` | `string` | `"No items found"` | Message when no options match search |
 | `loading` | `boolean` | `false` | Show loading state in dropdown |
+| `placement` | `'bottom-start' \| 'bottom-end' \| 'top-start' \| 'top-end' \| 'auto'` | `'bottom-start'` | Dropdown placement position |
+| `dropdownClass` | `string` | `""` | Additional CSS classes for dropdown |
+| `isFullAnchorWidth` | `boolean` | `true` | Make dropdown full width of trigger element |
 
 ### SelectOptionItem Interface
 
@@ -603,7 +608,33 @@ The SelectOption component is fully accessible by default:
 />
 ```
 
-### Server-Side Search
+### Server-Side Search with fetchFn
+
+Use the `fetchFn` prop for async option loading with built-in pagination support:
+
+```svelte
+<script>
+  async function fetchOptions(query, callback) {
+    const response = await fetch(`/api/options?q=${query.query}&offset=${query.offset}&limit=${query.limit}`);
+    const data = await response.json();
+    callback(data.items, data.total);
+  }
+</script>
+
+<SelectOption 
+  fetchFn={fetchOptions}
+  limit={20}
+  label="Async Options"
+  behavior={{ 
+    isSearchable: true,
+    loading: isLoading 
+  }}
+/>
+```
+
+### Server-Side Search (Manual)
+
+Alternatively, handle search events manually:
 
 ```svelte
 <script>

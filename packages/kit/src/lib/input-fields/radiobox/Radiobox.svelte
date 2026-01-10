@@ -69,14 +69,6 @@
   <style>
     .radiobox-wrapper {
       --radiobox-size: 1;
-      --radiobox-primary: #3b82f6;
-      --radiobox-secondary: #6b7280;
-      --radiobox-success: #10b981;
-      --radiobox-error: #ef4444;
-      --radiobox-warning: #f59e0b;
-      --radiobox-border: #d1d5db;
-      --radiobox-disabled: #9ca3af;
-      --radiobox-background: #ffffff;
       --radiobox-indicator-size: calc(1.25rem * var(--radiobox-size));
       --radiobox-gap: 0.5rem;
       
@@ -114,9 +106,9 @@
       justify-content: center;
       width: var(--radiobox-indicator-size);
       height: var(--radiobox-indicator-size);
-      border: 2px solid var(--radiobox-border);
+      border: 2px solid var(--radiobox-border, var(--color-border, #d1d5db));
       border-radius: 50%;
-      background-color: var(--radiobox-background);
+      background-color: var(--radiobox-background, var(--color-surface, #ffffff));
       transition: all 0.2s ease-in-out;
       flex-shrink: 0;
     }
@@ -126,7 +118,7 @@
       width: calc(var(--radiobox-indicator-size) * 0.4);
       height: calc(var(--radiobox-indicator-size) * 0.4);
       border-radius: 50%;
-      background-color: var(--radiobox-background);
+      background-color: var(--radiobox-background, var(--color-surface, #ffffff));
       opacity: 0;
       transform: scale(0);
       transition: all 0.2s ease-in-out;
@@ -134,29 +126,29 @@
   
     /* Color variants */
     .radiobox-indicator--primary {
-      --current-color: var(--radiobox-primary);
+      --current-color: var(--radiobox-primary, var(--color-primary, #3b82f6));
     }
     
     .radiobox-indicator--secondary {
-      --current-color: var(--radiobox-secondary);
+      --current-color: var(--radiobox-secondary, var(--color-text-muted, #6b7280));
     }
     
     .radiobox-indicator--success {
-      --current-color: var(--radiobox-success);
+      --current-color: var(--radiobox-success, var(--color-success, #10b981));
     }
     
     .radiobox-indicator--error {
-      --current-color: var(--radiobox-error);
+      --current-color: var(--radiobox-error, var(--color-error, #ef4444));
     }
     
     .radiobox-indicator--warning {
-      --current-color: var(--radiobox-warning);
+      --current-color: var(--radiobox-warning, var(--color-warning, #f59e0b));
     }
   
     /* Checked state */
     .radiobox-indicator--checked {
-      border-color: var(--current-color, var(--radiobox-primary));
-      background-color: var(--current-color, var(--radiobox-primary));
+      border-color: var(--current-color, var(--radiobox-primary, var(--color-primary, #3b82f6)));
+      background-color: var(--current-color, var(--radiobox-primary, var(--color-primary, #3b82f6)));
     }
   
     .radiobox-indicator--checked::after {
@@ -171,26 +163,26 @@
   
     .radiobox-indicator--outlined.radiobox-indicator--checked {
       background-color: transparent;
-      border-color: var(--current-color, var(--radiobox-primary));
+      border-color: var(--current-color, var(--radiobox-primary, var(--color-primary, #3b82f6)));
     }
   
     .radiobox-indicator--outlined.radiobox-indicator--checked::after {
-      background-color: var(--current-color, var(--radiobox-primary));
+      background-color: var(--current-color, var(--radiobox-primary, var(--color-primary, #3b82f6)));
     }
   
     .radiobox-indicator--filled {
       border-width: 0;
-      background-color: var(--radiobox-border);
+      background-color: var(--radiobox-border, var(--color-border, #d1d5db));
     }
   
     .radiobox-indicator--filled.radiobox-indicator--checked {
-      background-color: var(--current-color, var(--radiobox-primary));
+      background-color: var(--current-color, var(--radiobox-primary, var(--color-primary, #3b82f6)));
     }
   
     /* Disabled state */
     .radiobox-indicator--disabled {
-      border-color: var(--radiobox-disabled);
-      background-color: var(--radiobox-disabled);
+      border-color: var(--radiobox-disabled, var(--color-text-disabled, #9ca3af));
+      background-color: var(--radiobox-disabled, var(--color-text-disabled, #9ca3af));
       cursor: not-allowed;
       opacity: 0.6;
     }
@@ -202,12 +194,12 @@
   
     /* Hover state */
     .radiobox-container:hover:not(:has(.radiobox-input:disabled)) .radiobox-indicator:not(.radiobox-indicator--checked) {
-      border-color: var(--current-color, var(--radiobox-primary));
+      border-color: var(--current-color, var(--radiobox-primary, var(--color-primary, #3b82f6)));
     }
   
     /* Focus state */
     .radiobox-input:focus-visible + .radiobox-indicator {
-      outline: 2px solid var(--current-color, var(--radiobox-primary));
+      outline: 2px solid var(--current-color, var(--radiobox-primary, var(--color-primary, #3b82f6)));
       outline-offset: 2px;
     }
   

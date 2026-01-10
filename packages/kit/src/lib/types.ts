@@ -2,13 +2,25 @@
 export type ButtonVariant = 'filled' | 'outlined' | 'text' | 'link';
 export type ButtonSize = 'sm' | 'md' | 'lg' | 'xl';
 export type ButtonState = 'default' | 'active' | 'selected' | 'highlight';
+export type ButtonSemantic =
+	| 'primary'
+	| 'secondary'
+	| 'success'
+	| 'danger'
+	| 'warning'
+	| 'info'
+	| string;
 export type IconPosition = 'left' | 'right' | 'only';
+
+export type Placement = 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end' | 'auto';
 
 export interface ButtonProps {
 	/** Button text content */
 	label?: string;
 	/** Button variant style */
 	variant?: ButtonVariant;
+	/** Button semantic color scheme */
+	semantic?: ButtonSemantic;
 	/** Button size */
 	size?: ButtonSize;
 	/** Button state */
@@ -17,6 +29,8 @@ export interface ButtonProps {
 	fullRounded?: boolean;
 	/** Custom CSS class */
 	className?: string;
+	/** Custom style */
+	customStyle?: string;
 	/** Disabled state */
 	disabled?: boolean;
 	/** Loading/processing state */
@@ -412,6 +426,10 @@ export interface SelectOptionBehavior {
 	emptyMessage?: string;
 	/** Loading state */
 	loading?: boolean;
+	/** placement position */
+	placement?: Placement;
+	/** dropdown class position */
+	dropdownClass?: string;
 }
 
 export interface SelectOptionProps {

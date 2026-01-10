@@ -451,4 +451,47 @@ Here's a complete example integrating all concepts:
 <DatePicker value={saveDate} className="dp-success" loading={saving} />
 ```
 
+## InputDatePicker Styling
+
+The `InputDatePicker` component (input wrapper) uses separate CSS custom properties with the `--input-date-picker-` prefix:
+
+```css
+:root {
+  /* === INPUT TRIGGER === */
+  --input-date-picker-bg: var(--color-surface, #ffffff);
+  --input-date-picker-bg-hover: var(--color-surface-hover, #f9fafb);
+  --input-date-picker-border: var(--color-border, #e5e7eb);
+  --input-date-picker-border-focus: var(--color-primary, #3b82f6);
+  --input-date-picker-border-error: var(--color-error, #ef4444);
+  --input-date-picker-text: var(--color-text, #111827);
+  --input-date-picker-text-placeholder: var(--color-text-muted, #9ca3af);
+  --input-date-picker-label: var(--color-text-secondary, #374151);
+  --input-date-picker-error-text: var(--color-error, #ef4444);
+  --input-date-picker-icon-color: var(--color-text-muted, #6b7280);
+  --input-date-picker-shadow-focus: var(--shadow-focus, 0 0 0 3px rgb(59 130 246 / 0.1));
+  --input-date-picker-border-radius: var(--radius, 0.375rem);
+  --input-date-picker-border-width: 1px;
+  --input-date-picker-transition: all 0.2s ease-in-out;
+  
+  /* === SIZES === */
+  /* Small */
+  --input-date-picker-height-sm: 2rem;
+  --input-date-picker-padding-x-sm: 0.5rem;
+  --input-date-picker-padding-y-sm: 0.375rem;
+  --input-date-picker-font-size-sm: 0.875rem;
+  
+  /* Medium */
+  --input-date-picker-height-md: 2.5rem;
+  --input-date-picker-padding-x-md: 0.75rem;
+  --input-date-picker-padding-y-md: 0.5rem;
+  --input-date-picker-font-size-md: 0.875rem;
+  
+  /* Large */
+  --input-date-picker-height-lg: 3rem;
+  --input-date-picker-padding-x-lg: 1rem;
+  --input-date-picker-padding-y-lg: 0.625rem;
+  --input-date-picker-font-size-lg: 1.125rem;
+}
+```
+
 This styling system provides maximum flexibility while maintaining consistency and performance across your application.

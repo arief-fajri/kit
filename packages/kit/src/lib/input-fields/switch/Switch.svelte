@@ -102,22 +102,9 @@
     --switch-slider-offset: 2px;
     --switch-transition-duration: 0.4s;
     --switch-transition-timing: ease;
-    
-    --switch-bg-unchecked: #888888;
-    --switch-bg-unchecked-hover: #4f4f4f;
-    --switch-bg-checked: #1b1c21;
-    --switch-slider-color: white;
-    --switch-disabled-opacity: 0.5;
-    --switch-focus-ring-color: #3b82f6;
     --switch-focus-ring-width: 2px;
     --switch-focus-ring-offset: 2px;
     --switch-gap: 0.5rem;
-
-    /* Variant colors */
-    --switch-color-primary: #3b82f6;
-    --switch-color-success: #10b981;
-    --switch-color-error: #ef4444;
-    --switch-color-warning: #f59e0b;
 
     display: inline-flex;
     align-items: center;
@@ -146,7 +133,7 @@
     display: inline-block;
     width: calc(var(--switch-width-base) * var(--switch-size));
     height: calc(var(--switch-height-base) * var(--switch-size));
-    background-color: var(--switch-bg-unchecked);
+    background-color: var(--switch-bg-unchecked, var(--color-text-muted, #888888));
     border-radius: 9999px;
     transition: background-color var(--switch-transition-duration) var(--switch-transition-timing);
     flex-shrink: 0;
@@ -159,17 +146,17 @@
     height: calc(var(--switch-slider-size-base) * var(--switch-size));
     left: var(--switch-slider-offset);
     bottom: var(--switch-slider-offset);
-    background-color: var(--switch-slider-color);
+    background-color: var(--switch-slider-color, var(--color-surface, white));
     border-radius: 50%;
     transition: transform var(--switch-transition-duration) var(--switch-transition-timing);
   }
 
   .switch-container:hover input:not(:disabled):not(:checked) + .switch-slider {
-    background-color: var(--switch-bg-unchecked-hover);
+    background-color: var(--switch-bg-unchecked-hover, var(--color-text-secondary, #4f4f4f));
   }
 
   .switch-container input:checked + .switch-slider {
-    background-color: var(--switch-bg-checked);
+    background-color: var(--switch-bg-checked, var(--color-text, #1b1c21));
   }
 
   .switch-container input:checked + .switch-slider::before {
@@ -177,18 +164,18 @@
   }
 
   .switch-container input:focus-visible + .switch-slider {
-    outline: var(--switch-focus-ring-width) solid var(--switch-focus-ring-color);
+    outline: var(--switch-focus-ring-width) solid var(--switch-focus-ring-color, var(--color-primary, #3b82f6));
     outline-offset: var(--switch-focus-ring-offset);
   }
 
   .switch-container input:disabled + .switch-slider {
-    opacity: var(--switch-disabled-opacity);
+    opacity: var(--switch-disabled-opacity, 0.5);
     cursor: not-allowed;
   }
 
   .switch-container:has(input:disabled) {
     cursor: not-allowed;
-    opacity: var(--switch-disabled-opacity);
+    opacity: var(--switch-disabled-opacity, 0.5);
   }
 
   .switch-label {
@@ -200,18 +187,18 @@
 
   /* Variant styles */
   .switch-slider[data-variant="primary"] {
-    --switch-bg-checked: var(--switch-color-primary);
+    --switch-bg-checked: var(--switch-color-primary, var(--color-primary, #3b82f6));
   }
 
   .switch-slider[data-variant="success"] {
-    --switch-bg-checked: var(--switch-color-success);
+    --switch-bg-checked: var(--switch-color-success, var(--color-success, #10b981));
   }
 
   .switch-slider[data-variant="error"] {
-    --switch-bg-checked: var(--switch-color-error);
+    --switch-bg-checked: var(--switch-color-error, var(--color-error, #ef4444));
   }
 
   .switch-slider[data-variant="warning"] {
-    --switch-bg-checked: var(--switch-color-warning);
+    --switch-bg-checked: var(--switch-color-warning, var(--color-warning, #f59e0b));
   }
 </style>

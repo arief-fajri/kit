@@ -75,6 +75,48 @@ export interface DatePickerChangeEvent {
 	formatted: string | string[];
 }
 
+// InputDatePicker styling, validation, and behavior types
+export type InputDatePickerVariant = DatePickerVariant | "filled" | "outlined";
+
+export interface DatePickerStyling {
+	/** DatePicker size variant */
+	size?: DatePickerSize;
+	/** DatePicker style variant (supports DatePicker variants plus filled/outlined for trigger styling) */
+	variant?: InputDatePickerVariant;
+	/** Custom CSS class for wrapper */
+	wrapperClass?: string;
+	/** Custom CSS class for trigger button */
+	triggerClass?: string;
+	/** Custom CSS class for label */
+	labelClass?: string;
+	/** Custom inline styles for wrapper */
+	wrapperStyle?: string;
+}
+
+export interface DatePickerValidation {
+	/** Required field indicator */
+	required?: boolean;
+	/** Error state */
+	isError?: boolean;
+	/** Error message to display */
+	errorMessage?: string;
+}
+
+export interface DatePickerBehavior {
+	/** Disabled state */
+	disabled?: boolean;
+	/** Close picker on date selection */
+	closeOnSelect?: boolean;
+	/** Placement position for dropdown */
+	placement?: "bottom-start" | "bottom-end" | "top-start" | "top-end" | "auto";
+	/** Make dropdown full width of anchor */
+	isFullAnchorWidth?: boolean;
+	/** Loading state */
+	loading?: boolean;
+	/** Placeholder text */
+	placeholder?: string;
+}
+
 // Internal types for calendar grid
 export interface CalendarCell {
 	/** Day number (1-31) or undefined for empty cells */
