@@ -48,30 +48,30 @@
 
 	// Computed props with defaults
 	$: computedStyling = {
-		size: styling.size ?? 'md',
-		variant: styling.variant ?? 'default',
-		className: styling.className ?? '',
-		style: styling.style ?? '',
-		headerWrapperClass: styling.headerWrapperClass ?? '',
-		headerButtonClass: styling.headerButtonClass ?? '',
-		contentClass: styling.contentClass ?? '',
-		iconClass: styling.iconClass ?? '',
-		wrapperStyle: styling.wrapperStyle ?? ''
+		size: styling?.size ?? 'md',
+		variant: styling?.variant ?? 'default',
+		className: styling?.className ?? '',
+		style: styling?.style ?? '',
+		headerWrapperClass: styling?.headerWrapperClass ?? '',
+		headerButtonClass: styling?.headerButtonClass ?? '',
+		contentClass: styling?.contentClass ?? '',
+		iconClass: styling?.iconClass ?? '',
+		wrapperStyle: styling?.wrapperStyle ?? ''
 	};
 
 	$: computedBehavior = {
-		disabled: behavior.disabled ?? false,
-		showIcon: behavior.showIcon ?? true,
-		iconPosition: behavior.iconPosition ?? 'right',
-		transitionDuration: behavior.transitionDuration ?? 300,
-		titleUnderline: behavior.titleUnderline ?? false
+		disabled: behavior?.disabled ?? false,
+		showIcon: behavior?.showIcon ?? true,
+		iconPosition: behavior?.iconPosition ?? 'right',
+		transitionDuration: behavior?.transitionDuration ?? 300,
+		titleUnderline: behavior?.titleUnderline ?? false
 	};
 
 	$: computedContent = {
-		item: content.item,
-		title: content.title || content.item?.title || '',
-		subtitle: content.subtitle || content.item?.subtitle || '',
-		content: safeHtmlContent(content.content || content.item?.content || '')
+		item: content?.item,
+		title: content?.title || content?.item?.title || '',
+		subtitle: content?.subtitle || content?.item?.subtitle || '',
+		content: safeHtmlContent(content?.content || content?.item?.content || '')
 	};
 
 	// Determine actual expanded state (controlled vs uncontrolled)

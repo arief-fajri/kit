@@ -2,7 +2,13 @@
 	import { sineOut } from 'svelte/easing';
 	import { createEventDispatcher, onMount, onDestroy } from 'svelte';
 	import DragLine from '../drag-line/DragLine.svelte';
-	import type { DrawerPosition, DrawerEventDetail, DrawerResizeEventDetail } from '../types.js';
+	import type {
+		DrawerPosition,
+		DrawerEventDetail,
+		DrawerResizeEventDetail,
+		DrawerStyling,
+		DrawerBehavior
+	} from '../types.js';
 
 	// Core props
 	export let visible: boolean = false;
@@ -13,17 +19,17 @@
 
 	// Computed props with defaults
 	$: computedStyling = {
-		className: styling.className ?? '',
-		style: styling.style ?? '',
-		bgPanel: styling.bgPanel ?? 'var(--color-surface, #F6F6F6)'
+		className: styling?.className ?? '',
+		style: styling?.style ?? '',
+		bgPanel: styling?.bgPanel ?? 'var(--color-surface, #F6F6F6)'
 	};
 
 	$: computedBehavior = {
-		position: behavior.position ?? 'right',
-		preventClose: behavior.preventClose ?? false,
-		isDraggable: behavior.isDraggable ?? true,
-		overlay: behavior.overlay ?? true,
-		closeOnEscape: behavior.closeOnEscape ?? true
+		position: behavior?.position ?? 'right',
+		preventClose: behavior?.preventClose ?? false,
+		isDraggable: behavior?.isDraggable ?? true,
+		overlay: behavior?.overlay ?? true,
+		closeOnEscape: behavior?.closeOnEscape ?? true
 	};
 
 	const dispatch = createEventDispatcher<{

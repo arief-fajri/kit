@@ -6,7 +6,7 @@
 		getWeekdayHeaders,
 		getWeekNumber
 	} from './composables/useCalendarGrid.js';
-	import { toDate, sameDay } from './composables/useDateUtils.js';
+	import { toDate } from './composables/useDateUtils.js';
 
 	const dispatch = createEventDispatcher<{
 		datechange: { date: Date; type: 'select' | 'range-start' | 'range-end' };

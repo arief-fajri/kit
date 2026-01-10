@@ -40,31 +40,31 @@
 
 	// Computed props with defaults (using ?? for proper nullish coalescing)
 	$: computedStyling = {
-		size: styling.size ?? 'md',
-		variant: styling.variant ?? 'default',
-		inputClass: styling.inputClass ?? '',
-		wrapperClass: styling.wrapperClass ?? '',
-		labelClass: styling.labelClass ?? '',
-		wrapperStyle: styling.wrapperStyle ?? ''
+		size: styling?.size ?? 'md',
+		variant: styling?.variant ?? 'default',
+		inputClass: styling?.inputClass ?? '',
+		wrapperClass: styling?.wrapperClass ?? '',
+		labelClass: styling?.labelClass ?? '',
+		wrapperStyle: styling?.wrapperStyle ?? ''
 	};
 
 	$: computedValidation = {
-		required: validation.required ?? false,
-		isError: validation.isError ?? false,
-		errorMessage: validation.errorMessage ?? '',
-		maxLength: validation.maxLength ?? null,
-		pattern: validation.pattern ?? '',
-		showMaxLengthCounter: validation.showMaxLengthCounter ?? false
+		required: validation?.required ?? false,
+		isError: validation?.isError ?? false,
+		errorMessage: validation?.errorMessage ?? '',
+		maxLength: validation?.maxLength ?? null,
+		pattern: validation?.pattern ?? '',
+		showMaxLengthCounter: validation?.showMaxLengthCounter ?? false
 	};
 
 	$: computedBehavior = {
-		disabled: behavior.disabled ?? false,
-		readonly: behavior.readonly ?? false,
-		autoFocus: behavior.autoFocus ?? false,
-		clearable: behavior.clearable ?? false,
-		useKeyup: behavior.useKeyup ?? true,
-		useNumberFormat: behavior.useNumberFormat ?? true,
-		autocomplete: behavior.autocomplete ?? ''
+		disabled: behavior?.disabled ?? false,
+		readonly: behavior?.readonly ?? false,
+		autoFocus: behavior?.autoFocus ?? false,
+		clearable: behavior?.clearable ?? false,
+		useKeyup: behavior?.useKeyup ?? true,
+		useNumberFormat: behavior?.useNumberFormat ?? true,
+		autocomplete: behavior?.autocomplete ?? ''
 	};
 
 	// Internal state
@@ -73,7 +73,6 @@
 	let localType: string = type;
 	let firstLoad: boolean = false;
 	let passwordView: boolean = false;
-	let cursorPosition: number = 0;
 
 	// Event listener cleanup - optimized
 	let cleanupListeners: (() => void) | null = null;
@@ -124,7 +123,6 @@
 		const target = e.target as HTMLInputElement;
 		if (!target) return;
 		const { value: _value } = target;
-		cursorPosition = target.selectionEnd || 0;
 		oldValue = _value;
 
 		dispatch('keydown', { key, event: e });

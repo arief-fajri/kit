@@ -2,20 +2,27 @@
 	"name": "@rief/utils",
 	"version": "1.0.0",
 	"description": "Shared utility functions",
-	"main": "./src/index.ts",
 	"type": "module",
-	"types": "./src/index.ts",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
 	"exports": {
 		".": {
-			"types": "./src/index.ts",
-			"default": "./src/index.ts"
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"default": "./dist/index.js"
 		}
 	},
+	"files": [
+		"dist"
+	],
 	"scripts": {
-		"build": "echo 'No build step required for utils package'",
-		"dev": "echo 'No dev step required for utils package'",
+		"build": "tsc",
+		"dev": "tsc --watch",
+		"clean": "rm -rf dist",
 		"lint": "echo 'No lint step required for utils package'"
 	},
-	"devDependencies": {},
+	"devDependencies": {
+		"typescript": "^5.3.3"
+	},
 	"dependencies": {}
 }

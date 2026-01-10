@@ -7,19 +7,9 @@
 		DatePickerChangeEvent,
 		DateValue,
 		DateRangeValue,
-		DateMultipleValue,
-		DatePickerStyling,
-		DatePickerValidation,
-		DatePickerBehavior
+		DateMultipleValue
 	} from './types.js';
 	import { toDate, formatDate } from './composables/useDateUtils.js';
-
-	import type {
-		DatePickerProps,
-		DatePickerStyling,
-		DatePickerValidation,
-		DatePickerBehavior
-	} from './types.js';
 
 	// Core props
 	export let value: DatePickerProps['value'] = null;
@@ -36,39 +26,39 @@
 
 	// Computed props with defaults
 	$: computedStyling = {
-		size: styling.size ?? 'md',
-		variant: styling.variant ?? 'default',
-		className: styling.className ?? '',
-		style: styling.style ?? '',
-		wrapperClass: styling.wrapperClass ?? '',
-		triggerClass: styling.triggerClass ?? '',
-		labelClass: styling.labelClass ?? '',
-		wrapperStyle: styling.wrapperStyle ?? ''
+		size: styling?.size ?? 'md',
+		variant: styling?.variant ?? 'default',
+		className: styling?.className ?? '',
+		style: styling?.style ?? '',
+		wrapperClass: styling?.wrapperClass ?? '',
+		triggerClass: styling?.triggerClass ?? '',
+		labelClass: styling?.labelClass ?? '',
+		wrapperStyle: styling?.wrapperStyle ?? ''
 	};
 
 	$: computedValidation = {
-		required: validation.required ?? false,
-		isError: validation.isError ?? false,
-		errorMessage: validation.errorMessage ?? ''
+		required: validation?.required ?? false,
+		isError: validation?.isError ?? false,
+		errorMessage: validation?.errorMessage ?? ''
 	};
 
 	$: computedBehavior = {
-		mode: behavior.mode ?? 'single',
-		disabled: behavior.disabled ?? false,
-		loading: behavior.loading ?? false,
-		minDate: behavior.minDate ?? null,
-		maxDate: behavior.maxDate ?? null,
-		disabledDates: behavior.disabledDates ?? undefined,
-		firstDayOfWeek: behavior.firstDayOfWeek ?? 0,
-		showWeekNumbers: behavior.showWeekNumbers ?? false,
-		showToday: behavior.showToday ?? true,
-		showClear: behavior.showClear ?? true,
-		labels: behavior.labels ?? {},
-		locale: behavior.locale ?? 'en-US',
-		closeOnSelect: behavior.closeOnSelect ?? true,
-		placement: behavior.placement ?? 'bottom-start',
-		isFullAnchorWidth: behavior.isFullAnchorWidth ?? false,
-		placeholder: behavior.placeholder ?? 'Select date'
+		mode: behavior?.mode ?? 'single',
+		disabled: behavior?.disabled ?? false,
+		loading: behavior?.loading ?? false,
+		minDate: behavior?.minDate ?? null,
+		maxDate: behavior?.maxDate ?? null,
+		disabledDates: behavior?.disabledDates ?? undefined,
+		firstDayOfWeek: behavior?.firstDayOfWeek ?? 0,
+		showWeekNumbers: behavior?.showWeekNumbers ?? false,
+		showToday: behavior?.showToday ?? true,
+		showClear: behavior?.showClear ?? true,
+		labels: behavior?.labels ?? {},
+		locale: behavior?.locale ?? 'en-US',
+		closeOnSelect: behavior?.closeOnSelect ?? true,
+		placement: behavior?.placement ?? 'bottom-start',
+		isFullAnchorWidth: behavior?.isFullAnchorWidth ?? false,
+		placeholder: behavior?.placeholder ?? 'Select date'
 	};
 
 	const dispatch = createEventDispatcher<{ change: DatePickerChangeEvent }>();
@@ -105,7 +95,7 @@
 
 	// Handle date change from DatePicker
 	const handleDateChange = (event: CustomEvent<DatePickerChangeEvent>) => {
-		const { value: newValue, mode: changeMode, formatted } = event.detail;
+		const { value: newValue, mode: changeMode } = event.detail;
 
 		if (changeMode === 'single') {
 			value = newValue as DateValue;

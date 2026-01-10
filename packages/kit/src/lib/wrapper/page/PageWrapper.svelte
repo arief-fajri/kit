@@ -1,29 +1,29 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import type { PageWrapperProps, PageWrapperStyling, PageWrapperBehavior } from '../../types.js';
+	import type { PageWrapperProps, PageWrapperScrollEventDetail } from '../../types.js';
 
 	export let styling: PageWrapperProps['styling'] = {};
 	export let behavior: PageWrapperProps['behavior'] = {};
-	export let pageElm: PageWrapperProps['pageElm'];
-	export let contentElm: PageWrapperProps['contentElm'];
-	export let footerElm: PageWrapperProps['footerElm'];
+	export let pageElm: HTMLElement | undefined = undefined;
+	export let contentElm: HTMLElement | undefined = undefined;
+	export let footerElm: HTMLElement | undefined = undefined;
 	export let ariaLabel: PageWrapperProps['ariaLabel'] = undefined;
 	export let ariaDescribedBy: PageWrapperProps['ariaDescribedBy'] = undefined;
 
 	// Computed props with defaults
 	$: computedStyling = {
-		className: styling.className ?? '',
-		style: styling.style ?? '',
-		wrapperClassName: styling.wrapperClassName ?? '',
-		wrapperStyle: styling.wrapperStyle ?? '',
-		contentClassName: styling.contentClassName ?? '',
-		contentStyle: styling.contentStyle ?? '',
-		footerClassName: styling.footerClassName ?? '',
-		footerStyle: styling.footerStyle ?? ''
+		className: styling?.className ?? '',
+		style: styling?.style ?? '',
+		wrapperClassName: styling?.wrapperClassName ?? '',
+		wrapperStyle: styling?.wrapperStyle ?? '',
+		contentClassName: styling?.contentClassName ?? '',
+		contentStyle: styling?.contentStyle ?? '',
+		footerClassName: styling?.footerClassName ?? '',
+		footerStyle: styling?.footerStyle ?? ''
 	};
 
 	$: computedBehavior = {
-		center: behavior.center ?? false
+		center: behavior?.center ?? false
 	};
 
 	const dispatch = createEventDispatcher<{

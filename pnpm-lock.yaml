@@ -29,6 +29,9 @@ importers:
       '@rief/kit':
         specifier: workspace:*
         version: link:../../packages/kit
+      '@rief/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
       '@sveltejs/adapter-static':
         specifier: ^3.0.0
         version: 3.0.10(@sveltejs/kit@2.48.5)
@@ -131,7 +134,11 @@ importers:
         specifier: ^5.0.0
         version: 5.4.21
 
-  packages/utils: {}
+  packages/utils:
+    devDependencies:
+      typescript:
+        specifier: ^5.3.3
+        version: 5.9.3
 
 packages:
 

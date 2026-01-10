@@ -4,9 +4,7 @@
 	import type {
 		SidebarWrapperProps,
 		SidebarResizeEventDetail,
-		SidebarDragEventDetail,
-		SidebarWrapperStyling,
-		SidebarWrapperBehavior
+		SidebarDragEventDetail
 	} from '../../types.js';
 
 	const dispatch = createEventDispatcher<{
@@ -24,22 +22,22 @@
 
 	// Computed props with defaults
 	$: computedStyling = {
-		className: styling.className ?? '',
-		style: styling.style ?? '',
-		sidebarClassName: styling.sidebarClassName ?? '',
-		sidebarStyle: styling.sidebarStyle ?? ''
+		className: styling?.className ?? '',
+		style: styling?.style ?? '',
+		sidebarClassName: styling?.sidebarClassName ?? '',
+		sidebarStyle: styling?.sidebarStyle ?? ''
 	};
 
 	$: computedBehavior = {
-		collapsed: behavior.collapsed ?? false,
-		collapseWidth: behavior.collapseWidth ?? '0',
-		isDraggable: behavior.isDraggable ?? false,
-		defaultWidth: behavior.defaultWidth ?? 321,
-		draglinePosition: behavior.draglinePosition ?? 'left',
-		minWidth: behavior.minWidth ?? 320,
-		maxWidth: behavior.maxWidth ?? '25%',
-		persistWidth: behavior.persistWidth ?? false,
-		storageKey: behavior.storageKey ?? 'sidebar-width'
+		collapsed: behavior?.collapsed ?? false,
+		collapseWidth: behavior?.collapseWidth ?? '0',
+		isDraggable: behavior?.isDraggable ?? false,
+		defaultWidth: behavior?.defaultWidth ?? 321,
+		draglinePosition: behavior?.draglinePosition ?? 'left',
+		minWidth: behavior?.minWidth ?? 320,
+		maxWidth: behavior?.maxWidth ?? '25%',
+		persistWidth: behavior?.persistWidth ?? false,
+		storageKey: behavior?.storageKey ?? 'sidebar-width'
 	};
 
 	// Ensure minWidth has a value

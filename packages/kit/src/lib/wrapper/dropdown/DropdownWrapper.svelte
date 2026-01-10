@@ -2,11 +2,7 @@
 	import { onMount, tick, createEventDispatcher } from 'svelte';
 	import { sineOut } from 'svelte/easing';
 	import { portal } from '@rief/utils';
-	import type {
-		DropdownWrapperProps,
-		DropdownWrapperStyling,
-		DropdownWrapperBehavior
-	} from '../../types.js';
+	import type { DropdownWrapperProps, Placement } from '../../types.js';
 
 	// Core props
 	export let visible: boolean = false;
@@ -18,18 +14,18 @@
 
 	// Computed props with defaults
 	$: computedStyling = {
-		variant: styling.variant ?? 'default',
-		size: styling.size ?? 'md',
-		className: styling.className ?? '',
-		style: styling.style ?? ''
+		variant: styling?.variant ?? 'default',
+		size: styling?.size ?? 'md',
+		className: styling?.className ?? '',
+		style: styling?.style ?? ''
 	};
 
 	$: computedBehavior = {
-		placement: behavior.placement ?? 'bottom-start',
-		offset: behavior.offset ?? { x: 0, y: 4 },
-		closeOnClickOutside: behavior.closeOnClickOutside ?? true,
-		closeOnEscape: behavior.closeOnEscape ?? true,
-		isFullAnchorWidth: behavior.isFullAnchorWidth ?? true
+		placement: behavior?.placement ?? 'bottom-start',
+		offset: behavior?.offset ?? { x: 0, y: 4 },
+		closeOnClickOutside: behavior?.closeOnClickOutside ?? true,
+		closeOnEscape: behavior?.closeOnEscape ?? true,
+		isFullAnchorWidth: behavior?.isFullAnchorWidth ?? true
 	};
 
 	let dropdownEl: HTMLElement;
@@ -77,7 +73,6 @@
 			const spaceBelow = viewport.height - anchorRect.bottom;
 			const spaceAbove = anchorRect.top;
 			const spaceRight = viewport.width - anchorRect.left;
-			const spaceLeft = anchorRect.right;
 
 			if (spaceBelow >= dropdownRect.height) {
 				finalPlacement = spaceRight >= dropdownRect.width ? 'bottom-start' : 'bottom-end';

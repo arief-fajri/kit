@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import type { ButtonProps, ButtonStyling, ButtonBehavior } from '../types.js';
+	import type { ButtonProps } from '../types.js';
 
 	// Core props
 	export let label: ButtonProps['label'] = '';
@@ -10,27 +10,27 @@
 
 	// Computed props with defaults
 	$: computedStyling = {
-		variant: styling.variant ?? 'filled',
-		semantic: styling.semantic ?? undefined,
-		size: styling.size ?? 'md',
-		fullRounded: styling.fullRounded ?? false,
-		className: styling.className ?? '',
-		style: styling.style ?? '',
-		fillColor: styling.fillColor ?? undefined,
-		textColor: styling.textColor ?? undefined,
-		outlineColor: styling.outlineColor ?? undefined
+		variant: styling?.variant ?? 'filled',
+		semantic: styling?.semantic ?? undefined,
+		size: styling?.size ?? 'md',
+		fullRounded: styling?.fullRounded ?? false,
+		className: styling?.className ?? '',
+		style: styling?.style ?? '',
+		fillColor: styling?.fillColor ?? undefined,
+		textColor: styling?.textColor ?? undefined,
+		outlineColor: styling?.outlineColor ?? undefined
 	};
 
 	$: computedBehavior = {
-		disabled: behavior.disabled ?? false,
-		state: behavior.state ?? undefined,
-		loading: behavior.loading ?? false,
-		loadingMessage: behavior.loadingMessage ?? 'Loading...',
-		stopPropagation: behavior.stopPropagation ?? false,
-		href: behavior.href ?? undefined,
-		target: behavior.target ?? undefined,
-		rel: behavior.rel ?? undefined,
-		iconPosition: behavior.iconPosition ?? 'left'
+		disabled: behavior?.disabled ?? false,
+		state: behavior?.state ?? undefined,
+		loading: behavior?.loading ?? false,
+		loadingMessage: behavior?.loadingMessage ?? 'Loading...',
+		stopPropagation: behavior?.stopPropagation ?? false,
+		href: behavior?.href ?? undefined,
+		target: behavior?.target ?? undefined,
+		rel: behavior?.rel ?? undefined,
+		iconPosition: behavior?.iconPosition ?? 'left'
 	};
 
 	const dispatch = createEventDispatcher<{

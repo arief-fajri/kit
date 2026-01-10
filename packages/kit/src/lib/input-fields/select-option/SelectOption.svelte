@@ -34,33 +34,33 @@
 
 	// Computed props with defaults
 	$: computedStyling = {
-		size: styling.size || 'md',
-		variant: styling.variant || 'default',
-		wrapperClass: styling.wrapperClass || '',
-		inputClass: styling.inputClass || '',
-		labelClass: styling.labelClass || '',
-		wrapperStyle: styling.wrapperStyle || ''
+		size: styling?.size || 'md',
+		variant: styling?.variant || 'default',
+		wrapperClass: styling?.wrapperClass || '',
+		inputClass: styling?.inputClass || '',
+		labelClass: styling?.labelClass || '',
+		wrapperStyle: styling?.wrapperStyle || ''
 	};
 
 	$: computedValidation = {
-		required: validation.required ?? false,
-		isError: validation.isError ?? false,
-		errorMessage: validation.errorMessage || ''
+		required: validation?.required ?? false,
+		isError: validation?.isError ?? false,
+		errorMessage: validation?.errorMessage || ''
 	};
 
 	$: computedBehavior = {
-		disabled: behavior.disabled ?? false,
-		isMultiOption: behavior.isMultiOption ?? false,
-		isSearchable: behavior.isSearchable ?? true,
-		closeOnSelect: behavior.closeOnSelect ?? true,
-		debounceMs: behavior.debounceMs ?? 300,
-		maxHeight: behavior.maxHeight ?? 240,
-		placeholder: behavior.placeholder || 'Select an option',
-		emptyMessage: behavior.emptyMessage || 'No items found',
-		loading: behavior.loading ?? false,
-		placement: behavior.placement ?? 'bottom-start',
-		dropdownClass: behavior.dropdownClass ?? '',
-		isFullAnchorWidth: behavior.isFullAnchorWidth ?? true
+		disabled: behavior?.disabled ?? false,
+		isMultiOption: behavior?.isMultiOption ?? false,
+		isSearchable: behavior?.isSearchable ?? true,
+		closeOnSelect: behavior?.closeOnSelect ?? true,
+		debounceMs: behavior?.debounceMs ?? 300,
+		maxHeight: behavior?.maxHeight ?? 240,
+		placeholder: behavior?.placeholder || 'Select an option',
+		emptyMessage: behavior?.emptyMessage || 'No items found',
+		loading: behavior?.loading ?? false,
+		placement: behavior?.placement ?? 'bottom-start',
+		dropdownClass: behavior?.dropdownClass ?? '',
+		isFullAnchorWidth: behavior?.isFullAnchorWidth ?? true
 	};
 
 	const dispatch = createEventDispatcher<{

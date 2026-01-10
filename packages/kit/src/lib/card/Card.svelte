@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import type { CardProps, CardStyling, CardBehavior } from '../types.js';
+	import type { CardProps } from '../types.js';
 
 	// Core props
 	export let styling: CardProps['styling'] = {};
@@ -9,22 +9,22 @@
 
 	// Computed props with defaults
 	$: computedStyling = {
-		variant: styling.variant ?? 'default',
-		size: styling.size ?? 'md',
-		padding: styling.padding ?? 'md',
-		className: styling.className ?? '',
-		style: styling.style ?? '',
-		backgroundColor: styling.backgroundColor ?? undefined,
-		borderColor: styling.borderColor ?? undefined,
-		shadowColor: styling.shadowColor ?? undefined,
-		rounded: styling.rounded ?? true,
-		borderRadius: styling.borderRadius ?? undefined
+		variant: styling?.variant ?? 'default',
+		size: styling?.size ?? 'md',
+		padding: styling?.padding ?? 'md',
+		className: styling?.className ?? '',
+		style: styling?.style ?? '',
+		backgroundColor: styling?.backgroundColor ?? undefined,
+		borderColor: styling?.borderColor ?? undefined,
+		shadowColor: styling?.shadowColor ?? undefined,
+		rounded: styling?.rounded ?? true,
+		borderRadius: styling?.borderRadius ?? undefined
 	};
 
 	$: computedBehavior = {
-		disabled: behavior.disabled ?? false,
-		interactive: behavior.interactive ?? false,
-		clickable: behavior.clickable ?? false
+		disabled: behavior?.disabled ?? false,
+		interactive: behavior?.interactive ?? false,
+		clickable: behavior?.clickable ?? false
 	};
 
 	const dispatch = createEventDispatcher<{

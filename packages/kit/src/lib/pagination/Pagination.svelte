@@ -8,8 +8,6 @@
 		PaginationVariant
 	} from '../types.js';
 
-	import type { PaginationProps, PaginationStyling, PaginationBehavior } from '../types.js';
-
 	// Core props
 	export let currentOffset: PaginationProps['currentOffset'] = 0;
 	export let limit: PaginationProps['limit'] = 10;
@@ -21,27 +19,27 @@
 
 	// Computed props with defaults
 	$: computedStyling = {
-		size: styling.size ?? 'md',
-		variant: styling.variant ?? 'default',
-		className: styling.className ?? '',
-		style: styling.style ?? '',
-		backgroundColor: styling.backgroundColor ?? undefined,
-		textColor: styling.textColor ?? undefined,
-		borderColor: styling.borderColor ?? undefined,
-		activeBackgroundColor: styling.activeBackgroundColor ?? undefined,
-		activeTextColor: styling.activeTextColor ?? undefined,
-		borderRadius: styling.borderRadius ?? undefined,
-		gap: styling.gap ?? undefined
+		size: styling?.size ?? 'md',
+		variant: styling?.variant ?? 'default',
+		className: styling?.className ?? '',
+		style: styling?.style ?? '',
+		backgroundColor: styling?.backgroundColor ?? undefined,
+		textColor: styling?.textColor ?? undefined,
+		borderColor: styling?.borderColor ?? undefined,
+		activeBackgroundColor: styling?.activeBackgroundColor ?? undefined,
+		activeTextColor: styling?.activeTextColor ?? undefined,
+		borderRadius: styling?.borderRadius ?? undefined,
+		gap: styling?.gap ?? undefined
 	};
 
 	$: computedBehavior = {
-		disabled: behavior.disabled ?? false,
-		visiblePages: behavior.visiblePages ?? 5,
-		showFirstLast: behavior.showFirstLast ?? true,
-		showPreviousNext: behavior.showPreviousNext ?? true,
-		showEllipsis: behavior.showEllipsis ?? true,
-		showPageInfo: behavior.showPageInfo ?? false,
-		pageInfoFormatter: behavior.pageInfoFormatter ?? undefined
+		disabled: behavior?.disabled ?? false,
+		visiblePages: behavior?.visiblePages ?? 5,
+		showFirstLast: behavior?.showFirstLast ?? true,
+		showPreviousNext: behavior?.showPreviousNext ?? true,
+		showEllipsis: behavior?.showEllipsis ?? true,
+		showPageInfo: behavior?.showPageInfo ?? false,
+		pageInfoFormatter: behavior?.pageInfoFormatter ?? undefined
 	};
 
 	// ============================================

@@ -6,8 +6,6 @@
 	import type {
 		DatePickerProps,
 		DatePickerChangeEvent,
-		DatePickerMode,
-		DateValue,
 		DateRangeValue,
 		DateMultipleValue
 	} from './types.js';
@@ -18,8 +16,6 @@
 	type DisplayMode = 'calendar' | 'month' | 'year';
 
 	const dispatch = createEventDispatcher<{ change: DatePickerChangeEvent }>();
-
-	import type { DatePickerProps, DatePickerStyling, DatePickerBehavior } from './types.js';
 
 	// Core props
 	export let value: DatePickerProps['value'] = null;
@@ -32,26 +28,26 @@
 
 	// Computed props with defaults
 	$: computedStyling = {
-		variant: styling.variant ?? 'default',
-		size: styling.size ?? 'md',
-		className: styling.className ?? '',
-		style: styling.style ?? ''
+		variant: styling?.variant ?? 'default',
+		size: styling?.size ?? 'md',
+		className: styling?.className ?? '',
+		style: styling?.style ?? ''
 	};
 
 	$: computedBehavior = {
-		mode: behavior.mode ?? 'single',
-		disabled: behavior.disabled ?? false,
-		loading: behavior.loading ?? false,
-		minDate: behavior.minDate ?? null,
-		maxDate: behavior.maxDate ?? null,
-		disabledDates: behavior.disabledDates ?? undefined,
-		firstDayOfWeek: behavior.firstDayOfWeek ?? 0,
-		showWeekNumbers: behavior.showWeekNumbers ?? false,
-		showToday: behavior.showToday ?? true,
-		showClear: behavior.showClear ?? true,
-		closeOnSelect: behavior.closeOnSelect ?? true,
-		labels: behavior.labels ?? {},
-		locale: behavior.locale ?? 'en-US'
+		mode: behavior?.mode ?? 'single',
+		disabled: behavior?.disabled ?? false,
+		loading: behavior?.loading ?? false,
+		minDate: behavior?.minDate ?? null,
+		maxDate: behavior?.maxDate ?? null,
+		disabledDates: behavior?.disabledDates ?? undefined,
+		firstDayOfWeek: behavior?.firstDayOfWeek ?? 0,
+		showWeekNumbers: behavior?.showWeekNumbers ?? false,
+		showToday: behavior?.showToday ?? true,
+		showClear: behavior?.showClear ?? true,
+		closeOnSelect: behavior?.closeOnSelect ?? true,
+		labels: behavior?.labels ?? {},
+		locale: behavior?.locale ?? 'en-US'
 	};
 
 	// Generate CSS custom properties for style overrides - memoized

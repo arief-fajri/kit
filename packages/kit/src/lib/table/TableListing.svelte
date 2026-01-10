@@ -3,15 +3,13 @@
 	import Pagination from '../pagination/Pagination.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import { safeUniqueId, normalizeTableColumn, compareValues } from '@rief/utils';
-	import type { TableColumn, TableRow, TableListingProps } from '../types';
+	import type { TableColumn, TableRow, TableListingProps } from '../types.js';
 
 	// Type for normalizeTableColumn input
 	type NormalizeTableColumnInput = Partial<
 		Pick<TableColumn, 'key' | 'field' | 'title' | 'label' | 'name' | 'alias' | 'sortable'>
 	> &
 		Record<string, unknown>;
-
-	import type { TableListingProps, TableListingStyling, TableListingBehavior } from '../types.js';
 
 	// Core props
 	export let columns: TableListingProps['columns'] = [];
@@ -28,36 +26,36 @@
 
 	// Computed props with defaults
 	$: computedStyling = {
-		className: styling.className ?? '',
-		style: styling.style ?? '',
-		tableContainerClass: styling.tableContainerClass ?? '',
-		headerClass: styling.headerClass ?? '',
-		rowClass: styling.rowClass ?? '',
-		cellClass: styling.cellClass ?? '',
-		tbodyClass: styling.tbodyClass ?? '',
-		paginationClass: styling.paginationClass ?? '',
-		cssVariables: styling.cssVariables ?? {},
-		hoverColor: styling.hoverColor ?? undefined
+		className: styling?.className ?? '',
+		style: styling?.style ?? '',
+		tableContainerClass: styling?.tableContainerClass ?? '',
+		headerClass: styling?.headerClass ?? '',
+		rowClass: styling?.rowClass ?? '',
+		cellClass: styling?.cellClass ?? '',
+		tbodyClass: styling?.tbodyClass ?? '',
+		paginationClass: styling?.paginationClass ?? '',
+		cssVariables: styling?.cssVariables ?? {},
+		hoverColor: styling?.hoverColor ?? undefined
 	};
 
 	$: computedBehavior = {
-		showPagination: behavior.showPagination ?? true,
-		paginationSize: behavior.paginationSize ?? 'md',
-		paginationVariant: behavior.paginationVariant ?? 'default',
-		paginationShowFirstLast: behavior.paginationShowFirstLast ?? true,
-		paginationShowPageInfo: behavior.paginationShowPageInfo ?? false,
-		autoResetOffsetOnSort: behavior.autoResetOffsetOnSort ?? true,
-		scrollToTopOnPageChange: behavior.scrollToTopOnPageChange ?? true,
-		customSortFn: behavior.customSortFn ?? undefined,
-		rowClickable: behavior.rowClickable ?? false,
-		loading: behavior.loading ?? false,
-		selectable: behavior.selectable ?? false,
-		selectedRows: behavior.selectedRows ?? [],
-		enableHover: behavior.enableHover ?? true,
-		draggable: behavior.draggable ?? false,
-		canDrop: behavior.canDrop ?? undefined,
-		serverSide: behavior.serverSide ?? false,
-		totalRows: behavior.totalRows ?? undefined
+		showPagination: behavior?.showPagination ?? true,
+		paginationSize: behavior?.paginationSize ?? 'md',
+		paginationVariant: behavior?.paginationVariant ?? 'default',
+		paginationShowFirstLast: behavior?.paginationShowFirstLast ?? true,
+		paginationShowPageInfo: behavior?.paginationShowPageInfo ?? false,
+		autoResetOffsetOnSort: behavior?.autoResetOffsetOnSort ?? true,
+		scrollToTopOnPageChange: behavior?.scrollToTopOnPageChange ?? true,
+		customSortFn: behavior?.customSortFn ?? undefined,
+		rowClickable: behavior?.rowClickable ?? false,
+		loading: behavior?.loading ?? false,
+		selectable: behavior?.selectable ?? false,
+		selectedRows: behavior?.selectedRows ?? [],
+		enableHover: behavior?.enableHover ?? true,
+		draggable: behavior?.draggable ?? false,
+		canDrop: behavior?.canDrop ?? undefined,
+		serverSide: behavior?.serverSide ?? false,
+		totalRows: behavior?.totalRows ?? undefined
 	};
 
 	const dispatch = createEventDispatcher<{

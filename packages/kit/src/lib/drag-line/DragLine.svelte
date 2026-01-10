@@ -16,15 +16,15 @@
 
 	// Computed props with defaults
 	$: computedStyling = {
-		className: styling.className ?? '',
-		style: styling.style ?? '',
-		zIndex: styling.zIndex ?? 101
+		className: styling?.className ?? '',
+		style: styling?.style ?? '',
+		zIndex: styling?.zIndex ?? 101
 	};
 
 	$: computedBehavior = {
-		disabled: behavior.disabled ?? false,
-		tolerance: behavior.tolerance ?? 0,
-		isVertical: behavior.isVertical ?? false
+		disabled: behavior?.disabled ?? false,
+		tolerance: behavior?.tolerance ?? 0,
+		isVertical: behavior?.isVertical ?? false
 	};
 
 	let elem: HTMLElement;

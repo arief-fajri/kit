@@ -64,39 +64,39 @@
 
 	// Computed props with defaults
 	$: computedStyling = {
-		className: styling.className ?? '',
-		style: styling.style ?? '',
-		labelClass: styling.labelClass ?? '',
-		wrapperClass: styling.wrapperClass ?? ''
+		className: styling?.className ?? '',
+		style: styling?.style ?? '',
+		labelClass: styling?.labelClass ?? '',
+		wrapperClass: styling?.wrapperClass ?? ''
 	};
 
 	$: computedValidation = {
-		isError: validation.isError ?? false,
-		required: validation.required ?? false
+		isError: validation?.isError ?? false,
+		required: validation?.required ?? false
 	};
 
 	$: computedBehavior = {
-		disabled: behavior.disabled ?? false,
-		readonly: behavior.readonly ?? false,
-		addKeys: behavior.addKeys ?? [KEY_CODES.ENTER],
-		maxTags: behavior.maxTags ?? false,
-		onlyUnique: behavior.onlyUnique ?? false,
-		removeKeys: behavior.removeKeys ?? [KEY_CODES.BACKSPACE],
-		placeholder: behavior.placeholder ?? '',
-		allowPaste: behavior.allowPaste ?? false,
-		allowDrop: behavior.allowDrop ?? false,
-		splitWith: behavior.splitWith ?? ',',
-		autoComplete: behavior.autoComplete ?? false,
-		autoCompleteKey: behavior.autoCompleteKey ?? false,
-		autoCompleteMarkupKey: behavior.autoCompleteMarkupKey ?? false,
-		allowBlur: behavior.allowBlur ?? false,
-		minChars: behavior.minChars ?? 0,
-		onlyAutocomplete: behavior.onlyAutocomplete ?? false,
-		onTagClick: behavior.onTagClick ?? (() => {}),
-		autoCompleteShowKey: behavior.autoCompleteShowKey ?? behavior.autoCompleteKey ?? false,
-		numberOnly: behavior.numberOnly ?? false,
-		allowDecimal: behavior.allowDecimal ?? false,
-		debounceMs: behavior.debounceMs ?? DEFAULT_DEBOUNCE_MS
+		disabled: behavior?.disabled ?? false,
+		readonly: behavior?.readonly ?? false,
+		addKeys: behavior?.addKeys ?? [KEY_CODES.ENTER],
+		maxTags: behavior?.maxTags ?? false,
+		onlyUnique: behavior?.onlyUnique ?? false,
+		removeKeys: behavior?.removeKeys ?? [KEY_CODES.BACKSPACE],
+		placeholder: behavior?.placeholder ?? '',
+		allowPaste: behavior?.allowPaste ?? false,
+		allowDrop: behavior?.allowDrop ?? false,
+		splitWith: behavior?.splitWith ?? ',',
+		autoComplete: behavior?.autoComplete ?? false,
+		autoCompleteKey: behavior?.autoCompleteKey ?? false,
+		autoCompleteMarkupKey: behavior?.autoCompleteMarkupKey ?? false,
+		allowBlur: behavior?.allowBlur ?? false,
+		minChars: behavior?.minChars ?? 0,
+		onlyAutocomplete: behavior?.onlyAutocomplete ?? false,
+		onTagClick: behavior?.onTagClick ?? (() => {}),
+		autoCompleteShowKey: behavior?.autoCompleteShowKey ?? behavior?.autoCompleteKey ?? false,
+		numberOnly: behavior?.numberOnly ?? false,
+		allowDecimal: behavior?.allowDecimal ?? false,
+		debounceMs: behavior?.debounceMs ?? DEFAULT_DEBOUNCE_MS
 	};
 
 	// Internal state

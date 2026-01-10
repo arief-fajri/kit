@@ -30,36 +30,36 @@
 
 	// Computed props with defaults
 	$: computedStyling = {
-		size: styling.size ?? 'md',
-		variant: styling.variant ?? 'default',
-		inputClass: styling.inputClass ?? '',
-		wrapperClass: styling.wrapperClass ?? '',
-		labelClass: styling.labelClass ?? '',
-		wrapperStyle: styling.wrapperStyle ?? ''
+		size: styling?.size ?? 'md',
+		variant: styling?.variant ?? 'default',
+		inputClass: styling?.inputClass ?? '',
+		wrapperClass: styling?.wrapperClass ?? '',
+		labelClass: styling?.labelClass ?? '',
+		wrapperStyle: styling?.wrapperStyle ?? ''
 	};
 
 	$: computedValidation = {
-		required: validation.required ?? false,
-		isError: validation.isError ?? false,
-		errorMessage: validation.errorMessage ?? '',
-		maxLength: validation.maxLength ?? null,
-		showMaxLengthCounter: validation.showMaxLengthCounter ?? false
+		required: validation?.required ?? false,
+		isError: validation?.isError ?? false,
+		errorMessage: validation?.errorMessage ?? '',
+		maxLength: validation?.maxLength ?? null,
+		showMaxLengthCounter: validation?.showMaxLengthCounter ?? false
 	};
 
 	$: computedBehavior = {
-		disabled: behavior.disabled ?? false,
-		readonly: behavior.readonly ?? false,
-		autoFocus: behavior.autoFocus ?? false,
-		clearable: behavior.clearable ?? false,
-		autocomplete: behavior.autocomplete ?? '',
-		excludedKeys: behavior.excludedKeys ?? []
+		disabled: behavior?.disabled ?? false,
+		readonly: behavior?.readonly ?? false,
+		autoFocus: behavior?.autoFocus ?? false,
+		clearable: behavior?.clearable ?? false,
+		autocomplete: behavior?.autocomplete ?? '',
+		excludedKeys: behavior?.excludedKeys ?? []
 	};
 
 	$: computedLayout = {
-		rows: layout.rows ?? 4,
-		fixedHeight: layout.fixedHeight ?? true,
-		maxHeight: layout.maxHeight ?? null,
-		autoResize: layout.autoResize ?? !layout.fixedHeight
+		rows: layout?.rows ?? 4,
+		fixedHeight: layout?.fixedHeight ?? true,
+		maxHeight: layout?.maxHeight ?? null,
+		autoResize: layout?.autoResize ?? !layout?.fixedHeight
 	};
 
 	const dispatch = createEventDispatcher<{

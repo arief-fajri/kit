@@ -7,12 +7,12 @@
 
 	// Computed props with defaults
 	$: computedStyling = {
-		className: styling.className ?? '',
-		style: styling.style ?? '',
-		layoutClassName: styling.layoutClassName ?? '',
-		layoutStyle: styling.layoutStyle ?? '',
-		bodyClassName: styling.bodyClassName ?? '',
-		bodyStyle: styling.bodyStyle ?? ''
+		className: styling?.className ?? '',
+		style: styling?.style ?? '',
+		layoutClassName: styling?.layoutClassName ?? '',
+		layoutStyle: styling?.layoutStyle ?? '',
+		bodyClassName: styling?.bodyClassName ?? '',
+		bodyStyle: styling?.bodyStyle ?? ''
 	};
 
 	let innerHeight: number = 0;

@@ -1,85 +1,85 @@
 <script lang="ts">
-	import '../app.css';
-	import { page } from '$app/stores';
-	import { BaseLayoutWrapper, SidebarWrapper } from '@rief/kit';
-	import DocsHeader from '$lib/components/DocsHeader.svelte';
-	import Breadcrumbs from '$lib/components/Breadcrumbs.svelte';
-	import StatusBadge from '$lib/components/StatusBadge.svelte';
-	import type { NavigationSection, ComponentStatus } from '$lib/types/navigation';
+	import "../app.css";
+	import { page } from "$app/stores";
+	import { BaseLayoutWrapper, PageWrapper, SidebarWrapper } from "@rief/kit";
+	import DocsHeader from "$lib/components/DocsHeader.svelte";
+	import Breadcrumbs from "$lib/components/Breadcrumbs.svelte";
+	import StatusBadge from "$lib/components/StatusBadge.svelte";
+	import type { NavigationSection, ComponentStatus } from "$lib/types/navigation";
 
 	const navigation: NavigationSection[] = [
 		{
-			title: 'Getting Started',
+			title: "Getting Started",
 			items: [
-				{ title: 'Overview', href: '/' },
-				{ title: 'Installation', href: '/getting-started/installation' }
+				{ title: "Overview", href: "/" },
+				{ title: "Installation", href: "/getting-started/installation" }
 			]
 		},
 		{
-			title: 'Design System',
+			title: "Design System",
 			items: [
-				{ title: 'Global Configuration', href: '/design-system/global-configuration' },
-				{ title: 'Theming', href: '/design-system/theming' }
+				{ title: "Global Configuration", href: "/design-system/global-configuration" },
+				{ title: "Theming", href: "/design-system/theming" }
 			]
 		},
 		{
-			title: 'Form Inputs',
+			title: "Form Inputs",
 			items: [
-				{ title: 'InputText', href: '/components/input-text', status: 'stable' as ComponentStatus },
-				{ title: 'TextArea', href: '/components/textarea', status: 'stable' as ComponentStatus },
-				{ title: 'Checkbox', href: '/components/checkbox', status: 'stable' as ComponentStatus },
-				{ title: 'Switch', href: '/components/switch', status: 'stable' as ComponentStatus },
-				{ title: 'Radiobox', href: '/components/radiobox', status: 'stable' as ComponentStatus },
+				{ title: "InputText", href: "/components/input-text", status: "stable" as ComponentStatus },
+				{ title: "TextArea", href: "/components/textarea", status: "stable" as ComponentStatus },
+				{ title: "Checkbox", href: "/components/checkbox", status: "stable" as ComponentStatus },
+				{ title: "Switch", href: "/components/switch", status: "stable" as ComponentStatus },
+				{ title: "Radiobox", href: "/components/radiobox", status: "stable" as ComponentStatus },
 				{
-					title: 'SelectOption',
-					href: '/components/select-option',
-					status: 'stable' as ComponentStatus
+					title: "SelectOption",
+					href: "/components/select-option",
+					status: "stable" as ComponentStatus
 				},
 				{
-					title: 'DatePicker',
-					href: '/components/date-picker',
-					status: 'stable' as ComponentStatus
+					title: "DatePicker",
+					href: "/components/date-picker",
+					status: "stable" as ComponentStatus
 				}
 			]
 		},
 		{
-			title: 'Components',
+			title: "Components",
 			items: [
-				{ title: 'Button', href: '/components/button', status: 'stable' as ComponentStatus },
-				{ title: 'Accordion', href: '/components/accordion', status: 'stable' as ComponentStatus },
-				{ title: 'Drawer', href: '/components/drawer', status: 'stable' as ComponentStatus },
-				{ title: 'Tags', href: '/components/tags', status: 'stable' as ComponentStatus }
+				{ title: "Button", href: "/components/button", status: "stable" as ComponentStatus },
+				{ title: "Accordion", href: "/components/accordion", status: "stable" as ComponentStatus },
+				{ title: "Drawer", href: "/components/drawer", status: "stable" as ComponentStatus },
+				{ title: "Tags", href: "/components/tags", status: "stable" as ComponentStatus }
 			]
 		},
 		{
-			title: 'Layout',
+			title: "Layout",
 			items: [
 				{
-					title: 'BaseLayoutWrapper',
-					href: '/components/base-layout-wrapper',
-					status: 'stable' as ComponentStatus
+					title: "BaseLayoutWrapper",
+					href: "/components/base-layout-wrapper",
+					status: "stable" as ComponentStatus
 				},
 				{
-					title: 'SidebarWrapper',
-					href: '/components/sidebar-wrapper',
-					status: 'stable' as ComponentStatus
+					title: "SidebarWrapper",
+					href: "/components/sidebar-wrapper",
+					status: "stable" as ComponentStatus
 				},
 				{
-					title: 'PageWrapper',
-					href: '/components/page-wrapper',
-					status: 'stable' as ComponentStatus
+					title: "PageWrapper",
+					href: "/components/page-wrapper",
+					status: "stable" as ComponentStatus
 				},
 				{
-					title: 'DropdownWrapper',
-					href: '/components/dropdown-wrapper',
-					status: 'stable' as ComponentStatus
+					title: "DropdownWrapper",
+					href: "/components/dropdown-wrapper",
+					status: "stable" as ComponentStatus
 				}
 			]
 		},
 		{
-			title: 'Utilities',
+			title: "Utilities",
 			items: [
-				{ title: 'DragLine', href: '/components/drag-line', status: 'stable' as ComponentStatus }
+				{ title: "DragLine", href: "/components/drag-line", status: "stable" as ComponentStatus }
 			]
 		}
 		// {
@@ -94,49 +94,51 @@
 </script>
 
 <!-- <DocsHeader {navigation} /> -->
-<BaseLayoutWrapper layoutClassName="docs-layout" layoutStyle="min-height: 100svh;">
+<BaseLayoutWrapper styling={{ layoutClassName: "docs-layout", layoutStyle: "min-height: 100svh;" }}>
 	<!-- <div class="layout-body">
 </div> -->
-	<SidebarWrapper
-		collapsed={sidebarCollapsed}
-		isDraggable={true}
-		defaultWidth={280}
-		minWidth={240}
-		maxWidth="400px"
-		draglinePosition="right"
-		persistWidth={true}
-		storageKey="docs-sidebar-width"
-		sidebarClassName="docs-sidebar"
-	>
-		<div class="sidebar-content">
-			{#each navigation as section}
-				<div class="nav-section">
-					<h3 class="nav-section-title">{section.title}</h3>
-					<ul class="nav-list">
-						{#each section.items as item}
-							<li>
-								<a
-									href={item.href}
-									class="nav-link"
-									class:active={$page.url.pathname === item.href}
-								>
-									<span class="nav-link-text">{item.title}</span>
-									{#if item.status}
-										<StatusBadge status={item.status} showTooltip={false} />
-									{/if}
-								</a>
-							</li>
-						{/each}
-					</ul>
-				</div>
-			{/each}
-		</div>
-	</SidebarWrapper>
+	<svelte:fragment slot="body">
+		<SidebarWrapper
+			collapsed={sidebarCollapsed}
+			isDraggable={true}
+			defaultWidth={280}
+			minWidth={240}
+			maxWidth="400px"
+			draglinePosition="right"
+			persistWidth={true}
+			storageKey="docs-sidebar-width"
+			sidebarClassName="docs-sidebar"
+		>
+			<div class="sidebar-content">
+				{#each navigation as section}
+					<div class="nav-section">
+						<h3 class="nav-section-title">{section.title}</h3>
+						<ul class="nav-list">
+							{#each section.items as item}
+								<li>
+									<a
+										href={item.href}
+										class="nav-link"
+										class:active={$page.url.pathname === item.href}
+									>
+										<span class="nav-link-text">{item.title}</span>
+										{#if item.status}
+											<StatusBadge status={item.status} showTooltip={false} />
+										{/if}
+									</a>
+								</li>
+							{/each}
+						</ul>
+					</div>
+				{/each}
+			</div>
+		</SidebarWrapper>
 
-	<div class="main-content">
-		<Breadcrumbs />
-		<slot />
-	</div>
+		<PageWrapper>
+			<Breadcrumbs />
+			<slot />
+		</PageWrapper>
+	</svelte:fragment>
 </BaseLayoutWrapper>
 
 <style>
@@ -152,6 +154,10 @@
 		display: flex;
 		flex: 1;
 		min-height: 0;
+	}
+	.main-content {
+		flex: 1;
+		width: 100%;
 	}
 
 	:global(.docs-sidebar) {

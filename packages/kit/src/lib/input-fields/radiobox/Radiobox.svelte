@@ -26,19 +26,19 @@
 
 	// Computed props with defaults
 	$: computedStyling = {
-		size: styling.size ?? 'md',
-		variant: styling.variant ?? 'default',
-		color: styling.color ?? 'primary',
-		wrapperClass: styling.wrapperClass ?? '',
-		labelClass: styling.labelClass ?? '',
-		radioClass: styling.radioClass ?? '',
-		wrapperStyle: styling.wrapperStyle ?? ''
+		size: styling?.size ?? 'md',
+		variant: styling?.variant ?? 'default',
+		color: styling?.color ?? 'primary',
+		wrapperClass: styling?.wrapperClass ?? '',
+		labelClass: styling?.labelClass ?? '',
+		radioClass: styling?.radioClass ?? '',
+		wrapperStyle: styling?.wrapperStyle ?? ''
 	};
 
 	$: computedBehavior = {
-		disabled: behavior.disabled ?? false,
-		rtl: behavior.rtl ?? false,
-		stopPropagation: behavior.stopPropagation ?? false
+		disabled: behavior?.disabled ?? false,
+		rtl: behavior?.rtl ?? false,
+		stopPropagation: behavior?.stopPropagation ?? false
 	};
 
 	// Constants
