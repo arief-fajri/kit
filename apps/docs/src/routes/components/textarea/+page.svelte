@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { TextArea, Accordion, SelectOption, Checkbox } from '@rief/kit';
 	import type { InputSize, InputVariant, SelectOptionItem } from '@rief/kit';
-	
+
 	// Demo state
 	let value = '';
 	let size: SelectOptionItem | null = { value: 'md', label: 'Medium' };
@@ -20,21 +20,21 @@
 	let rowsString = '4';
 	let maxLengthString = '500';
 	let maxHeightString = '200';
-	
+
 	// Computed values for component props
-	$: textAreaSize = size?.value as InputSize || 'md';
-	$: textAreaVariant = variant?.value as InputVariant || 'default';
+	$: textAreaSize = (size?.value as InputSize) || 'md';
+	$: textAreaVariant = (variant?.value as InputVariant) || 'default';
 	let label = 'Message';
 	let placeholder = 'Enter your message...';
 	let errorMessage = 'This field has an error';
-	
+
 	// Options
 	const sizeOptions = [
 		{ value: 'sm', label: 'Small' },
 		{ value: 'md', label: 'Medium' },
 		{ value: 'lg', label: 'Large' }
 	];
-	
+
 	const variantOptions = [
 		{ value: 'default', label: 'Default' },
 		{ value: 'filled', label: 'Filled' },
@@ -51,8 +51,9 @@
 	<header class="docs-header">
 		<h1>TextArea</h1>
 		<p class="docs-description">
-			A comprehensive multi-line text input component with auto-resize, validation, character counting, and accessibility features.
-			Perfect for forms, comments, and any multi-line text input needs.
+			A comprehensive multi-line text input component with auto-resize, validation, character
+			counting, and accessibility features. Perfect for forms, comments, and any multi-line text
+			input needs.
 		</p>
 	</header>
 
@@ -60,24 +61,24 @@
 		<h2>Interactive Demo</h2>
 		<div class="demo-container">
 			<div class="demo-preview">
-				<TextArea 
+				<TextArea
 					bind:value
 					{label}
 					{placeholder}
-					styling={{ 
-						size: textAreaSize, 
-						variant: textAreaVariant 
+					styling={{
+						size: textAreaSize,
+						variant: textAreaVariant
 					}}
-					validation={{ 
-						required, 
-						isError, 
+					validation={{
+						required,
+						isError,
 						errorMessage,
 						maxLength,
 						showMaxLengthCounter: showCounter
 					}}
-					behavior={{ 
-						disabled, 
-						readonly, 
+					behavior={{
+						disabled,
+						readonly,
 						clearable
 					}}
 					layout={{
@@ -96,7 +97,7 @@
 					</p>
 				{/if}
 			</div>
-			
+
 			<div class="demo-controls">
 				<h3>Controls</h3>
 				<div class="controls-grid">
@@ -105,65 +106,65 @@
 						options={sizeOptions}
 						bind:value={size}
 						behavior={{ closeOnSelect: true }}
-						styling={{ variant: "outlined" }}
+						styling={{ variant: 'outlined' }}
 					/>
-					
+
 					<SelectOption
 						label="Variant"
 						options={variantOptions}
 						bind:value={variant}
 						behavior={{ closeOnSelect: true }}
-						styling={{ variant: "outlined" }}
+						styling={{ variant: 'outlined' }}
 					/>
-					
+
 					<TextArea
 						label="Label"
 						bind:value={label}
-						styling={{ variant: "outlined" }}
+						styling={{ variant: 'outlined' }}
 						layout={{ rows: 1 }}
 					/>
-					
+
 					<TextArea
 						label="Placeholder"
 						bind:value={placeholder}
-						styling={{ variant: "outlined" }}
+						styling={{ variant: 'outlined' }}
 						layout={{ rows: 1 }}
 					/>
-					
+
 					<TextArea
 						label="Error Message"
 						bind:value={errorMessage}
-						styling={{ variant: "outlined" }}
+						styling={{ variant: 'outlined' }}
 						layout={{ rows: 1 }}
 					/>
 				</div>
-				
+
 				<div class="number-controls">
 					<TextArea
 						label="Rows"
 						bind:value={rowsString}
-						styling={{ variant: "outlined" }}
+						styling={{ variant: 'outlined' }}
 						layout={{ rows: 1 }}
-						on:input={() => rows = parseInt(rowsString) || 4}
+						on:input={() => (rows = parseInt(rowsString) || 4)}
 					/>
-					
+
 					<TextArea
 						label="Max Length"
 						bind:value={maxLengthString}
-						styling={{ variant: "outlined" }}
+						styling={{ variant: 'outlined' }}
 						layout={{ rows: 1 }}
-						on:input={() => maxLength = parseInt(maxLengthString) || null}
+						on:input={() => (maxLength = parseInt(maxLengthString) || null)}
 					/>
-					
+
 					<TextArea
 						label="Max Height (px)"
 						bind:value={maxHeightString}
-						styling={{ variant: "outlined" }}
+						styling={{ variant: 'outlined' }}
 						layout={{ rows: 1 }}
-						on:input={() => maxHeight = parseInt(maxHeightString) || null}
+						on:input={() => (maxHeight = parseInt(maxHeightString) || null)}
 					/>
 				</div>
-				
+
 				<div class="checkbox-controls">
 					<Checkbox bind:checked={disabled}>Disabled</Checkbox>
 					<Checkbox bind:checked={readonly}>Readonly</Checkbox>
@@ -180,24 +181,24 @@
 
 	<section class="examples-section">
 		<h2>Examples</h2>
-		
-		<Accordion 
+
+		<Accordion
 			content={{
-				title: "Basic Usage",
-				subtitle: "Simple textarea examples",
-				content: ""
+				title: 'Basic Usage',
+				subtitle: 'Simple textarea examples',
+				content: ''
 			}}
-			styling={{ variant: "outlined" }}
+			styling={{ variant: 'outlined' }}
 			behavior={{ showIcon: true }}
 		>
 			<div class="example-grid">
-				<TextArea 
-					label="Basic TextArea" 
+				<TextArea
+					label="Basic TextArea"
 					placeholder="Enter your text here..."
 					layout={{ rows: 3 }}
 				/>
-				<TextArea 
-					label="With Character Limit" 
+				<TextArea
+					label="With Character Limit"
 					placeholder="Max 100 characters..."
 					validation={{ maxLength: 100, showMaxLengthCounter: true }}
 					layout={{ rows: 3 }}
@@ -205,80 +206,80 @@
 			</div>
 		</Accordion>
 
-		<Accordion 
+		<Accordion
 			content={{
-				title: "Auto-Resize",
-				subtitle: "Automatically expanding textarea",
-				content: ""
+				title: 'Auto-Resize',
+				subtitle: 'Automatically expanding textarea',
+				content: ''
 			}}
-			styling={{ variant: "outlined" }}
+			styling={{ variant: 'outlined' }}
 			behavior={{ showIcon: true }}
 		>
 			<div class="example-grid">
-				<TextArea 
-					label="Auto-Resize TextArea" 
+				<TextArea
+					label="Auto-Resize TextArea"
 					placeholder="Start typing and watch it grow..."
 					layout={{ rows: 2, autoResize: true, maxHeight: 150 }}
 				/>
-				<TextArea 
-					label="Fixed Height" 
+				<TextArea
+					label="Fixed Height"
 					placeholder="This won't resize..."
 					layout={{ rows: 4, fixedHeight: true }}
 				/>
 			</div>
 		</Accordion>
 
-		<Accordion 
+		<Accordion
 			content={{
-				title: "Variants",
-				subtitle: "Different visual styles",
-				content: ""
+				title: 'Variants',
+				subtitle: 'Different visual styles',
+				content: ''
 			}}
-			styling={{ variant: "outlined" }}
+			styling={{ variant: 'outlined' }}
 			behavior={{ showIcon: true }}
 		>
 			<div class="example-grid">
-				<TextArea 
-					label="Default Variant" 
+				<TextArea
+					label="Default Variant"
 					placeholder="Default styling..."
-					styling={{ variant: "default" }}
+					styling={{ variant: 'default' }}
 					layout={{ rows: 3 }}
 				/>
-				<TextArea 
-					label="Filled Variant" 
+				<TextArea
+					label="Filled Variant"
 					placeholder="Filled styling..."
-					styling={{ variant: "filled" }}
+					styling={{ variant: 'filled' }}
 					layout={{ rows: 3 }}
 				/>
-				<TextArea 
-					label="Outlined Variant" 
+				<TextArea
+					label="Outlined Variant"
 					placeholder="Outlined styling..."
-					styling={{ variant: "outlined" }}
+					styling={{ variant: 'outlined' }}
 					layout={{ rows: 3 }}
 				/>
 			</div>
 		</Accordion>
 
-		<Accordion 
+		<Accordion
 			content={{
-				title: "Validation States",
-				subtitle: "Error handling and validation",
-				content: ""
+				title: 'Validation States',
+				subtitle: 'Error handling and validation',
+				content: ''
 			}}
-			styling={{ variant: "outlined" }}
+			styling={{ variant: 'outlined' }}
 			behavior={{ showIcon: true }}
 		>
 			<div class="example-grid">
-				<TextArea 
-					label="Required Field" 
+				<TextArea
+					label="Required Field"
 					placeholder="This field is required..."
 					validation={{ required: true }}
 					layout={{ rows: 3 }}
 				/>
-				<TextArea 
-					label="Error State" 
+				<TextArea
+					label="Error State"
 					placeholder="This has an error..."
-					validation={{ isError: true, errorMessage: "Please provide more details" }}
+					validation={{ isError: true, errorMessage: 'Please provide more details' }}
 					layout={{ rows: 3 }}
 				/>
 			</div>

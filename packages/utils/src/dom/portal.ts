@@ -4,23 +4,23 @@
  * @returns Action object with destroy method
  */
 export function portal(node: HTMLElement): { destroy(): void } {
-  const target = document.body;
-  
-  function update(): void {
-    if (node.parentNode !== target) {
-      target.appendChild(node);
-    }
-  }
-  
-  function destroy(): void {
-    if (node.parentNode) {
-      node.parentNode.removeChild(node);
-    }
-  }
-  
-  update();
-  
-  return {
-    destroy
-  };
+	const target = document.body;
+
+	function update(): void {
+		if (node.parentNode !== target) {
+			target.appendChild(node);
+		}
+	}
+
+	function destroy(): void {
+		if (node.parentNode) {
+			node.parentNode.removeChild(node);
+		}
+	}
+
+	update();
+
+	return {
+		destroy
+	};
 }

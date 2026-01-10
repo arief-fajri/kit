@@ -1,18 +1,21 @@
 <script lang="ts">
 	import { Button, Accordion, InputText } from '@rief/kit';
-	
+
 	let copied = false;
-	
+
 	function copyToClipboard(text: string) {
 		navigator.clipboard.writeText(text);
 		copied = true;
-		setTimeout(() => copied = false, 2000);
+		setTimeout(() => (copied = false), 2000);
 	}
 </script>
 
 <svelte:head>
 	<title>Installation - Kit Component Library</title>
-	<meta name="description" content="Learn how to install and set up Kit components in your project" />
+	<meta
+		name="description"
+		content="Learn how to install and set up Kit components in your project"
+	/>
 </svelte:head>
 
 <div class="installation-guide">
@@ -26,8 +29,8 @@
 	<section class="installation-steps">
 		<Accordion
 			content={{
-				title: "Package Installation",
-				subtitle: "Install Kit via npm, yarn, or pnpm",
+				title: 'Package Installation',
+				subtitle: 'Install Kit via npm, yarn, or pnpm',
 				content: `
 					<div class="install-commands">
 						<div class="command-group">
@@ -54,14 +57,14 @@
 					</div>
 				`
 			}}
-			styling={{ variant: "outlined" }}
+			styling={{ variant: 'outlined' }}
 			behavior={{ showIcon: true }}
 		/>
 
 		<Accordion
 			content={{
-				title: "Basic Usage",
-				subtitle: "Import and use components in your Svelte app",
+				title: 'Basic Usage',
+				subtitle: 'Import and use components in your Svelte app',
 				content: `
 					<div class="code-example">
 						<h4>Component Import</h4>
@@ -75,14 +78,14 @@
 					</div>
 				`
 			}}
-			styling={{ variant: "outlined" }}
+			styling={{ variant: 'outlined' }}
 			behavior={{ showIcon: true }}
 		/>
 
 		<Accordion
 			content={{
-				title: "Styling Setup",
-				subtitle: "Include default styles or customize your own",
+				title: 'Styling Setup',
+				subtitle: 'Include default styles or customize your own',
 				content: `
 					<div class="code-example">
 						<h4>Include Default Styles</h4>
@@ -99,14 +102,14 @@ import '@rief/kit/default-style.css';</code></pre>
 					</div>
 				`
 			}}
-			styling={{ variant: "outlined" }}
+			styling={{ variant: 'outlined' }}
 			behavior={{ showIcon: true }}
 		/>
 
 		<Accordion
 			content={{
-				title: "TypeScript Support",
-				subtitle: "Full TypeScript support with type definitions",
+				title: 'TypeScript Support',
+				subtitle: 'Full TypeScript support with type definitions',
 				content: `
 					<div class="code-example">
 						<h4>TypeScript Example</h4>
@@ -138,14 +141,14 @@ import '@rief/kit/default-style.css';</code></pre>
 					</div>
 				`
 			}}
-			styling={{ variant: "outlined" }}
+			styling={{ variant: 'outlined' }}
 			behavior={{ showIcon: true }}
 		/>
 
 		<Accordion
 			content={{
-				title: "Custom Styling",
-				subtitle: "Override component styles with CSS",
+				title: 'Custom Styling',
+				subtitle: 'Override component styles with CSS',
 				content: `
 					<div class="code-example">
 						<h4>Global Style Override</h4>
@@ -173,14 +176,14 @@ import '@rief/kit/default-style.css';</code></pre>
 					</div>
 				`
 			}}
-			styling={{ variant: "outlined" }}
+			styling={{ variant: 'outlined' }}
 			behavior={{ showIcon: true }}
 		/>
 
 		<Accordion
 			content={{
-				title: "Tree Shaking & Bundle Size",
-				subtitle: "Optimize your bundle size with tree shaking",
+				title: 'Tree Shaking & Bundle Size',
+				subtitle: 'Optimize your bundle size with tree shaking',
 				content: `
 					<div class="code-example">
 						<h4>Individual Component Imports</h4>
@@ -212,14 +215,14 @@ export default &#123;
 					</div>
 				`
 			}}
-			styling={{ variant: "outlined" }}
+			styling={{ variant: 'outlined' }}
 			behavior={{ showIcon: true }}
 		/>
 
 		<Accordion
 			content={{
-				title: "SvelteKit Configuration",
-				subtitle: "Setup for SvelteKit projects",
+				title: 'SvelteKit Configuration',
+				subtitle: 'Setup for SvelteKit projects',
 				content: `
 					<div class="code-example">
 						<h4>SvelteKit Config</h4>
@@ -246,7 +249,7 @@ export default &#123;
 					</div>
 				`
 			}}
-			styling={{ variant: "outlined" }}
+			styling={{ variant: 'outlined' }}
 			behavior={{ showIcon: true }}
 		/>
 	</section>
@@ -257,23 +260,17 @@ export default &#123;
 			<div class="step-card">
 				<h3>Browse Components</h3>
 				<p>Explore all available components and their APIs</p>
-				<Button variant="outlined" href="/components/button">
-					View Components →
-				</Button>
+				<Button variant="outlined" href="/components/button">View Components →</Button>
 			</div>
 			<div class="step-card">
 				<h3>Theming Guide</h3>
 				<p>Learn how to customize colors and styles</p>
-				<Button variant="outlined" href="/design-system/theming">
-					Theming →
-				</Button>
+				<Button variant="outlined" href="/design-system/theming">Theming →</Button>
 			</div>
 			<div class="step-card">
 				<h3>Playground</h3>
 				<p>Try components interactively</p>
-				<Button variant="outlined" href="/playground">
-					Playground →
-				</Button>
+				<Button variant="outlined" href="/playground">Playground →</Button>
 			</div>
 		</div>
 	</section>

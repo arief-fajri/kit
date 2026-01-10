@@ -35,24 +35,24 @@ The BaseLayoutWrapper creates a two-layer container structure optimized for full
 
 ```svelte
 <script>
-  import { BaseLayoutWrapper } from '@rief/kit';
+	import { BaseLayoutWrapper } from '@rief/kit';
 </script>
 
 <!-- Basic full-viewport layout -->
 <BaseLayoutWrapper>
-  <div>Your application content here</div>
+	<div>Your application content here</div>
 </BaseLayoutWrapper>
 
 <!-- With custom styling -->
-<BaseLayoutWrapper 
-  styling={{
-    layoutClassName: "my-layout",
-    bodyClassName: "my-content",
-    layoutStyle: "background: #f0f0f0;",
-    bodyStyle: "padding: 2rem;"
-  }}
+<BaseLayoutWrapper
+	styling={{
+		layoutClassName: 'my-layout',
+		bodyClassName: 'my-content',
+		layoutStyle: 'background: #f0f0f0;',
+		bodyStyle: 'padding: 2rem;'
+	}}
 >
-  <div>Custom styled content</div>
+	<div>Custom styled content</div>
 </BaseLayoutWrapper>
 ```
 
@@ -60,27 +60,27 @@ The BaseLayoutWrapper creates a two-layer container structure optimized for full
 
 ### Core Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| *(No core props - BaseLayoutWrapper uses only styling)* | | | |
+| Prop                                                    | Type | Default | Description |
+| ------------------------------------------------------- | ---- | ------- | ----------- |
+| _(No core props - BaseLayoutWrapper uses only styling)_ |      |         |             |
 
 ### Styling Props (`styling` object)
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `styling.className` | `string` | `""` | Additional CSS classes for root element |
-| `styling.style` | `string` | `""` | Additional inline styles |
-| `styling.layoutClassName` | `string` | `""` | Additional CSS classes for the outer layout container |
-| `styling.layoutStyle` | `string` | `""` | Inline styles for the outer layout container |
-| `styling.bodyClassName` | `string` | `""` | Additional CSS classes for the inner body container |
-| `styling.bodyStyle` | `string` | `""` | Inline styles for the inner body container |
+| Prop                      | Type     | Default | Description                                           |
+| ------------------------- | -------- | ------- | ----------------------------------------------------- |
+| `styling.className`       | `string` | `""`    | Additional CSS classes for root element               |
+| `styling.style`           | `string` | `""`    | Additional inline styles                              |
+| `styling.layoutClassName` | `string` | `""`    | Additional CSS classes for the outer layout container |
+| `styling.layoutStyle`     | `string` | `""`    | Inline styles for the outer layout container          |
+| `styling.bodyClassName`   | `string` | `""`    | Additional CSS classes for the inner body container   |
+| `styling.bodyStyle`       | `string` | `""`    | Inline styles for the inner body container            |
 
 ### Accessibility Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `ariaLabel` | `string` | `undefined` | ARIA label for accessibility |
-| `ariaDescribedBy` | `string` | `undefined` | ARIA described by reference |
+| Prop              | Type     | Default     | Description                  |
+| ----------------- | -------- | ----------- | ---------------------------- |
+| `ariaLabel`       | `string` | `undefined` | ARIA label for accessibility |
+| `ariaDescribedBy` | `string` | `undefined` | ARIA described by reference  |
 
 ## CSS Custom Properties
 
@@ -97,22 +97,22 @@ These are automatically updated when the window is resized.
 
 ```svelte
 <BaseLayoutWrapper>
-  <div style="width: var(--base-layout-width); height: var(--base-layout-height);">
-    Full viewport sized content
-  </div>
+	<div style="width: var(--base-layout-width); height: var(--base-layout-height);">
+		Full viewport sized content
+	</div>
 </BaseLayoutWrapper>
 ```
 
 ### Using Props for Customization
 
 ```svelte
-<BaseLayoutWrapper 
-  styling={{
-    layoutStyle: "background: linear-gradient(to bottom, #667eea 0%, #764ba2 100%);",
-    bodyStyle: "padding: 2rem; max-width: 1200px; margin: 0 auto;"
-  }}
+<BaseLayoutWrapper
+	styling={{
+		layoutStyle: 'background: linear-gradient(to bottom, #667eea 0%, #764ba2 100%);',
+		bodyStyle: 'padding: 2rem; max-width: 1200px; margin: 0 auto;'
+	}}
 >
-  <div>Centered content with gradient background</div>
+	<div>Centered content with gradient background</div>
 </BaseLayoutWrapper>
 ```
 
@@ -120,19 +120,19 @@ These are automatically updated when the window is resized.
 
 ```svelte
 <BaseLayoutWrapper layoutClassName="app-container" bodyClassName="app-content">
-  <div>Content with custom classes</div>
+	<div>Content with custom classes</div>
 </BaseLayoutWrapper>
 ```
 
 ```css
 .app-container {
-  --base-layout-bg: #1a1a1a;
-  --base-layout-z-index: 1;
+	--base-layout-bg: #1a1a1a;
+	--base-layout-z-index: 1;
 }
 
 .app-content {
-  --base-layout-body-padding: 2rem;
-  --base-layout-text-color: #ffffff;
+	--base-layout-body-padding: 2rem;
+	--base-layout-text-color: #ffffff;
 }
 ```
 
@@ -142,20 +142,20 @@ These are automatically updated when the window is resized.
 
 ```svelte
 <script>
-  import { BaseLayoutWrapper } from '@rief/kit';
+	import { BaseLayoutWrapper } from '@rief/kit';
 </script>
 
-<BaseLayoutWrapper 
-  bodyClassName="dashboard-layout"
-  bodyStyle="display: grid; grid-template-columns: 250px 1fr; gap: 1rem;"
+<BaseLayoutWrapper
+	bodyClassName="dashboard-layout"
+	bodyStyle="display: grid; grid-template-columns: 250px 1fr; gap: 1rem;"
 >
-  <aside class="sidebar">
-    <nav>Navigation</nav>
-  </aside>
-  <main class="dashboard-content">
-    <h1>Dashboard</h1>
-    <!-- Dashboard widgets -->
-  </main>
+	<aside class="sidebar">
+		<nav>Navigation</nav>
+	</aside>
+	<main class="dashboard-content">
+		<h1>Dashboard</h1>
+		<!-- Dashboard widgets -->
+	</main>
 </BaseLayoutWrapper>
 ```
 
@@ -163,21 +163,19 @@ These are automatically updated when the window is resized.
 
 ```svelte
 <script>
-  import { BaseLayoutWrapper } from '@rief/kit';
+	import { BaseLayoutWrapper } from '@rief/kit';
 </script>
 
-<BaseLayoutWrapper 
-  layoutStyle="background: #000;"
-  bodyStyle="display: flex; flex-direction: column;"
+<BaseLayoutWrapper
+	layoutStyle="background: #000;"
+	bodyStyle="display: flex; flex-direction: column;"
 >
-  <header style="height: 60px; background: #1a1a1a;">
-    <nav>App Header</nav>
-  </header>
-  <main style="flex: 1; overflow: auto;">
-    <div style="height: var(--base-layout-height);">
-      Main content area
-    </div>
-  </main>
+	<header style="height: 60px; background: #1a1a1a;">
+		<nav>App Header</nav>
+	</header>
+	<main style="flex: 1; overflow: auto;">
+		<div style="height: var(--base-layout-height);">Main content area</div>
+	</main>
 </BaseLayoutWrapper>
 ```
 
@@ -185,21 +183,19 @@ These are automatically updated when the window is resized.
 
 ```svelte
 <script>
-  import { BaseLayoutWrapper } from '@rief/kit';
-  
-  $: isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+	import { BaseLayoutWrapper } from '@rief/kit';
+
+	$: isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 </script>
 
-<BaseLayoutWrapper 
-  bodyStyle={isMobile ? 'padding: 1rem;' : 'padding: 2rem;'}
->
-  <div class="responsive-content">
-    {#if isMobile}
-      <div>Mobile layout</div>
-    {:else}
-      <div>Desktop layout</div>
-    {/if}
-  </div>
+<BaseLayoutWrapper bodyStyle={isMobile ? 'padding: 1rem;' : 'padding: 2rem;'}>
+	<div class="responsive-content">
+		{#if isMobile}
+			<div>Mobile layout</div>
+		{:else}
+			<div>Desktop layout</div>
+		{/if}
+	</div>
 </BaseLayoutWrapper>
 ```
 
@@ -207,17 +203,17 @@ These are automatically updated when the window is resized.
 
 ```svelte
 <script>
-  import { BaseLayoutWrapper } from '@rief/kit';
+	import { BaseLayoutWrapper } from '@rief/kit';
 </script>
 
 <BaseLayoutWrapper bodyStyle="display: flex; align-items: center; justify-content: center;">
-  <canvas 
-    width={typeof window !== 'undefined' ? window.innerWidth : 0}
-    height={typeof window !== 'undefined' ? window.innerHeight : 0}
-    style="border: 1px solid #ccc;"
-  >
-    Canvas content
-  </canvas>
+	<canvas
+		width={typeof window !== 'undefined' ? window.innerWidth : 0}
+		height={typeof window !== 'undefined' ? window.innerHeight : 0}
+		style="border: 1px solid #ccc;"
+	>
+		Canvas content
+	</canvas>
 </BaseLayoutWrapper>
 ```
 
@@ -225,18 +221,18 @@ These are automatically updated when the window is resized.
 
 ```svelte
 <script>
-  import { BaseLayoutWrapper } from '@rief/kit';
-  
-  let darkMode = false;
-  $: layoutBg = darkMode ? '#1a1a1a' : '#ffffff';
-  $: textColor = darkMode ? '#ffffff' : '#000000';
+	import { BaseLayoutWrapper } from '@rief/kit';
+
+	let darkMode = false;
+	$: layoutBg = darkMode ? '#1a1a1a' : '#ffffff';
+	$: textColor = darkMode ? '#ffffff' : '#000000';
 </script>
 
-<BaseLayoutWrapper 
-  layoutStyle={`background: ${layoutBg};`}
-  bodyStyle={`color: ${textColor}; padding: 2rem;`}
+<BaseLayoutWrapper
+	layoutStyle={`background: ${layoutBg};`}
+	bodyStyle={`color: ${textColor}; padding: 2rem;`}
 >
-  <div>Theme-aware content</div>
+	<div>Theme-aware content</div>
 </BaseLayoutWrapper>
 ```
 
@@ -247,11 +243,11 @@ These are automatically updated when the window is resized.
 ```svelte
 <!-- app.html or +layout.svelte -->
 <script>
-  import { BaseLayoutWrapper } from '@rief/kit';
+	import { BaseLayoutWrapper } from '@rief/kit';
 </script>
 
 <BaseLayoutWrapper>
-  <slot />
+	<slot />
 </BaseLayoutWrapper>
 ```
 
@@ -259,21 +255,18 @@ These are automatically updated when the window is resized.
 
 ```svelte
 <script>
-  import { BaseLayoutWrapper } from '@rief/kit';
-  import { page } from '$app/stores';
+	import { BaseLayoutWrapper } from '@rief/kit';
+	import { page } from '$app/stores';
 </script>
 
-<BaseLayoutWrapper 
-  bodyClassName="app-body"
-  bodyStyle="padding: 0;"
->
-  {#if $page.url.pathname === '/dashboard'}
-    <Dashboard />
-  {:else if $page.url.pathname === '/settings'}
-    <Settings />
-  {:else}
-    <Home />
-  {/if}
+<BaseLayoutWrapper bodyClassName="app-body" bodyStyle="padding: 0;">
+	{#if $page.url.pathname === '/dashboard'}
+		<Dashboard />
+	{:else if $page.url.pathname === '/settings'}
+		<Settings />
+	{:else}
+		<Home />
+	{/if}
 </BaseLayoutWrapper>
 ```
 
@@ -281,18 +274,20 @@ These are automatically updated when the window is resized.
 
 ```svelte
 <script>
-  import { BaseLayoutWrapper } from '@rief/kit';
-  import { writable } from 'svelte/store';
-  
-  const sidebarOpen = writable(false);
+	import { BaseLayoutWrapper } from '@rief/kit';
+	import { writable } from 'svelte/store';
+
+	const sidebarOpen = writable(false);
 </script>
 
-<BaseLayoutWrapper 
-  bodyClassName="app-layout"
-  bodyStyle="display: grid; grid-template-columns: {sidebarOpen ? '250px' : '0'} 1fr; transition: grid-template-columns 0.3s;"
+<BaseLayoutWrapper
+	bodyClassName="app-layout"
+	bodyStyle="display: grid; grid-template-columns: {sidebarOpen
+		? '250px'
+		: '0'} 1fr; transition: grid-template-columns 0.3s;"
 >
-  <aside class="sidebar">Sidebar</aside>
-  <main>Main content</main>
+	<aside class="sidebar">Sidebar</aside>
+	<main>Main content</main>
 </BaseLayoutWrapper>
 ```
 
@@ -309,9 +304,9 @@ For better accessibility, consider adding semantic elements within the body:
 
 ```svelte
 <BaseLayoutWrapper>
-  <header role="banner">App Header</header>
-  <main role="main">Main Content</main>
-  <footer role="contentinfo">App Footer</footer>
+	<header role="banner">App Header</header>
+	<main role="main">Main Content</main>
+	<footer role="contentinfo">App Footer</footer>
 </BaseLayoutWrapper>
 ```
 
@@ -327,10 +322,10 @@ The component exports comprehensive TypeScript types:
 import type { BaseLayoutWrapperProps } from '@rief/kit';
 
 const layoutConfig: BaseLayoutWrapperProps = {
-  layoutClassName: 'my-layout',
-  layoutStyle: 'background: #f0f0f0;',
-  bodyClassName: 'my-content',
-  bodyStyle: 'padding: 2rem;'
+	layoutClassName: 'my-layout',
+	layoutStyle: 'background: #f0f0f0;',
+	bodyClassName: 'my-content',
+	bodyStyle: 'padding: 2rem;'
 };
 ```
 
@@ -356,4 +351,3 @@ const layoutConfig: BaseLayoutWrapperProps = {
 - **Canvas Applications**: Drawing apps, games, or interactive visualizations
 - **Mobile Apps**: Progressive web apps with full-screen experience
 - **Presentation Apps**: Slide shows, demos, or kiosk applications
-

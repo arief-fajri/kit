@@ -9,4 +9,3 @@
 	"updateInternalDependencies": "patch",
 	"ignore": ["@kit/docs"]
 }
-

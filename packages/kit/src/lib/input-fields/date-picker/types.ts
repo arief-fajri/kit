@@ -1,4 +1,4 @@
-import type { BaseStyling, BaseBehavior, BaseAccessibility } from "../../types.js";
+import type { BaseStyling, BaseBehavior, BaseAccessibility } from '../../types.js';
 
 // DatePicker component types
 export type DatePickerVariant = 'default' | 'minimal' | 'rounded' | 'bordered';
@@ -24,7 +24,20 @@ export interface DatePickerLabels {
 	/** Weekday labels starting from Sunday */
 	weekdays?: [string, string, string, string, string, string, string];
 	/** Month names */
-	months?: [string, string, string, string, string, string, string, string, string, string, string, string];
+	months?: [
+		string,
+		string,
+		string,
+		string,
+		string,
+		string,
+		string,
+		string,
+		string,
+		string,
+		string,
+		string
+	];
 }
 
 export interface DatePickerStyling extends BaseStyling {
@@ -84,7 +97,7 @@ export interface DatePickerChangeEvent {
 }
 
 // InputDatePicker styling, validation, and behavior types
-export type InputDatePickerVariant = DatePickerVariant | "filled" | "outlined";
+export type InputDatePickerVariant = DatePickerVariant | 'filled' | 'outlined';
 
 export interface DatePickerStyling {
 	/** DatePicker size variant */
@@ -116,7 +129,7 @@ export interface DatePickerBehavior {
 	/** Close picker on date selection */
 	closeOnSelect?: boolean;
 	/** Placement position for dropdown */
-	placement?: "bottom-start" | "bottom-end" | "top-start" | "top-end" | "auto";
+	placement?: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end' | 'auto';
 	/** Make dropdown full width of anchor */
 	isFullAnchorWidth?: boolean;
 	/** Loading state */

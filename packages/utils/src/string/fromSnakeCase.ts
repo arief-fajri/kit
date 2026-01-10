@@ -6,12 +6,12 @@
  * fromSnakeCase('user_name') // returns 'User Name'
  */
 export function fromSnakeCase(str: string = ''): string {
-  if (!str || typeof str !== "string") {
-    return "";
-  }
+	if (!str || typeof str !== 'string') {
+		return '';
+	}
 
-  return str
-    .split("_")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(" ");
+	return str
+		.split('_')
+		.map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+		.join(' ');
 }

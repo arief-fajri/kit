@@ -38,13 +38,13 @@ The PageWrapper creates a three-layer container structure optimized for scrollab
 
 ```svelte
 <script>
-  import { BaseLayoutWrapper, PageWrapper } from '@rief/kit';
+	import { BaseLayoutWrapper, PageWrapper } from '@rief/kit';
 </script>
 
 <BaseLayoutWrapper>
-  <PageWrapper>
-    <div>Your page content here</div>
-  </PageWrapper>
+	<PageWrapper>
+		<div>Your page content here</div>
+	</PageWrapper>
 </BaseLayoutWrapper>
 ```
 
@@ -52,13 +52,13 @@ The PageWrapper creates a three-layer container structure optimized for scrollab
 
 ```svelte
 <BaseLayoutWrapper>
-  <PageWrapper>
-    <div>Main content</div>
-    
-    <svelte:fragment slot="footer">
-      <div>Footer content</div>
-    </svelte:fragment>
-  </PageWrapper>
+	<PageWrapper>
+		<div>Main content</div>
+
+		<svelte:fragment slot="footer">
+			<div>Footer content</div>
+		</svelte:fragment>
+	</PageWrapper>
 </BaseLayoutWrapper>
 ```
 
@@ -66,9 +66,9 @@ The PageWrapper creates a three-layer container structure optimized for scrollab
 
 ```svelte
 <BaseLayoutWrapper>
-  <PageWrapper behavior={{ center: true }}>
-    <div>Centered content</div>
-  </PageWrapper>
+	<PageWrapper behavior={{ center: true }}>
+		<div>Centered content</div>
+	</PageWrapper>
 </BaseLayoutWrapper>
 ```
 
@@ -76,16 +76,16 @@ The PageWrapper creates a three-layer container structure optimized for scrollab
 
 ```svelte
 <BaseLayoutWrapper>
-  <PageWrapper 
-    styling={{
-      wrapperClassName: "my-page",
-      contentClassName: "my-content",
-      wrapperStyle: "background: #f0f0f0;",
-      contentStyle: "padding: 2rem; max-width: 1200px; margin: 0 auto;"
-    }}
-  >
-    <div>Custom styled content</div>
-  </PageWrapper>
+	<PageWrapper
+		styling={{
+			wrapperClassName: 'my-page',
+			contentClassName: 'my-content',
+			wrapperStyle: 'background: #f0f0f0;',
+			contentStyle: 'padding: 2rem; max-width: 1200px; margin: 0 auto;'
+		}}
+	>
+		<div>Custom styled content</div>
+	</PageWrapper>
 </BaseLayoutWrapper>
 ```
 
@@ -93,37 +93,37 @@ The PageWrapper creates a three-layer container structure optimized for scrollab
 
 ### Core Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `pageElm` | `HTMLElement` | `undefined` | Reference to the page wrapper DOM element |
-| `contentElm` | `HTMLElement` | `undefined` | Reference to the content DOM element |
-| `footerElm` | `HTMLElement` | `undefined` | Reference to the footer DOM element |
+| Prop         | Type          | Default     | Description                               |
+| ------------ | ------------- | ----------- | ----------------------------------------- |
+| `pageElm`    | `HTMLElement` | `undefined` | Reference to the page wrapper DOM element |
+| `contentElm` | `HTMLElement` | `undefined` | Reference to the content DOM element      |
+| `footerElm`  | `HTMLElement` | `undefined` | Reference to the footer DOM element       |
 
 ### Styling Props (`styling` object)
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `styling.className` | `string` | `""` | Additional CSS classes for root element |
-| `styling.style` | `string` | `""` | Additional inline styles |
-| `styling.wrapperClassName` | `string` | `""` | Additional CSS classes for the page wrapper container |
-| `styling.wrapperStyle` | `string` | `""` | Inline styles for the page wrapper container |
-| `styling.contentClassName` | `string` | `""` | Additional CSS classes for the content container |
-| `styling.contentStyle` | `string` | `""` | Inline styles for the content container |
-| `styling.footerClassName` | `string` | `""` | Additional CSS classes for the footer container |
-| `styling.footerStyle` | `string` | `""` | Inline styles for the footer container |
+| Prop                       | Type     | Default | Description                                           |
+| -------------------------- | -------- | ------- | ----------------------------------------------------- |
+| `styling.className`        | `string` | `""`    | Additional CSS classes for root element               |
+| `styling.style`            | `string` | `""`    | Additional inline styles                              |
+| `styling.wrapperClassName` | `string` | `""`    | Additional CSS classes for the page wrapper container |
+| `styling.wrapperStyle`     | `string` | `""`    | Inline styles for the page wrapper container          |
+| `styling.contentClassName` | `string` | `""`    | Additional CSS classes for the content container      |
+| `styling.contentStyle`     | `string` | `""`    | Inline styles for the content container               |
+| `styling.footerClassName`  | `string` | `""`    | Additional CSS classes for the footer container       |
+| `styling.footerStyle`      | `string` | `""`    | Inline styles for the footer container                |
 
 ### Behavior Props (`behavior` object)
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
+| Prop              | Type      | Default | Description                                |
+| ----------------- | --------- | ------- | ------------------------------------------ |
 | `behavior.center` | `boolean` | `false` | Center content vertically and horizontally |
 
 ### Accessibility Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `ariaLabel` | `string` | `undefined` | ARIA label for accessibility |
-| `ariaDescribedBy` | `string` | `undefined` | ARIA described by reference |
+| Prop              | Type     | Default     | Description                  |
+| ----------------- | -------- | ----------- | ---------------------------- |
+| `ariaLabel`       | `string` | `undefined` | ARIA label for accessibility |
+| `ariaDescribedBy` | `string` | `undefined` | ARIA described by reference  |
 
 ## Events
 
@@ -133,11 +133,11 @@ Dispatched when the page wrapper is scrolled. The event detail contains scroll p
 
 ```typescript
 interface PageWrapperScrollEventDetail {
-  scrollTop: number;      // Current scroll position from top
-  scrollLeft: number;    // Current scroll position from left
-  scrollHeight: number;  // Total scrollable height
-  clientHeight: number;  // Visible height of the scrollable area
-  target: HTMLElement;   // The scrollable element
+	scrollTop: number; // Current scroll position from top
+	scrollLeft: number; // Current scroll position from left
+	scrollHeight: number; // Total scrollable height
+	clientHeight: number; // Visible height of the scrollable area
+	target: HTMLElement; // The scrollable element
 }
 ```
 
@@ -145,18 +145,18 @@ interface PageWrapperScrollEventDetail {
 
 ```svelte
 <script>
-  import { PageWrapper } from '@rief/kit';
-  import type { PageWrapperScrollEventDetail } from '@rief/kit';
+	import { PageWrapper } from '@rief/kit';
+	import type { PageWrapperScrollEventDetail } from '@rief/kit';
 
-  function handleScroll(event: CustomEvent<PageWrapperScrollEventDetail>) {
-    const { scrollTop, scrollHeight, clientHeight } = event.detail;
-    const scrollPercentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
-    console.log(`Scrolled ${scrollPercentage.toFixed(1)}%`);
-  }
+	function handleScroll(event: CustomEvent<PageWrapperScrollEventDetail>) {
+		const { scrollTop, scrollHeight, clientHeight } = event.detail;
+		const scrollPercentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
+		console.log(`Scrolled ${scrollPercentage.toFixed(1)}%`);
+	}
 </script>
 
 <PageWrapper on:scroll={handleScroll}>
-  <div>Scrollable content</div>
+	<div>Scrollable content</div>
 </PageWrapper>
 ```
 
@@ -164,15 +164,15 @@ interface PageWrapperScrollEventDetail {
 
 The component uses CSS custom properties for easy theming and customization. See [STYLING.md](./STYLING.md) for comprehensive styling documentation.
 
-| Property | Default | Description |
-|----------|---------|-------------|
-| `--page-wrapper-bg` | `var(--color-surface, transparent)` | Background color of the page wrapper |
-| `--page-wrapper-padding` | `0` | Padding of the page wrapper |
-| `--page-wrapper-scroll-behavior` | `smooth` | Scroll behavior (`smooth`, `auto`, `instant`) |
-| `--page-content-max-width` | `none` | Maximum width of the content area |
-| `--page-content-padding` | `0` | Padding of the content area |
-| `--page-footer-bg` | `transparent` | Background color of the footer |
-| `--page-footer-padding` | `0` | Padding of the footer |
+| Property                         | Default                             | Description                                   |
+| -------------------------------- | ----------------------------------- | --------------------------------------------- |
+| `--page-wrapper-bg`              | `var(--color-surface, transparent)` | Background color of the page wrapper          |
+| `--page-wrapper-padding`         | `0`                                 | Padding of the page wrapper                   |
+| `--page-wrapper-scroll-behavior` | `smooth`                            | Scroll behavior (`smooth`, `auto`, `instant`) |
+| `--page-content-max-width`       | `none`                              | Maximum width of the content area             |
+| `--page-content-padding`         | `0`                                 | Padding of the content area                   |
+| `--page-footer-bg`               | `transparent`                       | Background color of the footer                |
+| `--page-footer-padding`          | `0`                                 | Padding of the footer                         |
 
 ## Advanced Usage
 
@@ -180,29 +180,29 @@ The component uses CSS custom properties for easy theming and customization. See
 
 ```svelte
 <script>
-  import { PageWrapper } from '@rief/kit';
-  import type { PageWrapperScrollEventDetail } from '@rief/kit';
-  
-  let scrollPosition = 0;
-  let isScrolling = false;
+	import { PageWrapper } from '@rief/kit';
+	import type { PageWrapperScrollEventDetail } from '@rief/kit';
 
-  function handleScroll(event: CustomEvent<PageWrapperScrollEventDetail>) {
-    scrollPosition = event.detail.scrollTop;
-    isScrolling = true;
-    
-    // Reset scrolling flag after scroll ends
-    clearTimeout(window.scrollTimeout);
-    window.scrollTimeout = setTimeout(() => {
-      isScrolling = false;
-    }, 150);
-  }
+	let scrollPosition = 0;
+	let isScrolling = false;
+
+	function handleScroll(event: CustomEvent<PageWrapperScrollEventDetail>) {
+		scrollPosition = event.detail.scrollTop;
+		isScrolling = true;
+
+		// Reset scrolling flag after scroll ends
+		clearTimeout(window.scrollTimeout);
+		window.scrollTimeout = setTimeout(() => {
+			isScrolling = false;
+		}, 150);
+	}
 </script>
 
 <PageWrapper on:scroll={handleScroll}>
-  <div>Scroll position: {scrollPosition}px</div>
-  {#if isScrolling}
-    <div>Scrolling...</div>
-  {/if}
+	<div>Scroll position: {scrollPosition}px</div>
+	{#if isScrolling}
+		<div>Scrolling...</div>
+	{/if}
 </PageWrapper>
 ```
 
@@ -210,33 +210,33 @@ The component uses CSS custom properties for easy theming and customization. See
 
 ```svelte
 <script>
-  import { PageWrapper } from '@rief/kit';
-  import type { PageWrapperScrollEventDetail } from '@rief/kit';
-  
-  let items = Array.from({ length: 20 }, (_, i) => i + 1);
-  let loading = false;
+	import { PageWrapper } from '@rief/kit';
+	import type { PageWrapperScrollEventDetail } from '@rief/kit';
 
-  async function handleScroll(event: CustomEvent<PageWrapperScrollEventDetail>) {
-    const { scrollTop, scrollHeight, clientHeight } = event.detail;
-    const threshold = scrollHeight - clientHeight - 100; // 100px before bottom
-    
-    if (scrollTop >= threshold && !loading) {
-      loading = true;
-      // Load more items
-      await new Promise(resolve => setTimeout(resolve, 500));
-      items = [...items, ...Array.from({ length: 10 }, (_, i) => items.length + i + 1)];
-      loading = false;
-    }
-  }
+	let items = Array.from({ length: 20 }, (_, i) => i + 1);
+	let loading = false;
+
+	async function handleScroll(event: CustomEvent<PageWrapperScrollEventDetail>) {
+		const { scrollTop, scrollHeight, clientHeight } = event.detail;
+		const threshold = scrollHeight - clientHeight - 100; // 100px before bottom
+
+		if (scrollTop >= threshold && !loading) {
+			loading = true;
+			// Load more items
+			await new Promise((resolve) => setTimeout(resolve, 500));
+			items = [...items, ...Array.from({ length: 10 }, (_, i) => items.length + i + 1)];
+			loading = false;
+		}
+	}
 </script>
 
 <PageWrapper on:scroll={handleScroll}>
-  {#each items as item}
-    <div>Item {item}</div>
-  {/each}
-  {#if loading}
-    <div>Loading more...</div>
-  {/if}
+	{#each items as item}
+		<div>Item {item}</div>
+	{/each}
+	{#if loading}
+		<div>Loading more...</div>
+	{/if}
 </PageWrapper>
 ```
 
@@ -244,21 +244,21 @@ The component uses CSS custom properties for easy theming and customization. See
 
 ```svelte
 <script>
-  import { PageWrapper } from '@rief/kit';
-  
-  let pageRef: HTMLElement;
+	import { PageWrapper } from '@rief/kit';
 
-  function scrollToTop() {
-    pageRef?.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+	let pageRef: HTMLElement;
 
-  function scrollToBottom() {
-    pageRef?.scrollTo({ top: pageRef.scrollHeight, behavior: 'smooth' });
-  }
+	function scrollToTop() {
+		pageRef?.scrollTo({ top: 0, behavior: 'smooth' });
+	}
+
+	function scrollToBottom() {
+		pageRef?.scrollTo({ top: pageRef.scrollHeight, behavior: 'smooth' });
+	}
 </script>
 
 <PageWrapper bind:pageElm={pageRef}>
-  <div>Content</div>
+	<div>Content</div>
 </PageWrapper>
 
 <button on:click={scrollToTop}>Scroll to Top</button>
@@ -268,8 +268,10 @@ The component uses CSS custom properties for easy theming and customization. See
 ### Responsive Content Width
 
 ```svelte
-<PageWrapper styling={{ contentStyle: "max-width: min(100%, 1200px); margin: 0 auto; padding: 2rem;" }}>
-  <div>Responsive centered content</div>
+<PageWrapper
+	styling={{ contentStyle: 'max-width: min(100%, 1200px); margin: 0 auto; padding: 2rem;' }}
+>
+	<div>Responsive centered content</div>
 </PageWrapper>
 ```
 
@@ -280,13 +282,13 @@ The component uses CSS custom properties for easy theming and customization. See
 ```svelte
 <!-- +layout.svelte -->
 <script>
-  import { BaseLayoutWrapper, PageWrapper } from '@rief/kit';
+	import { BaseLayoutWrapper, PageWrapper } from '@rief/kit';
 </script>
 
 <BaseLayoutWrapper>
-  <PageWrapper>
-    <slot />
-  </PageWrapper>
+	<PageWrapper>
+		<slot />
+	</PageWrapper>
 </BaseLayoutWrapper>
 ```
 
@@ -294,25 +296,25 @@ The component uses CSS custom properties for easy theming and customization. See
 
 ```svelte
 <script>
-  import { BaseLayoutWrapper, PageWrapper } from '@rief/kit';
-  import { page } from '$app/stores';
+	import { BaseLayoutWrapper, PageWrapper } from '@rief/kit';
+	import { page } from '$app/stores';
 </script>
 
 <BaseLayoutWrapper>
-  <PageWrapper 
-    styling={{
-      contentClassName: "app-content",
-      contentStyle: "padding: 2rem;"
-    }}
-  >
-    {#if $page.url.pathname === '/dashboard'}
-      <Dashboard />
-    {:else if $page.url.pathname === '/settings'}
-      <Settings />
-    {:else}
-      <Home />
-    {/if}
-  </PageWrapper>
+	<PageWrapper
+		styling={{
+			contentClassName: 'app-content',
+			contentStyle: 'padding: 2rem;'
+		}}
+	>
+		{#if $page.url.pathname === '/dashboard'}
+			<Dashboard />
+		{:else if $page.url.pathname === '/settings'}
+			<Settings />
+		{:else}
+			<Home />
+		{/if}
+	</PageWrapper>
 </BaseLayoutWrapper>
 ```
 
@@ -320,21 +322,22 @@ The component uses CSS custom properties for easy theming and customization. See
 
 ```svelte
 <script>
-  import { BaseLayoutWrapper, PageWrapper } from '@rief/kit';
-  import { writable } from 'svelte/store';
-  
-  const sidebarOpen = writable(false);
+	import { BaseLayoutWrapper, PageWrapper } from '@rief/kit';
+	import { writable } from 'svelte/store';
+
+	const sidebarOpen = writable(false);
 </script>
 
 <BaseLayoutWrapper>
-  <PageWrapper 
-    styling={{
-      contentStyle: "display: grid; grid-template-columns: {$sidebarOpen ? '250px' : '0'} 1fr; transition: grid-template-columns 0.3s;"
-    }}
-  >
-    <aside class="sidebar">Sidebar</aside>
-    <main>Main content</main>
-  </PageWrapper>
+	<PageWrapper
+		styling={{
+			contentStyle:
+				"display: grid; grid-template-columns: {$sidebarOpen ? '250px' : '0'} 1fr; transition: grid-template-columns 0.3s;"
+		}}
+	>
+		<aside class="sidebar">Sidebar</aside>
+		<main>Main content</main>
+	</PageWrapper>
 </BaseLayoutWrapper>
 ```
 
@@ -351,14 +354,14 @@ For better accessibility, consider adding semantic elements within the content:
 
 ```svelte
 <PageWrapper>
-  <main role="main">
-    <h1>Page Title</h1>
-    <article>Main content</article>
-  </main>
-  
-  <svelte:fragment slot="footer">
-    <footer role="contentinfo">Footer content</footer>
-  </svelte:fragment>
+	<main role="main">
+		<h1>Page Title</h1>
+		<article>Main content</article>
+	</main>
+
+	<svelte:fragment slot="footer">
+		<footer role="contentinfo">Footer content</footer>
+	</svelte:fragment>
 </PageWrapper>
 ```
 
@@ -374,19 +377,19 @@ The component exports comprehensive TypeScript types:
 import type { PageWrapperProps, PageWrapperStyling, PageWrapperBehavior } from '@rief/kit';
 
 const pageConfig: PageWrapperProps = {
-  styling: {
-    wrapperClassName: 'my-page',
-    contentClassName: 'my-content',
-    wrapperStyle: 'background: #f0f0f0;',
-    contentStyle: 'padding: 2rem;'
-  },
-  behavior: {
-    center: false
-  }
+	styling: {
+		wrapperClassName: 'my-page',
+		contentClassName: 'my-content',
+		wrapperStyle: 'background: #f0f0f0;',
+		contentStyle: 'padding: 2rem;'
+	},
+	behavior: {
+		center: false
+	}
 };
 
 function handleScroll(event: CustomEvent<PageWrapperScrollEventDetail>) {
-  console.log('Scroll position:', event.detail.scrollTop);
+	console.log('Scroll position:', event.detail.scrollTop);
 }
 ```
 
@@ -412,4 +415,3 @@ function handleScroll(event: CustomEvent<PageWrapperScrollEventDetail>) {
 - **Documentation Sites**: Long-form content with footers
 - **Mobile Apps**: Progressive web apps with scrollable pages
 - **Landing Pages**: Marketing pages with centered content and footers
-

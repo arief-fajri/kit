@@ -40,7 +40,7 @@ export interface SwitchBehavior {
 	stopPropagation?: boolean;
 }
 
-import type { BaseAccessibility } from "../../types.js";
+import type { BaseAccessibility } from '../../types.js';
 
 export interface SwitchProps extends BaseAccessibility {
 	/** Unique identifier for the switch input */
@@ -60,4 +60,3 @@ export interface SwitchProps extends BaseAccessibility {
 	/** Reference to switch DOM element */
 	switchRef?: HTMLInputElement;
 }
-

@@ -7,21 +7,21 @@ import { getFormData } from './getFormData.js';
  * @returns Validation result with isValid flag and errors object
  */
 export function validateRequiredFields(
-  form: HTMLFormElement,
-  requiredFields: string[]
+	form: HTMLFormElement,
+	requiredFields: string[]
 ): { isValid: boolean; errors: Record<string, string> } {
-  const formData = getFormData(form);
-  const errors: Record<string, string> = {};
+	const formData = getFormData(form);
+	const errors: Record<string, string> = {};
 
-  for (const fieldName of requiredFields) {
-    const value = formData.get(fieldName);
-    if (!value || (typeof value === "string" && value.trim() === "")) {
-      errors[fieldName] = `${fieldName} is required`;
-    }
-  }
+	for (const fieldName of requiredFields) {
+		const value = formData.get(fieldName);
+		if (!value || (typeof value === 'string' && value.trim() === '')) {
+			errors[fieldName] = `${fieldName} is required`;
+		}
+	}
 
-  return {
-    isValid: Object.keys(errors).length === 0,
-    errors
-  };
+	return {
+		isValid: Object.keys(errors).length === 0,
+		errors
+	};
 }

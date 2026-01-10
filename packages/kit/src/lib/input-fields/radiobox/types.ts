@@ -36,7 +36,7 @@ export interface RadioboxBehavior {
 	stopPropagation?: boolean;
 }
 
-import type { BaseAccessibility } from "../../types.js";
+import type { BaseAccessibility } from '../../types.js';
 
 export interface RadioboxProps extends BaseAccessibility {
 	/** HTML name attribute for form handling (required for radio groups) */

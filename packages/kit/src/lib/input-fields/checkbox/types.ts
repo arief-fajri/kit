@@ -16,7 +16,7 @@ export interface FocusEventDetail {
 	originalEvent: FocusEvent;
 }
 
-import type { BaseStyling, BaseBehavior, BaseAccessibility } from "../../types.js";
+import type { BaseStyling, BaseBehavior, BaseAccessibility } from '../../types.js';
 
 export interface CheckboxStyling extends BaseStyling {
 	/** Checkbox size variant */

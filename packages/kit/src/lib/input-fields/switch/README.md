@@ -39,105 +39,107 @@ The Switch uses a label-wrapped checkbox so the entire control is clickable whil
 
 ```svelte
 <script>
-  import { Switch } from '@rief/kit';
+	import { Switch } from '@rief/kit';
 
-  let marketingEmails = false;
+	let marketingEmails = false;
 </script>
 
 <!-- Basic toggle -->
 <Switch bind:checked={marketingEmails} label="Marketing emails" />
 
 <!-- Listen to change event -->
-<Switch
-  label="Notifications"
-  on:change={(event) => console.log(event.detail.checked)}
-/>
+<Switch label="Notifications" on:change={(event) => console.log(event.detail.checked)} />
 ```
 
 ## Props
 
 ### Core Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `id` | `string \| undefined` | `undefined` | Unique identifier used for label association and form inputs |
-| `name` | `string` | `"switch"` | HTML name attribute so the switch participates in form submissions |
-| `checked` | `boolean` | `false` | Controls the current on/off state; works with `bind:checked` |
-| `value` | `any` | `undefined` | Value submitted with the form when the switch is checked |
-| `label` | `string` | `""` | Optional inline label (falls back to the `label` slot) |
-| `switchRef` | `HTMLInputElement \| undefined` | `undefined` | Reference to switch DOM element |
+| Prop        | Type                            | Default     | Description                                                        |
+| ----------- | ------------------------------- | ----------- | ------------------------------------------------------------------ |
+| `id`        | `string \| undefined`           | `undefined` | Unique identifier used for label association and form inputs       |
+| `name`      | `string`                        | `"switch"`  | HTML name attribute so the switch participates in form submissions |
+| `checked`   | `boolean`                       | `false`     | Controls the current on/off state; works with `bind:checked`       |
+| `value`     | `any`                           | `undefined` | Value submitted with the form when the switch is checked           |
+| `label`     | `string`                        | `""`        | Optional inline label (falls back to the `label` slot)             |
+| `switchRef` | `HTMLInputElement \| undefined` | `undefined` | Reference to switch DOM element                                    |
 
 ### Styling Props (`styling` object)
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `styling.size` | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | Adjusts track width/height and knob size proportionally |
-| `styling.variant` | `'default' \| 'primary' \| 'success' \| 'error' \| 'warning'` | `'default'` | Sets semantic track colors for checked state |
-| `styling.wrapperClass` | `string` | `""` | Adds custom classes to the root wrapper |
-| `styling.labelClass` | `string` | `""` | Additional CSS classes for label |
-| `styling.inputClass` | `string` | `""` | Additional CSS classes for input |
-| `styling.wrapperStyle` | `string` | `""` | Inline styles for wrapper element |
+| Prop                   | Type                                                          | Default     | Description                                             |
+| ---------------------- | ------------------------------------------------------------- | ----------- | ------------------------------------------------------- |
+| `styling.size`         | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'`                        | `'md'`      | Adjusts track width/height and knob size proportionally |
+| `styling.variant`      | `'default' \| 'primary' \| 'success' \| 'error' \| 'warning'` | `'default'` | Sets semantic track colors for checked state            |
+| `styling.wrapperClass` | `string`                                                      | `""`        | Adds custom classes to the root wrapper                 |
+| `styling.labelClass`   | `string`                                                      | `""`        | Additional CSS classes for label                        |
+| `styling.inputClass`   | `string`                                                      | `""`        | Additional CSS classes for input                        |
+| `styling.wrapperStyle` | `string`                                                      | `""`        | Inline styles for wrapper element                       |
 
 ### Behavior Props (`behavior` object)
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `behavior.disabled` | `boolean` | `false` | Prevents interaction and applies reduced-opacity styling |
-| `behavior.required` | `boolean` | `false` | Marks the field as required for native form validation |
+| Prop                       | Type      | Default | Description                                                   |
+| -------------------------- | --------- | ------- | ------------------------------------------------------------- |
+| `behavior.disabled`        | `boolean` | `false` | Prevents interaction and applies reduced-opacity styling      |
+| `behavior.required`        | `boolean` | `false` | Marks the field as required for native form validation        |
 | `behavior.stopPropagation` | `boolean` | `false` | Stops click bubbling when you need isolated interaction zones |
 
 ### Accessibility Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `ariaLabel` | `string` | `undefined` | ARIA label for accessibility |
-| `ariaDescribedBy` | `string` | `undefined` | ARIA described by reference |
+| Prop              | Type     | Default     | Description                  |
+| ----------------- | -------- | ----------- | ---------------------------- |
+| `ariaLabel`       | `string` | `undefined` | ARIA label for accessibility |
+| `ariaDescribedBy` | `string` | `undefined` | ARIA described by reference  |
 
 ## Variants
 
 ### Default (Neutral)
+
 Neutral gray track suited for generic binary toggles.
 
 ```svelte
-<Switch styling={{ variant: "default" }} label="Neutral" />
+<Switch styling={{ variant: 'default' }} label="Neutral" />
 ```
 
 ### Primary
+
 Aligns with the primary brand color for emphasis.
 
 ```svelte
-<Switch styling={{ variant: "primary" }} label="Primary action" />
+<Switch styling={{ variant: 'primary' }} label="Primary action" />
 ```
 
 ### Success
+
 Communicates enabling positive outcomes or confirmations.
 
 ```svelte
-<Switch styling={{ variant: "success" }} label="Auto backup" />
+<Switch styling={{ variant: 'success' }} label="Auto backup" />
 ```
 
 ### Error
+
 Use for destructive or high-risk toggles.
 
 ```svelte
-<Switch styling={{ variant: "error" }} label="Danger mode" />
+<Switch styling={{ variant: 'error' }} label="Danger mode" />
 ```
 
 ### Warning
+
 Great for experimental features or cautionary toggles.
 
 ```svelte
-<Switch styling={{ variant: "warning" }} label="Beta features" />
+<Switch styling={{ variant: 'warning' }} label="Beta features" />
 ```
 
 ## Sizes
 
 ```svelte
-<Switch styling={{ size: "xs" }} label="XS" />
-<Switch styling={{ size: "sm" }} label="Small" />
-<Switch styling={{ size: "md" }} label="Medium" />
-<Switch styling={{ size: "lg" }} label="Large" />
-<Switch styling={{ size: "xl" }} label="XL" />
+<Switch styling={{ size: 'xs' }} label="XS" />
+<Switch styling={{ size: 'sm' }} label="Small" />
+<Switch styling={{ size: 'md' }} label="Medium" />
+<Switch styling={{ size: 'lg' }} label="Large" />
+<Switch styling={{ size: 'xl' }} label="XL" />
 ```
 
 ## States
@@ -154,10 +156,10 @@ Use the `label` slot when you need custom markup (icons, helper text, etc.).
 
 ```svelte
 <Switch bind:checked={enabled}>
-  <div slot="label" class="flex items-center gap-2">
-    <span>Enable syncing</span>
-    <small class="text-muted">Uses additional bandwidth</small>
-  </div>
+	<div slot="label" class="flex items-center gap-2">
+		<span>Enable syncing</span>
+		<small class="text-muted">Uses additional bandwidth</small>
+	</div>
 </Switch>
 ```
 
@@ -165,14 +167,14 @@ Use the `label` slot when you need custom markup (icons, helper text, etc.).
 
 ```svelte
 <form on:submit|preventDefault={(event) => console.log(new FormData(event.target))}>
-  <Switch
-    id="privacy"
-    name="privacy"
-    value="enabled"
-    behavior={{ required: true }}
-    label="Privacy Shield"
-  />
-  <button type="submit">Save</button>
+	<Switch
+		id="privacy"
+		name="privacy"
+		value="enabled"
+		behavior={{ required: true }}
+		label="Privacy Shield"
+	/>
+	<button type="submit">Save</button>
 </form>
 ```
 
@@ -182,8 +184,8 @@ Override CSS variables inline or via classes for bespoke styling.
 
 ```svelte
 <Switch
-  label="Custom gradient"
-  style="
+	label="Custom gradient"
+	style="
     --switch-bg-unchecked: #334155;
     --switch-bg-checked: linear-gradient(90deg, #6366f1, #8b5cf6);
     --switch-slider-color: #f8fafc;
@@ -197,10 +199,10 @@ Switch dispatches three events with helpful payloads:
 
 ```svelte
 <Switch
-  label="Notifications"
-  on:change={(event) => console.log(event.detail.checked)}
-  on:focus={() => console.log('focused')}
-  on:blur={() => console.log('blurred')}
+	label="Notifications"
+	on:change={(event) => console.log(event.detail.checked)}
+	on:focus={() => console.log('focused')}
+	on:blur={() => console.log('blurred')}
 />
 ```
 
@@ -218,11 +220,7 @@ Switch is accessible out of the box:
 - Focus states use `:focus-visible` for clear outlines.
 
 ```svelte
-<Switch
-  label="Airplane mode"
-  aria-label="Toggle airplane mode"
-  on:change={handleToggle}
-/>
+<Switch label="Airplane mode" aria-label="Toggle airplane mode" on:change={handleToggle} />
 ```
 
 ## Advanced Usage
@@ -231,17 +229,17 @@ Switch is accessible out of the box:
 
 ```svelte
 <Switch
-  variant={isBeta ? 'warning' : 'primary'}
-  size={compact ? 'sm' : 'lg'}
-  disabled={!canToggle}
-  bind:checked={isEnabled}
-  label={isEnabled ? 'Enabled' : 'Disabled'}
+	variant={isBeta ? 'warning' : 'primary'}
+	size={compact ? 'sm' : 'lg'}
+	disabled={!canToggle}
+	bind:checked={isEnabled}
+	label={isEnabled ? 'Enabled' : 'Disabled'}
 />
 ```
 
 ### Dynamic Content
 
-```svelte
+````svelte
 <Switch bind:checked={streaming}>
   <span slot="label">
     {#if streaming}
@@ -274,5 +272,4 @@ const marketingToggle: SwitchProps = {
   size: 'sm' satisfies SwitchSize,
   label: 'Marketing emails'
 };
-```
-
+````

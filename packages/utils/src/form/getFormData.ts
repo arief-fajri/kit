@@ -4,5 +4,5 @@
  * @returns FormData object
  */
 export function getFormData(form: HTMLFormElement): FormData {
-  return new FormData(form);
+	return new FormData(form);
 }

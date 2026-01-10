@@ -24,10 +24,10 @@
 
 	// Computed props with defaults
 	$: computedStyling = {
-		className: styling.className ?? "",
-		style: styling.style ?? "",
-		sidebarClassName: styling.sidebarClassName ?? "",
-		sidebarStyle: styling.sidebarStyle ?? ""
+		className: styling.className ?? '',
+		style: styling.style ?? '',
+		sidebarClassName: styling.sidebarClassName ?? '',
+		sidebarStyle: styling.sidebarStyle ?? ''
 	};
 
 	$: computedBehavior = {
@@ -80,7 +80,11 @@
 
 	// Load persisted width from localStorage
 	onMount(() => {
-		if (computedBehavior.persistWidth && typeof window !== 'undefined' && computedBehavior.storageKey) {
+		if (
+			computedBehavior.persistWidth &&
+			typeof window !== 'undefined' &&
+			computedBehavior.storageKey
+		) {
 			const key = computedBehavior.storageKey;
 			const savedWidth = localStorage.getItem(key);
 			if (savedWidth) {
@@ -94,7 +98,11 @@
 
 	// Save width to localStorage
 	function saveWidth(width: number): void {
-		if (computedBehavior.persistWidth && typeof window !== 'undefined' && computedBehavior.storageKey) {
+		if (
+			computedBehavior.persistWidth &&
+			typeof window !== 'undefined' &&
+			computedBehavior.storageKey
+		) {
 			const key = computedBehavior.storageKey;
 			localStorage.setItem(key, width.toString());
 		}

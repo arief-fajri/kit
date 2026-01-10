@@ -45,8 +45,8 @@ All components in `@rief/kit` follow a consistent props structure for better dev
 </script>
 
 <!-- Basic usage with grouped props -->
-<Button 
-	label="Click me" 
+<Button
+	label="Click me"
 	styling={{
 		variant: "filled",
 		size: "lg"
@@ -107,9 +107,9 @@ Browse component documentation in `packages/kit/src/lib/[component-name]/README.
 Full TypeScript support with comprehensive type definitions:
 
 ```typescript
-import type { 
-	ButtonProps, 
-	ButtonStyling, 
+import type {
+	ButtonProps,
+	ButtonStyling,
 	ButtonBehavior,
 	InputTextProps,
 	InputTextStyling,
@@ -117,6 +117,88 @@ import type {
 	InputTextBehavior
 } from '@rief/kit';
 ```
+
+### Form Input with Validation
+
+```svelte
+<script>
+	import { InputText } from '@rief/kit';
+
+	let email = '';
+	let error = false;
+</script>
+
+<InputText
+	type="email"
+	bind:value={email}
+	label="Email Address"
+	styling={{ size: 'md', variant: 'outlined' }}
+	validation={{
+		required: true,
+		isError: error,
+		errorMessage: error ? 'Please enter a valid email' : undefined
+	}}
+/>
+```
+
+### Layout with Sidebar
+
+```svelte
+<script>
+	import { SidebarWrapper, PageWrapper } from '@rief/kit';
+</script>
+
+<SidebarWrapper
+	collapsed={false}
+	isDraggable={true}
+	defaultWidth={250}
+	minWidth={200}
+	maxWidth="400px"
+	persistWidth={true}
+	storageKey="app-sidebar-width"
+>
+	<!-- Sidebar content -->
+	<nav>Navigation menu</nav>
+</SidebarWrapper>
+
+<PageWrapper center={false}>
+	<!-- Main page content -->
+	<main>Page content</main>
+</PageWrapper>
+```
+
+### Date Picker
+
+```svelte
+<script>
+	import { DatePicker } from '@rief/kit';
+	import type { DatePickerChangeEvent } from '@rief/kit';
+
+	function handleDateChange(event: CustomEvent<DatePickerChangeEvent>) {
+		console.log('Selected date:', event.detail.value);
+	}
+</script>
+
+<DatePicker mode="single" on:change={handleDateChange} />
+```
+
+## Key Features
+
+- ✅ **Full TypeScript Support** - Comprehensive type definitions for all components
+- ✅ **Accessibility** - WCAG compliant with ARIA support
+- ✅ **Customizable** - Extensive theming through CSS custom properties
+- ✅ **Consistent API** - Similar prop structures across related components
+- ✅ **Event Handling** - Rich event system with typed event details
+- ✅ **Form Integration** - Works seamlessly with Svelte forms
+- ✅ **Responsive** - Mobile-friendly components
+- ✅ **Performance** - Optimized Svelte components with proper reactivity
+
+## Documentation
+
+Each component includes detailed documentation in its respective folder:
+
+- `README.md` - Component usage, props, and examples
+- `STYLING.md` - Styling guide and CSS custom properties
 
 ## License
 

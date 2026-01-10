@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button } from '@rief/kit';
 	import type { ButtonVariant, ButtonSize } from '@rief/kit';
-	
+
 	let playgroundProps = {
 		variant: 'filled' as ButtonVariant,
 		size: 'md' as ButtonSize,
@@ -9,23 +9,27 @@
 		loading: false,
 		fullRounded: false
 	};
-	
+
 	const variants = ['filled', 'outlined', 'text', 'link'];
 	const sizes = ['sm', 'md', 'lg', 'xl'];
 </script>
 
 <svelte:head>
 	<title>Button - Kit Component Library</title>
-	<meta name="description" content="Button component documentation with examples and API reference" />
+	<meta
+		name="description"
+		content="Button component documentation with examples and API reference"
+	/>
 </svelte:head>
 
 <div class="component-page">
 	<header class="component-header">
 		<h1>Button</h1>
 		<p class="component-description">
-			Interactive button component with multiple variants, sizes, and states. Supports both button and link functionality.
+			Interactive button component with multiple variants, sizes, and states. Supports both button
+			and link functionality.
 		</p>
-		
+
 		<div class="import-code">
 			<pre><code>import &#123; Button &#125; from '@rief/kit';</code></pre>
 		</div>
@@ -49,7 +53,7 @@
 						{/each}
 					</select>
 				</div>
-				
+
 				<div class="control-group">
 					<label for="size-select">Size</label>
 					<select id="size-select" bind:value={playgroundProps.size}>
@@ -58,21 +62,21 @@
 						{/each}
 					</select>
 				</div>
-				
+
 				<div class="control-group">
 					<label>
 						<input type="checkbox" bind:checked={playgroundProps.disabled} />
 						Disabled
 					</label>
 				</div>
-				
+
 				<div class="control-group">
 					<label>
 						<input type="checkbox" bind:checked={playgroundProps.loading} />
 						Loading
 					</label>
 				</div>
-				
+
 				<div class="control-group">
 					<label>
 						<input type="checkbox" bind:checked={playgroundProps.fullRounded} />
@@ -80,9 +84,9 @@
 					</label>
 				</div>
 			</div>
-			
+
 			<div class="playground-preview">
-				<Button 
+				<Button
 					variant={playgroundProps.variant}
 					size={playgroundProps.size}
 					disabled={playgroundProps.disabled}
@@ -93,9 +97,10 @@
 				</Button>
 			</div>
 		</div>
-		
+
 		<div class="code-output">
-			<pre><code>&lt;Button 
+			<pre><code
+					>&lt;Button 
   variant="{playgroundProps.variant}"
   size="{playgroundProps.size}"
   {playgroundProps.disabled ? 'disabled' : ''}
@@ -103,13 +108,14 @@
   {playgroundProps.fullRounded ? 'fullRounded' : ''}
 &gt;
   Button Text
-&lt;/Button&gt;</code></pre>
+&lt;/Button&gt;</code
+				></pre>
 		</div>
 	</section>
 
 	<section class="examples">
 		<h2>Examples</h2>
-		
+
 		<div class="example-section">
 			<h3>Variants</h3>
 			<div class="example-grid">
@@ -175,7 +181,7 @@
 
 	<section class="api-reference">
 		<h2>API Reference</h2>
-		
+
 		<h3>Props</h3>
 		<div class="props-table">
 			<table>
@@ -347,7 +353,7 @@
 		background: white;
 	}
 
-	.control-group input[type="checkbox"] {
+	.control-group input[type='checkbox'] {
 		margin-right: 0.5rem;
 	}
 

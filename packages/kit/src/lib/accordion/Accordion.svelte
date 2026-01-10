@@ -29,14 +29,14 @@
 
 	// Initialize IDs in onMount to avoid SSR hydration issues
 
-	import { uniqueId } from "@rief/utils";
+	import { uniqueId } from '@rief/utils';
 
 	onMount(() => {
 		if (!contentId) {
-			contentId = uniqueId("accordion-content-");
+			contentId = uniqueId('accordion-content-');
 		}
 		if (!buttonId) {
-			buttonId = uniqueId("accordion-button-");
+			buttonId = uniqueId('accordion-button-');
 		}
 	});
 

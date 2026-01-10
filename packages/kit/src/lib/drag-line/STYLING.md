@@ -5,6 +5,7 @@ This guide covers how to customize the DragLine component's appearance using CSS
 ## CSS Custom Properties Overview
 
 The DragLine component uses CSS custom properties that allow you to:
+
 - Create consistent design systems
 - Implement dark/light themes
 - Customize cursors, opacity, and transitions
@@ -18,21 +19,21 @@ Create a global CSS file (e.g., `app.css` or `theme.css`) and define your design
 
 ```css
 :root {
-  /* Cursor Styles */
-  --dragline-cursor-horizontal: ew-resize;
-  --dragline-cursor-vertical: ns-resize;
-  
-  /* Z-Index */
-  --dragline-z-index: 101;
-  
-  /* Opacity */
-  --dragline-opacity: 1;
-  --dragline-hover-opacity: 1;
-  --dragline-dragging-opacity: 1;
-  --dragline-disabled-opacity: 0.5;
-  
-  /* Transitions */
-  --dragline-transition: opacity 0.2s ease;
+	/* Cursor Styles */
+	--dragline-cursor-horizontal: ew-resize;
+	--dragline-cursor-vertical: ns-resize;
+
+	/* Z-Index */
+	--dragline-z-index: 101;
+
+	/* Opacity */
+	--dragline-opacity: 1;
+	--dragline-hover-opacity: 1;
+	--dragline-dragging-opacity: 1;
+	--dragline-disabled-opacity: 0.5;
+
+	/* Transitions */
+	--dragline-transition: opacity 0.2s ease;
 }
 ```
 
@@ -41,10 +42,10 @@ Create a global CSS file (e.g., `app.css` or `theme.css`) and define your design
 ### 1. Dark Theme
 
 ```css
-[data-theme="dark"] {
-  --dragline-opacity: 0.8;
-  --dragline-hover-opacity: 1;
-  --dragline-disabled-opacity: 0.3;
+[data-theme='dark'] {
+	--dragline-opacity: 0.8;
+	--dragline-hover-opacity: 1;
+	--dragline-disabled-opacity: 0.3;
 }
 ```
 
@@ -53,14 +54,14 @@ Create a global CSS file (e.g., `app.css` or `theme.css`) and define your design
 ```css
 /* Custom resize cursors */
 :root {
-  --dragline-cursor-horizontal: col-resize;
-  --dragline-cursor-vertical: row-resize;
+	--dragline-cursor-horizontal: col-resize;
+	--dragline-cursor-vertical: row-resize;
 }
 
 /* Move cursor for both directions */
 .dragline-move {
-  --dragline-cursor-horizontal: move;
-  --dragline-cursor-vertical: move;
+	--dragline-cursor-horizontal: move;
+	--dragline-cursor-vertical: move;
 }
 ```
 
@@ -73,14 +74,14 @@ Target specific DragLine instances:
 ```css
 /* Specific component styling */
 .panel-resizer {
-  --dragline-opacity: 0.6;
-  --dragline-hover-opacity: 1;
-  --dragline-z-index: 200;
+	--dragline-opacity: 0.6;
+	--dragline-hover-opacity: 1;
+	--dragline-z-index: 200;
 }
 
 .sidebar-resizer {
-  --dragline-cursor-horizontal: col-resize;
-  --dragline-opacity: 0.5;
+	--dragline-cursor-horizontal: col-resize;
+	--dragline-opacity: 0.5;
 }
 ```
 
@@ -89,14 +90,14 @@ Target specific DragLine instances:
 ```css
 /* Custom dragging state */
 .dragline-active {
-  --dragline-dragging-opacity: 0.9;
-  --dragline-transition: opacity 0.1s ease;
+	--dragline-dragging-opacity: 0.9;
+	--dragline-transition: opacity 0.1s ease;
 }
 
 /* Custom disabled state */
 .dragline-locked {
-  --dragline-disabled-opacity: 0.2;
-  cursor: not-allowed;
+	--dragline-disabled-opacity: 0.2;
+	cursor: not-allowed;
 }
 ```
 
@@ -107,18 +108,18 @@ Target specific DragLine instances:
 ```css
 /* Mobile-first responsive opacity */
 :root {
-  --dragline-opacity-mobile: 0.8;
-  --dragline-opacity-desktop: 1;
+	--dragline-opacity-mobile: 0.8;
+	--dragline-opacity-desktop: 1;
 }
 
 .dragline {
-  opacity: var(--dragline-opacity-mobile);
+	opacity: var(--dragline-opacity-mobile);
 }
 
 @media (min-width: 768px) {
-  .dragline {
-    opacity: var(--dragline-opacity-desktop);
-  }
+	.dragline {
+		opacity: var(--dragline-opacity-desktop);
+	}
 }
 ```
 
@@ -127,17 +128,17 @@ Target specific DragLine instances:
 ```css
 /* Smooth transitions */
 .dragline-smooth {
-  --dragline-transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	--dragline-transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Quick transitions */
 .dragline-fast {
-  --dragline-transition: opacity 0.1s ease;
+	--dragline-transition: opacity 0.1s ease;
 }
 
 /* No transitions */
 .dragline-instant {
-  --dragline-transition: none;
+	--dragline-transition: none;
 }
 ```
 
@@ -146,24 +147,26 @@ Target specific DragLine instances:
 ```css
 /* Hover effect with background */
 .dragline-with-bg {
-  --dragline-opacity: 0.3;
-  --dragline-hover-opacity: 0.6;
-  background: rgba(59, 130, 246, 0.1);
-  transition: background 0.2s ease, opacity 0.2s ease;
+	--dragline-opacity: 0.3;
+	--dragline-hover-opacity: 0.6;
+	background: rgba(59, 130, 246, 0.1);
+	transition:
+		background 0.2s ease,
+		opacity 0.2s ease;
 }
 
 .dragline-with-bg:hover {
-  background: rgba(59, 130, 246, 0.2);
+	background: rgba(59, 130, 246, 0.2);
 }
 
 /* Border highlight on hover */
 .dragline-border {
-  border: 2px solid transparent;
-  transition: border-color 0.2s ease;
+	border: 2px solid transparent;
+	transition: border-color 0.2s ease;
 }
 
 .dragline-border:hover {
-  border-color: var(--color-primary, #3b82f6);
+	border-color: var(--color-primary, #3b82f6);
 }
 ```
 
@@ -174,16 +177,16 @@ Target specific DragLine instances:
 ```css
 /* Map design system tokens to DragLine properties */
 :root {
-  /* Design System Tokens */
-  --ds-z-index-overlay: 1000;
-  --ds-z-index-modal: 2000;
-  --ds-opacity-disabled: 0.5;
-  --ds-transition-fast: 0.15s ease;
-  
-  /* DragLine Mappings */
-  --dragline-z-index: var(--ds-z-index-overlay);
-  --dragline-disabled-opacity: var(--ds-opacity-disabled);
-  --dragline-transition: opacity var(--ds-transition-fast);
+	/* Design System Tokens */
+	--ds-z-index-overlay: 1000;
+	--ds-z-index-modal: 2000;
+	--ds-opacity-disabled: 0.5;
+	--ds-transition-fast: 0.15s ease;
+
+	/* DragLine Mappings */
+	--dragline-z-index: var(--ds-z-index-overlay);
+	--dragline-disabled-opacity: var(--ds-opacity-disabled);
+	--dragline-transition: opacity var(--ds-transition-fast);
 }
 ```
 
@@ -192,15 +195,15 @@ Target specific DragLine instances:
 ```css
 /* Tailwind CSS Integration */
 .dragline-tailwind {
-  --dragline-opacity: theme('opacity.60');
-  --dragline-hover-opacity: theme('opacity.100');
-  --dragline-z-index: theme('zIndex.50');
+	--dragline-opacity: theme('opacity.60');
+	--dragline-hover-opacity: theme('opacity.100');
+	--dragline-z-index: theme('zIndex.50');
 }
 
 /* Bootstrap Integration */
 .dragline-bootstrap {
-  --dragline-z-index: var(--bs-zindex-dropdown);
-  --dragline-opacity: var(--bs-opacity);
+	--dragline-z-index: var(--bs-zindex-dropdown);
+	--dragline-opacity: var(--bs-opacity);
 }
 ```
 
@@ -211,49 +214,49 @@ Here's a complete example integrating all concepts:
 ```css
 /* Global theme setup */
 :root {
-  /* Design tokens */
-  --color-primary: #3b82f6;
-  --opacity-default: 1;
-  --opacity-hover: 0.9;
-  --opacity-disabled: 0.5;
-  
-  /* DragLine defaults */
-  --dragline-cursor-horizontal: ew-resize;
-  --dragline-cursor-vertical: ns-resize;
-  --dragline-z-index: 101;
-  --dragline-opacity: var(--opacity-default);
-  --dragline-hover-opacity: var(--opacity-hover);
-  --dragline-disabled-opacity: var(--opacity-disabled);
-  --dragline-transition: opacity 0.2s ease;
+	/* Design tokens */
+	--color-primary: #3b82f6;
+	--opacity-default: 1;
+	--opacity-hover: 0.9;
+	--opacity-disabled: 0.5;
+
+	/* DragLine defaults */
+	--dragline-cursor-horizontal: ew-resize;
+	--dragline-cursor-vertical: ns-resize;
+	--dragline-z-index: 101;
+	--dragline-opacity: var(--opacity-default);
+	--dragline-hover-opacity: var(--opacity-hover);
+	--dragline-disabled-opacity: var(--opacity-disabled);
+	--dragline-transition: opacity 0.2s ease;
 }
 
 /* Dark theme */
-[data-theme="dark"] {
-  --dragline-opacity: 0.8;
-  --dragline-hover-opacity: 1;
-  --dragline-disabled-opacity: 0.3;
+[data-theme='dark'] {
+	--dragline-opacity: 0.8;
+	--dragline-hover-opacity: 1;
+	--dragline-disabled-opacity: 0.3;
 }
 
 /* Custom variants */
 .dragline-primary {
-  --dragline-opacity: 0.6;
-  --dragline-hover-opacity: 0.9;
+	--dragline-opacity: 0.6;
+	--dragline-hover-opacity: 0.9;
 }
 
 .dragline-subtle {
-  --dragline-opacity: 0.3;
-  --dragline-hover-opacity: 0.6;
+	--dragline-opacity: 0.3;
+	--dragline-hover-opacity: 0.6;
 }
 ```
 
 ```svelte
 <!-- Usage in components -->
 <DragLine className="dragline-primary">
-  <div class="drag-handle">Primary dragline</div>
+	<div class="drag-handle">Primary dragline</div>
 </DragLine>
 
 <DragLine className="dragline-subtle" disabled={isLocked}>
-  <div class="drag-handle">Subtle dragline</div>
+	<div class="drag-handle">Subtle dragline</div>
 </DragLine>
 ```
 
@@ -267,4 +270,3 @@ Here's a complete example integrating all concepts:
 6. **Performance**: Minimize the number of custom properties to avoid performance issues
 
 This styling system provides maximum flexibility while maintaining consistency and performance across your application.
-

@@ -67,6 +67,7 @@ pnpm run build
 ```
 
 Turborepo will:
+
 - Build packages in the correct dependency order
 - Cache builds for faster subsequent runs
 - Only rebuild what changed
@@ -114,9 +115,9 @@ The docs app depends on the kit package:
 
 ```json
 {
-  "dependencies": {
-    "@rief/kit": "workspace:*"
-  }
+	"dependencies": {
+		"@rief/kit": "workspace:*"
+	}
 }
 ```
 
@@ -153,4 +154,3 @@ rm -rf .turbo
 rm -rf node_modules packages/*/node_modules apps/*/node_modules .turbo
 pnpm install
 ```
-

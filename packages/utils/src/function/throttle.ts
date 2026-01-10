@@ -5,18 +5,18 @@
  * @returns Throttled function
  */
 export function throttle<T extends (...args: unknown[]) => unknown>(
-  func: T,
-  wait: number
+	func: T,
+	wait: number
 ): (...args: Parameters<T>) => void {
-  let inThrottle: boolean = false;
+	let inThrottle: boolean = false;
 
-  return function executedFunction(...args: Parameters<T>) {
-    if (!inThrottle) {
-      func(...args);
-      inThrottle = true;
-      setTimeout(() => {
-        inThrottle = false;
-      }, wait);
-    }
-  };
+	return function executedFunction(...args: Parameters<T>) {
+		if (!inThrottle) {
+			func(...args);
+			inThrottle = true;
+			setTimeout(() => {
+				inThrottle = false;
+			}, wait);
+		}
+	};
 }

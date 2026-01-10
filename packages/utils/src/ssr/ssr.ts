@@ -17,9 +17,9 @@ export const isBrowser = typeof window !== 'undefined';
  * @returns Unique ID string
  */
 export function safeUniqueId(prefix: string = 'id'): string {
-  if (isBrowser) {
-    return uniqueId(prefix);
-  }
-  // SSR-safe fallback: use timestamp + random to ensure uniqueness
-  return `${prefix}-ssr-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+	if (isBrowser) {
+		return uniqueId(prefix);
+	}
+	// SSR-safe fallback: use timestamp + random to ensure uniqueness
+	return `${prefix}-ssr-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
 }

@@ -4,6 +4,6 @@
  * @returns JSON string or undefined
  */
 export function objStringify(obj: Record<string, unknown> = {}): string | undefined {
-  if (typeof obj !== "object" || obj === null) return;
-  return JSON.stringify(obj);
+	if (typeof obj !== 'object' || obj === null) return;
+	return JSON.stringify(obj);
 }

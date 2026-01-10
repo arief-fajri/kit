@@ -43,32 +43,32 @@ The SidebarWrapper creates a semantic sidebar container with optional drag handl
 
 ```svelte
 <script>
-  import { SidebarWrapper } from '@rief/kit';
+	import { SidebarWrapper } from '@rief/kit';
 </script>
 
 <!-- Basic sidebar -->
 <SidebarWrapper>
-  <nav>
-    <ul>
-      <li>Menu Item 1</li>
-      <li>Menu Item 2</li>
-    </ul>
-  </nav>
+	<nav>
+		<ul>
+			<li>Menu Item 1</li>
+			<li>Menu Item 2</li>
+		</ul>
+	</nav>
 </SidebarWrapper>
 
 <!-- Collapsible sidebar -->
 <SidebarWrapper behavior={{ collapsed: isCollapsed }}>
-  <nav>Navigation</nav>
+	<nav>Navigation</nav>
 </SidebarWrapper>
 
 <!-- Draggable sidebar -->
-<SidebarWrapper 
-  behavior={{
-    isDraggable: true,
-    defaultWidth: 300
-  }}
+<SidebarWrapper
+	behavior={{
+		isDraggable: true,
+		defaultWidth: 300
+	}}
 >
-  <nav>Resizable Navigation</nav>
+	<nav>Resizable Navigation</nav>
 </SidebarWrapper>
 ```
 
@@ -76,39 +76,39 @@ The SidebarWrapper creates a semantic sidebar container with optional drag handl
 
 ### Core Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
+| Prop         | Type          | Default     | Description                      |
+| ------------ | ------------- | ----------- | -------------------------------- |
 | `sidebarElm` | `HTMLElement` | `undefined` | Reference to sidebar DOM element |
 
 ### Styling Props (`styling` object)
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `styling.className` | `string` | `""` | Additional CSS classes for root element |
-| `styling.style` | `string` | `""` | Additional inline styles |
-| `styling.sidebarClassName` | `string` | `""` | Additional CSS classes for sidebar |
-| `styling.sidebarStyle` | `string` | `""` | Inline styles for sidebar |
+| Prop                       | Type     | Default | Description                             |
+| -------------------------- | -------- | ------- | --------------------------------------- |
+| `styling.className`        | `string` | `""`    | Additional CSS classes for root element |
+| `styling.style`            | `string` | `""`    | Additional inline styles                |
+| `styling.sidebarClassName` | `string` | `""`    | Additional CSS classes for sidebar      |
+| `styling.sidebarStyle`     | `string` | `""`    | Inline styles for sidebar               |
 
 ### Behavior Props (`behavior` object)
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `behavior.collapsed` | `boolean` | `false` | Collapsed state of the sidebar |
-| `behavior.collapseWidth` | `string` | `"0"` | Width when collapsed (CSS value) |
-| `behavior.isDraggable` | `boolean` | `false` | Enable drag-to-resize functionality |
-| `behavior.defaultWidth` | `number` | `321` | Default width in pixels |
-| `behavior.draglinePosition` | `'left' \| 'right'` | `'left'` | Drag handle position |
-| `behavior.minWidth` | `number` | `320` | Minimum width in pixels when dragging |
-| `behavior.maxWidth` | `string` | `"25%"` | Maximum width (CSS value: px, %, etc.) |
-| `behavior.persistWidth` | `boolean` | `false` | Persist width to localStorage |
-| `behavior.storageKey` | `string` | `"sidebar-width"` | localStorage key for width persistence |
+| Prop                        | Type                | Default           | Description                            |
+| --------------------------- | ------------------- | ----------------- | -------------------------------------- |
+| `behavior.collapsed`        | `boolean`           | `false`           | Collapsed state of the sidebar         |
+| `behavior.collapseWidth`    | `string`            | `"0"`             | Width when collapsed (CSS value)       |
+| `behavior.isDraggable`      | `boolean`           | `false`           | Enable drag-to-resize functionality    |
+| `behavior.defaultWidth`     | `number`            | `321`             | Default width in pixels                |
+| `behavior.draglinePosition` | `'left' \| 'right'` | `'left'`          | Drag handle position                   |
+| `behavior.minWidth`         | `number`            | `320`             | Minimum width in pixels when dragging  |
+| `behavior.maxWidth`         | `string`            | `"25%"`           | Maximum width (CSS value: px, %, etc.) |
+| `behavior.persistWidth`     | `boolean`           | `false`           | Persist width to localStorage          |
+| `behavior.storageKey`       | `string`            | `"sidebar-width"` | localStorage key for width persistence |
 
 ### Accessibility Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `ariaLabel` | `string` | `undefined` | ARIA label for accessibility |
-| `ariaDescribedBy` | `string` | `undefined` | ARIA described by reference |
+| Prop              | Type     | Default     | Description                  |
+| ----------------- | -------- | ----------- | ---------------------------- |
+| `ariaLabel`       | `string` | `undefined` | ARIA label for accessibility |
+| `ariaDescribedBy` | `string` | `undefined` | ARIA described by reference  |
 
 ## Collapsible Sidebar
 
@@ -116,49 +116,49 @@ Control the sidebar's collapsed state programmatically:
 
 ```svelte
 <script>
-  import { SidebarWrapper } from '@rief/kit';
-  
-  let isCollapsed = false;
-  
-  function toggleSidebar() {
-    isCollapsed = !isCollapsed;
-  }
+	import { SidebarWrapper } from '@rief/kit';
+
+	let isCollapsed = false;
+
+	function toggleSidebar() {
+		isCollapsed = !isCollapsed;
+	}
 </script>
 
 <button on:click={toggleSidebar}>
-  {isCollapsed ? 'Expand' : 'Collapse'} Sidebar
+	{isCollapsed ? 'Expand' : 'Collapse'} Sidebar
 </button>
 
-<SidebarWrapper 
-  behavior={{
-    collapsed: isCollapsed,
-    collapseWidth: "0"
-  }}
+<SidebarWrapper
+	behavior={{
+		collapsed: isCollapsed,
+		collapseWidth: '0'
+	}}
 >
-  <nav>
-    <ul>
-      <li>Home</li>
-      <li>About</li>
-      <li>Contact</li>
-    </ul>
-  </nav>
+	<nav>
+		<ul>
+			<li>Home</li>
+			<li>About</li>
+			<li>Contact</li>
+		</ul>
+	</nav>
 </SidebarWrapper>
 ```
 
 ### Custom Collapse Width
 
 ```svelte
-<SidebarWrapper 
-  behavior={{
-    collapsed: isCollapsed,
-    collapseWidth: "60px"
-  }}
+<SidebarWrapper
+	behavior={{
+		collapsed: isCollapsed,
+		collapseWidth: '60px'
+	}}
 >
-  <nav>
-    <div class="icon-only-menu">
-      <!-- Icon-only menu items -->
-    </div>
-  </nav>
+	<nav>
+		<div class="icon-only-menu">
+			<!-- Icon-only menu items -->
+		</div>
+	</nav>
 </SidebarWrapper>
 ```
 
@@ -168,32 +168,32 @@ Enable drag-to-resize functionality with configurable constraints:
 
 ```svelte
 <script>
-  import { SidebarWrapper } from '@rief/kit';
+	import { SidebarWrapper } from '@rief/kit';
 </script>
 
 <!-- Basic draggable sidebar -->
-<SidebarWrapper 
-  behavior={{
-    isDraggable: true,
-    defaultWidth: 300,
-    minWidth: 250,
-    maxWidth: "30%"
-  }}
+<SidebarWrapper
+	behavior={{
+		isDraggable: true,
+		defaultWidth: 300,
+		minWidth: 250,
+		maxWidth: '30%'
+	}}
 >
-  <nav>Resizable Navigation</nav>
+	<nav>Resizable Navigation</nav>
 </SidebarWrapper>
 
 <!-- Right-positioned draggable sidebar -->
-<SidebarWrapper 
-  behavior={{
-    isDraggable: true,
-    draglinePosition: "right",
-    defaultWidth: 350,
-    minWidth: 280,
-    maxWidth: "40%"
-  }}
+<SidebarWrapper
+	behavior={{
+		isDraggable: true,
+		draglinePosition: 'right',
+		defaultWidth: 350,
+		minWidth: 280,
+		maxWidth: '40%'
+	}}
 >
-  <aside>Right Sidebar Content</aside>
+	<aside>Right Sidebar Content</aside>
 </SidebarWrapper>
 ```
 
@@ -202,15 +202,15 @@ Enable drag-to-resize functionality with configurable constraints:
 The sidebar enforces min/max width constraints during drag operations:
 
 ```svelte
-<SidebarWrapper 
-  behavior={{
-    isDraggable: true,
-    defaultWidth: 400,
-    minWidth: 300,
-    maxWidth: "50%"
-  }}
+<SidebarWrapper
+	behavior={{
+		isDraggable: true,
+		defaultWidth: 400,
+		minWidth: 300,
+		maxWidth: '50%'
+	}}
 >
-  <nav>Constrained Sidebar</nav>
+	<nav>Constrained Sidebar</nav>
 </SidebarWrapper>
 ```
 
@@ -220,30 +220,30 @@ Save and restore sidebar width across page reloads:
 
 ```svelte
 <script>
-  import { SidebarWrapper } from '@rief/kit';
+	import { SidebarWrapper } from '@rief/kit';
 </script>
 
 <!-- Persist width with default key -->
-<SidebarWrapper 
-  behavior={{
-    isDraggable: true,
-    persistWidth: true,
-    defaultWidth: 300
-  }}
+<SidebarWrapper
+	behavior={{
+		isDraggable: true,
+		persistWidth: true,
+		defaultWidth: 300
+	}}
 >
-  <nav>Persistent Sidebar</nav>
+	<nav>Persistent Sidebar</nav>
 </SidebarWrapper>
 
 <!-- Custom storage key -->
-<SidebarWrapper 
-  behavior={{
-    isDraggable: true,
-    persistWidth: true,
-    storageKey: "my-app-sidebar-width",
-    defaultWidth: 350
-  }}
+<SidebarWrapper
+	behavior={{
+		isDraggable: true,
+		persistWidth: true,
+		storageKey: 'my-app-sidebar-width',
+		defaultWidth: 350
+	}}
 >
-  <nav>Custom Key Sidebar</nav>
+	<nav>Custom Key Sidebar</nav>
 </SidebarWrapper>
 ```
 
@@ -252,26 +252,26 @@ Save and restore sidebar width across page reloads:
 ### Left Position (Default)
 
 ```svelte
-<SidebarWrapper 
-  behavior={{
-    draglinePosition: "left",
-    isDraggable: true
-  }}
+<SidebarWrapper
+	behavior={{
+		draglinePosition: 'left',
+		isDraggable: true
+	}}
 >
-  <nav>Left Sidebar</nav>
+	<nav>Left Sidebar</nav>
 </SidebarWrapper>
 ```
 
 ### Right Position
 
 ```svelte
-<SidebarWrapper 
-  behavior={{
-    draglinePosition: "right",
-    isDraggable: true
-  }}
+<SidebarWrapper
+	behavior={{
+		draglinePosition: 'right',
+		isDraggable: true
+	}}
 >
-  <aside>Right Sidebar</aside>
+	<aside>Right Sidebar</aside>
 </SidebarWrapper>
 ```
 
@@ -281,31 +281,31 @@ The SidebarWrapper component dispatches several events:
 
 ```svelte
 <script>
-  import { SidebarWrapper } from '@rief/kit';
-  
-  function handleResize(event) {
-    console.log('Width changed:', event.detail.width, 'px');
-  }
-  
-  function handleDragStart(event) {
-    console.log('Drag started from:', event.detail.initialWidth, 'px');
-  }
-  
-  function handleDragEnd(event) {
-    console.log('Drag ended:', {
-      initial: event.detail.initialWidth,
-      final: event.detail.finalWidth
-    });
-  }
+	import { SidebarWrapper } from '@rief/kit';
+
+	function handleResize(event) {
+		console.log('Width changed:', event.detail.width, 'px');
+	}
+
+	function handleDragStart(event) {
+		console.log('Drag started from:', event.detail.initialWidth, 'px');
+	}
+
+	function handleDragEnd(event) {
+		console.log('Drag ended:', {
+			initial: event.detail.initialWidth,
+			final: event.detail.finalWidth
+		});
+	}
 </script>
 
-<SidebarWrapper 
-  behavior={{ isDraggable: true }}
-  on:resize={handleResize}
-  on:dragstart={handleDragStart}
-  on:dragend={handleDragEnd}
+<SidebarWrapper
+	behavior={{ isDraggable: true }}
+	on:resize={handleResize}
+	on:dragstart={handleDragStart}
+	on:dragend={handleDragEnd}
 >
-  <nav>Event-Aware Sidebar</nav>
+	<nav>Event-Aware Sidebar</nav>
 </SidebarWrapper>
 ```
 
@@ -332,16 +332,13 @@ The SidebarWrapper component provides accessibility features:
 - Keyboard-friendly (inherits from DragLine component)
 
 ```svelte
-<SidebarWrapper 
-  ariaLabel="Main navigation sidebar"
-  behavior={{ collapsed: isCollapsed }}
->
-  <nav>
-    <ul role="navigation">
-      <li><a href="/">Home</a></li>
-      <li><a href="/about">About</a></li>
-    </ul>
-  </nav>
+<SidebarWrapper ariaLabel="Main navigation sidebar" behavior={{ collapsed: isCollapsed }}>
+	<nav>
+		<ul role="navigation">
+			<li><a href="/">Home</a></li>
+			<li><a href="/about">About</a></li>
+		</ul>
+	</nav>
 </SidebarWrapper>
 ```
 
@@ -351,27 +348,27 @@ The SidebarWrapper component provides accessibility features:
 
 ```svelte
 <script>
-  import { SidebarWrapper } from '@rief/kit';
-  
-  let sidebarRef;
-  let currentWidth = 300;
-  
-  function setWidth(width) {
-    if (sidebarRef) {
-      sidebarRef.style.width = `${width}px`;
-    }
-  }
+	import { SidebarWrapper } from '@rief/kit';
+
+	let sidebarRef;
+	let currentWidth = 300;
+
+	function setWidth(width) {
+		if (sidebarRef) {
+			sidebarRef.style.width = `${width}px`;
+		}
+	}
 </script>
 
-<SidebarWrapper 
-  bind:sidebarElm={sidebarRef}
-  behavior={{
-    defaultWidth: currentWidth,
-    isDraggable: true
-  }}
-  on:resize={(e) => currentWidth = e.detail.width}
+<SidebarWrapper
+	bind:sidebarElm={sidebarRef}
+	behavior={{
+		defaultWidth: currentWidth,
+		isDraggable: true
+	}}
+	on:resize={(e) => (currentWidth = e.detail.width)}
 >
-  <nav>Dynamic Sidebar</nav>
+	<nav>Dynamic Sidebar</nav>
 </SidebarWrapper>
 
 <button on:click={() => setWidth(400)}>Set to 400px</button>
@@ -382,33 +379,33 @@ The SidebarWrapper component provides accessibility features:
 
 ```svelte
 <script>
-  import { BaseLayoutWrapper, PageWrapper, SidebarWrapper } from '@rief/kit';
-  
-  let sidebarCollapsed = false;
+	import { BaseLayoutWrapper, PageWrapper, SidebarWrapper } from '@rief/kit';
+
+	let sidebarCollapsed = false;
 </script>
 
 <BaseLayoutWrapper>
-  <div style="display: grid; grid-template-columns: {sidebarCollapsed ? '0' : 'auto'} 1fr;">
-    <SidebarWrapper 
-      behavior={{
-        collapsed: sidebarCollapsed,
-        isDraggable: true,
-        defaultWidth: 300
-      }}
-    >
-      <nav>
-        <ul>
-          <li>Dashboard</li>
-          <li>Settings</li>
-          <li>Profile</li>
-        </ul>
-      </nav>
-    </SidebarWrapper>
-    
-    <PageWrapper>
-      <main>Main Content</main>
-    </PageWrapper>
-  </div>
+	<div style="display: grid; grid-template-columns: {sidebarCollapsed ? '0' : 'auto'} 1fr;">
+		<SidebarWrapper
+			behavior={{
+				collapsed: sidebarCollapsed,
+				isDraggable: true,
+				defaultWidth: 300
+			}}
+		>
+			<nav>
+				<ul>
+					<li>Dashboard</li>
+					<li>Settings</li>
+					<li>Profile</li>
+				</ul>
+			</nav>
+		</SidebarWrapper>
+
+		<PageWrapper>
+			<main>Main Content</main>
+		</PageWrapper>
+	</div>
 </BaseLayoutWrapper>
 ```
 
@@ -416,49 +413,49 @@ The SidebarWrapper component provides accessibility features:
 
 ```svelte
 <script>
-  import { SidebarWrapper } from '@rief/kit';
-  import { onMount } from 'svelte';
-  
-  let isMobile = false;
-  
-  onMount(() => {
-    if (typeof window !== 'undefined') {
-      const checkMobile = () => {
-        isMobile = window.innerWidth < 768;
-      };
-      checkMobile();
-      window.addEventListener('resize', checkMobile);
-      return () => window.removeEventListener('resize', checkMobile);
-    }
-  });
+	import { SidebarWrapper } from '@rief/kit';
+	import { onMount } from 'svelte';
+
+	let isMobile = false;
+
+	onMount(() => {
+		if (typeof window !== 'undefined') {
+			const checkMobile = () => {
+				isMobile = window.innerWidth < 768;
+			};
+			checkMobile();
+			window.addEventListener('resize', checkMobile);
+			return () => window.removeEventListener('resize', checkMobile);
+		}
+	});
 </script>
 
-<SidebarWrapper 
-  behavior={{
-    collapsed: isMobile,
-    isDraggable: !isMobile,
-    defaultWidth: isMobile ? 0 : 300
-  }}
+<SidebarWrapper
+	behavior={{
+		collapsed: isMobile,
+		isDraggable: !isMobile,
+		defaultWidth: isMobile ? 0 : 300
+	}}
 >
-  <nav>Responsive Sidebar</nav>
+	<nav>Responsive Sidebar</nav>
 </SidebarWrapper>
 ```
 
 ### Custom Styling
 
 ```svelte
-<SidebarWrapper 
-  styling={{
-    sidebarClassName: "custom-sidebar",
-    sidebarStyle: "background: linear-gradient(to bottom, #667eea, #764ba2);",
-    className: "shadow-lg"
-  }}
+<SidebarWrapper
+	styling={{
+		sidebarClassName: 'custom-sidebar',
+		sidebarStyle: 'background: linear-gradient(to bottom, #667eea, #764ba2);',
+		className: 'shadow-lg'
+	}}
 >
-  <nav class="text-white">
-    <ul>
-      <li>Styled Sidebar</li>
-    </ul>
-  </nav>
+	<nav class="text-white">
+		<ul>
+			<li>Styled Sidebar</li>
+		</ul>
+	</nav>
 </SidebarWrapper>
 ```
 
@@ -466,35 +463,35 @@ The SidebarWrapper component provides accessibility features:
 
 ```svelte
 <script>
-  import { BaseLayoutWrapper, SidebarWrapper } from '@rief/kit';
+	import { BaseLayoutWrapper, SidebarWrapper } from '@rief/kit';
 </script>
 
 <BaseLayoutWrapper>
-  <div style="display: grid; grid-template-columns: auto 1fr auto;">
-    <SidebarWrapper 
-      behavior={{
-        draglinePosition: "right",
-        isDraggable: true,
-        defaultWidth: 250,
-        storageKey: "left-sidebar-width"
-      }}
-    >
-      <nav>Left Sidebar</nav>
-    </SidebarWrapper>
-    
-    <main>Main Content</main>
-    
-    <SidebarWrapper 
-      behavior={{
-        draglinePosition: "left",
-        isDraggable: true,
-        defaultWidth: 300,
-        storageKey: "right-sidebar-width"
-      }}
-    >
-      <aside>Right Sidebar</aside>
-    </SidebarWrapper>
-  </div>
+	<div style="display: grid; grid-template-columns: auto 1fr auto;">
+		<SidebarWrapper
+			behavior={{
+				draglinePosition: 'right',
+				isDraggable: true,
+				defaultWidth: 250,
+				storageKey: 'left-sidebar-width'
+			}}
+		>
+			<nav>Left Sidebar</nav>
+		</SidebarWrapper>
+
+		<main>Main Content</main>
+
+		<SidebarWrapper
+			behavior={{
+				draglinePosition: 'left',
+				isDraggable: true,
+				defaultWidth: 300,
+				storageKey: 'right-sidebar-width'
+			}}
+		>
+			<aside>Right Sidebar</aside>
+		</SidebarWrapper>
+	</div>
 </BaseLayoutWrapper>
 ```
 
@@ -505,31 +502,31 @@ The SidebarWrapper component provides accessibility features:
 ```svelte
 <!-- +layout.svelte -->
 <script>
-  import { BaseLayoutWrapper, PageWrapper, SidebarWrapper } from '@rief/kit';
-  import { page } from '$app/stores';
+	import { BaseLayoutWrapper, PageWrapper, SidebarWrapper } from '@rief/kit';
+	import { page } from '$app/stores';
 </script>
 
 <BaseLayoutWrapper>
-  <div style="display: grid; grid-template-columns: auto 1fr;">
-    <SidebarWrapper 
-      behavior={{
-        isDraggable: true,
-        persistWidth: true,
-        defaultWidth: 280
-      }}
-    >
-      <nav>
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/about">About</a></li>
-        </ul>
-      </nav>
-    </SidebarWrapper>
-    
-    <PageWrapper>
-      <slot />
-    </PageWrapper>
-  </div>
+	<div style="display: grid; grid-template-columns: auto 1fr;">
+		<SidebarWrapper
+			behavior={{
+				isDraggable: true,
+				persistWidth: true,
+				defaultWidth: 280
+			}}
+		>
+			<nav>
+				<ul>
+					<li><a href="/">Home</a></li>
+					<li><a href="/about">About</a></li>
+				</ul>
+			</nav>
+		</SidebarWrapper>
+
+		<PageWrapper>
+			<slot />
+		</PageWrapper>
+	</div>
 </BaseLayoutWrapper>
 ```
 
@@ -537,23 +534,23 @@ The SidebarWrapper component provides accessibility features:
 
 ```svelte
 <script>
-  import { SidebarWrapper } from '@rief/kit';
-  import { writable } from 'svelte/store';
-  
-  const sidebarWidth = writable(300);
-  const sidebarCollapsed = writable(false);
+	import { SidebarWrapper } from '@rief/kit';
+	import { writable } from 'svelte/store';
+
+	const sidebarWidth = writable(300);
+	const sidebarCollapsed = writable(false);
 </script>
 
-<SidebarWrapper 
-  behavior={{
-    collapsed: $sidebarCollapsed,
-    isDraggable: true,
-    defaultWidth: $sidebarWidth,
-    persistWidth: true
-  }}
-  on:resize={(e) => sidebarWidth.set(e.detail.width)}
+<SidebarWrapper
+	behavior={{
+		collapsed: $sidebarCollapsed,
+		isDraggable: true,
+		defaultWidth: $sidebarWidth,
+		persistWidth: true
+	}}
+	on:resize={(e) => sidebarWidth.set(e.detail.width)}
 >
-  <nav>State-Managed Sidebar</nav>
+	<nav>State-Managed Sidebar</nav>
 </SidebarWrapper>
 ```
 
@@ -566,26 +563,22 @@ See the [Global Styling Guide](./STYLING.md) for comprehensive theming options u
 The component exports comprehensive TypeScript types:
 
 ```typescript
-import type { 
-  SidebarWrapperProps, 
-  SidebarWrapperStyling,
-  SidebarWrapperBehavior
-} from '@rief/kit';
+import type { SidebarWrapperProps, SidebarWrapperStyling, SidebarWrapperBehavior } from '@rief/kit';
 
 const sidebarConfig: SidebarWrapperProps = {
-  styling: {
-    sidebarClassName: 'custom-sidebar'
-  },
-  behavior: {
-    collapsed: false,
-    isDraggable: true,
-    defaultWidth: 300,
-    draglinePosition: 'left',
-    minWidth: 250,
-    maxWidth: '30%',
-    persistWidth: true,
-    storageKey: 'my-sidebar-width'
-  }
+	styling: {
+		sidebarClassName: 'custom-sidebar'
+	},
+	behavior: {
+		collapsed: false,
+		isDraggable: true,
+		defaultWidth: 300,
+		draglinePosition: 'left',
+		minWidth: 250,
+		maxWidth: '30%',
+		persistWidth: true,
+		storageKey: 'my-sidebar-width'
+	}
 };
 ```
 
@@ -595,13 +588,12 @@ const sidebarConfig: SidebarWrapperProps = {
 import type { SidebarResizeEventDetail, SidebarDragEventDetail } from '@rief/kit';
 
 function handleResize(event: CustomEvent<SidebarResizeEventDetail>) {
-  const { width, widthPx } = event.detail;
-  console.log(`Sidebar resized to ${width}px (${widthPx})`);
+	const { width, widthPx } = event.detail;
+	console.log(`Sidebar resized to ${width}px (${widthPx})`);
 }
 
 function handleDragEnd(event: CustomEvent<SidebarDragEventDetail>) {
-  const { initialWidth, finalWidth } = event.detail;
-  console.log(`Dragged from ${initialWidth}px to ${finalWidth}px`);
+	const { initialWidth, finalWidth } = event.detail;
+	console.log(`Dragged from ${initialWidth}px to ${finalWidth}px`);
 }
 ```
-

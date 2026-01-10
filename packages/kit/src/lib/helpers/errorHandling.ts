@@ -26,7 +26,7 @@ export function createComponentError(
  */
 export function logComponentError(error: ComponentError, isDev = false): void {
 	const errorMessage = `[${error.component}]${error.prop ? ` Prop "${error.prop}":` : ''} ${error.message}${error.value !== undefined ? ` (value: ${JSON.stringify(error.value)})` : ''}`;
-	
+
 	if (isDev) {
 		console.error(errorMessage);
 	} else {
@@ -42,7 +42,7 @@ export function sanitizeHtml(html: string): string {
 	if (typeof window === 'undefined') {
 		return html;
 	}
-	
+
 	// Basic XSS prevention - remove script tags and event handlers
 	// For production, replace with DOMPurify or similar
 	const div = document.createElement('div');
@@ -55,21 +55,18 @@ export function sanitizeHtml(html: string): string {
  */
 export function safeHtmlContent(content: string | undefined): string {
 	if (!content) return '';
-	
+
 	// In development, warn about potentially unsafe content
 	if (import.meta.env?.DEV) {
-		const dangerousPatterns = [
-			/<script/i,
-			/on\w+\s*=/i,
-			/javascript:/i,
-			/data:text\/html/i
-		];
-		
-		const hasDangerousContent = dangerousPatterns.some(pattern => pattern.test(content));
+		const dangerousPatterns = [/<script/i, /on\w+\s*=/i, /javascript:/i, /data:text\/html/i];
+
+		const hasDangerousContent = dangerousPatterns.some((pattern) => pattern.test(content));
 		if (hasDangerousContent) {
-			console.warn('[Component] Potentially unsafe HTML content detected. Consider using sanitizeHtml() or a proper sanitization library.');
+			console.warn(
+				'[Component] Potentially unsafe HTML content detected. Consider using sanitizeHtml() or a proper sanitization library.'
+			);
 		}
 	}
-	
+
 	return sanitizeHtml(content);
 }

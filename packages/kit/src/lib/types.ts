@@ -695,7 +695,9 @@ export interface SelectOptionProps extends BaseAccessibility {
 	/** Reference to trigger element */
 	triggerRef?: HTMLElement;
 	/** Fetch function for async options */
-	fetchFn?: ((query: any, callback: (result: SelectOptionItem[], total?: number) => void) => void) | null;
+	fetchFn?:
+		| ((query: any, callback: (result: SelectOptionItem[], total?: number) => void) => void)
+		| null;
 	/** Limit for fetch */
 	limit?: number;
 }
@@ -795,13 +797,13 @@ export interface AccordionProps extends BaseAccessibility {
  */
 
 /** Visual style variant for Card component */
-export type CardVariant = "default" | "outlined" | "elevated" | "filled";
+export type CardVariant = 'default' | 'outlined' | 'elevated' | 'filled';
 
 /** Size variant for Card component */
-export type CardSize = "sm" | "md" | "lg";
+export type CardSize = 'sm' | 'md' | 'lg';
 
 /** Padding size for Card component */
-export type CardPadding = "none" | "sm" | "md" | "lg" | "xl";
+export type CardPadding = 'none' | 'sm' | 'md' | 'lg' | 'xl';
 
 /**
  * Styling configuration for Card component
@@ -850,7 +852,7 @@ export interface CardProps extends BaseAccessibility {
  */
 
 /** Sort order direction */
-export type SortOrder = "asc" | "desc" | null;
+export type SortOrder = 'asc' | 'desc' | null;
 
 /**
  * Column definition for Table component
@@ -938,10 +940,15 @@ export interface DataLoadParams {
 	allSorting: SortConfig[];
 }
 
+/** Return type for async table data loader function */
+export type TableDataLoaderResult<T = Record<string, unknown>> =
+	| Promise<TableRow<T>[]>
+	| TableRow<T>[];
+
 /** Table data - can be static array or async function */
 export type TableData<T = Record<string, unknown>> =
 	| TableRow<T>[]
-	| ((params: DataLoadParams) => Promise<TableRow<T>[]> | TableRow<T>[]>);
+	| ((params: DataLoadParams) => TableDataLoaderResult<T>);
 
 /**
  * Props for Table component
@@ -1040,9 +1047,9 @@ export interface TableListingBehavior {
 	/** Show pagination component */
 	showPagination?: boolean;
 	/** Pagination size */
-	paginationSize?: "sm" | "md" | "lg";
+	paginationSize?: 'sm' | 'md' | 'lg';
 	/** Pagination variant */
-	paginationVariant?: "default" | "minimal";
+	paginationVariant?: 'default' | 'minimal';
 	/** Show first/last page buttons in pagination */
 	paginationShowFirstLast?: boolean;
 	/** Show page info in pagination */
@@ -1193,13 +1200,13 @@ export interface TagsProps extends BaseAccessibility {
  */
 
 /** Placement position for dropdowns */
-export type DropdownPlacement = "bottom-start" | "bottom-end" | "top-start" | "top-end" | "auto";
+export type DropdownPlacement = 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end' | 'auto';
 
 /** Visual style variant for DropdownWrapper */
-export type DropdownVariant = "default" | "minimal" | "elevated" | "outlined";
+export type DropdownVariant = 'default' | 'minimal' | 'elevated' | 'outlined';
 
 /** Size variant for DropdownWrapper */
-export type DropdownSize = "sm" | "md" | "lg" | "xl";
+export type DropdownSize = 'sm' | 'md' | 'lg' | 'xl';
 
 /**
  * Styling configuration for DropdownWrapper component
@@ -1246,10 +1253,10 @@ export interface DropdownWrapperProps extends BaseAccessibility {
  */
 
 /** Size variant for Pagination component */
-export type PaginationSize = "sm" | "md" | "lg";
+export type PaginationSize = 'sm' | 'md' | 'lg';
 
 /** Visual style variant for Pagination component */
-export type PaginationVariant = "default" | "outlined" | "minimal";
+export type PaginationVariant = 'default' | 'outlined' | 'minimal';
 
 /**
  * Styling configuration for Pagination component

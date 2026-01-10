@@ -1,40 +1,22 @@
 <script lang="ts">
 	import { Button, Accordion, InputText, Checkbox, Switch, DatePicker } from '@rief/kit';
-	import { onMount } from 'svelte';
+	import CodeBlock from '$lib/components/CodeBlock.svelte';
 
 	let emailValue = '';
 	let isChecked = false;
 	let isSwitched = false;
 	let singleDate: Date | null = null;
-
-	let currentTheme = 'light';
-
-	onMount(() => {
-		if (typeof window !== 'undefined') {
-			const savedTheme = localStorage.getItem('theme');
-			if (savedTheme) {
-				currentTheme = savedTheme;
-				document.documentElement.setAttribute('data-theme', savedTheme);
-			} else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-				currentTheme = 'dark';
-				document.documentElement.setAttribute('data-theme', 'dark');
-			}
-		}
-	});
-
-	function toggleTheme() {
-		currentTheme = currentTheme === 'light' ? 'dark' : 'light';
-		document.documentElement.setAttribute('data-theme', currentTheme);
-		localStorage.setItem('theme', currentTheme);
-	}
 </script>
 
 <svelte:head>
 	<title>Kit Component Library</title>
-	<meta name="description" content="A modern, accessible Svelte component library built with TypeScript" />
+	<meta
+		name="description"
+		content="A modern, accessible Svelte component library built with TypeScript"
+	/>
 </svelte:head>
 
-<div class="overview">
+<div class="w-full">
 	<header class="hero">
 		<h1>Kit Component Library</h1>
 		<p class="subtitle">A modern, accessible Svelte component library built with TypeScript</p>
@@ -45,9 +27,6 @@
 			<a href="/components/button">
 				<Button variant="outlined" size="lg">Browse Components</Button>
 			</a>
-			<Button variant="text" size="lg" on:click={toggleTheme}>
-				Toggle Theme ({currentTheme})
-			</Button>
 		</div>
 	</header>
 
@@ -67,7 +46,8 @@
 				content={{
 					title: 'Accessible',
 					subtitle: 'WCAG compliant components',
-					content: '<p>All components follow accessibility best practices and support keyboard navigation.</p>'
+					content:
+						'<p>All components follow accessibility best practices and support keyboard navigation.</p>'
 				}}
 				styling={{ variant: 'outlined' }}
 				behavior={{ showIcon: true }}
@@ -86,17 +66,16 @@
 
 	<section class="quick-start">
 		<h2>Quick Start</h2>
-		<div class="code-example">
-			<pre><code>npm install @rief/kit</code></pre>
-		</div>
-		<div class="code-example">
-			<pre><code>&lt;script&gt;
-  import &#123; Button, InputText &#125; from '@rief/kit';
-&lt;/script&gt;
+		<CodeBlock code="npm install @rief/kit" language="bash" />
+		<CodeBlock
+			code={`<script>
+  import { Button, InputText } from '@rief/kit';
+</script>
 
-&lt;Button variant="filled"&gt;Click me&lt;/Button&gt;
-&lt;InputText label="Name" placeholder="Enter your name" /&gt;</code></pre>
-		</div>
+<Button variant="filled">Click me</Button>
+<InputText label="Name" placeholder="Enter your name" />`}
+			language="svelte"
+		/>
 	</section>
 
 	<section class="components-preview">
@@ -199,22 +178,6 @@
 		font-weight: 700;
 		margin: 0 0 2rem;
 		color: var(--color-text, #1f2937);
-	}
-
-	.code-example {
-		margin-bottom: 1.5rem;
-	}
-
-	.code-example pre {
-		background: #1f2937;
-		color: #f9fafb;
-		padding: 1.5rem;
-		border-radius: 0.5rem;
-		overflow-x: auto;
-		margin: 0;
-		font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-		font-size: 0.875rem;
-		line-height: 1.5;
 	}
 
 	.components-preview h2 {

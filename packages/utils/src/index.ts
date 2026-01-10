@@ -15,7 +15,13 @@ export { isFunction, isObject } from './type-guards/index.js';
 export { omit, pick, merge, isEmpty } from './object/index.js';
 
 // String utilities
-export { toSnakeCase, fromSnakeCase, parseIfJSON, stripAnyBraces, objStringify } from './string/index.js';
+export {
+	toSnakeCase,
+	fromSnakeCase,
+	parseIfJSON,
+	stripAnyBraces,
+	objStringify
+} from './string/index.js';
 
 // Number utilities
 export { formatNumber, formatNumberCompact, convertNumber } from './number/index.js';
@@ -24,7 +30,12 @@ export { formatNumber, formatNumberCompact, convertNumber } from './number/index
 export { portal, clickOutside, intersect, copyToClipboard, sanitizeHtml } from './dom/index.js';
 
 // Form utilities
-export { getFormData, getFormDataAsObject, validateRequiredFields, getFormErrors } from './form/index.js';
+export {
+	getFormData,
+	getFormDataAsObject,
+	validateRequiredFields,
+	getFormErrors
+} from './form/index.js';
 
 // Async utilities
 export { sleep } from './async/index.js';
@@ -40,15 +51,15 @@ export { isBrowser, safeUniqueId } from './ssr/index.js';
 
 // Input utilities
 export {
-  applyMask,
-  removeMask,
-  getPatternLength,
-  getPatternSeparators,
-  sanitizeNumericInput,
-  isValidNumericKey,
-  shouldPreventInput,
-  parseAndFormatNumber,
-  formatNumberLocale
+	applyMask,
+	removeMask,
+	getPatternLength,
+	getPatternSeparators,
+	sanitizeNumericInput,
+	isValidNumericKey,
+	shouldPreventInput,
+	parseAndFormatNumber,
+	formatNumberLocale
 } from './input/index.js';
 
 // Table utilities

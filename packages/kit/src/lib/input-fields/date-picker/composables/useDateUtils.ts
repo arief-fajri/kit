@@ -6,7 +6,7 @@ const DAY_IN_MS = 86_400_000;
  * Convert various date formats to Date object or null
  */
 export function toDate(value: DateLike): Date | null {
-	if (value === null || value === undefined || value === "") return null;
+	if (value === null || value === undefined || value === '') return null;
 	const date = value instanceof Date ? new Date(value.getTime()) : new Date(value);
 	return Number.isNaN(date.getTime()) ? null : date;
 }
@@ -68,10 +68,10 @@ export function diffInDays(candidate: Date | null, anchor: Date | null): number 
  * Format date as ISO string (YYYY-MM-DD)
  */
 export function formatISODate(value: Date | null): string {
-	if (!value) return "";
+	if (!value) return '';
 	const year = value.getFullYear();
-	const month = `${value.getMonth() + 1}`.padStart(2, "0");
-	const date = `${value.getDate()}`.padStart(2, "0");
+	const month = `${value.getMonth() + 1}`.padStart(2, '0');
+	const date = `${value.getDate()}`.padStart(2, '0');
 	return `${year}-${month}-${date}`;
 }
 
@@ -106,19 +106,23 @@ export function getDateRange(start: Date, end: Date): Date[] {
 	const dates: Date[] = [];
 	const current = new Date(start);
 	const endDate = new Date(end);
-	
+
 	while (current <= endDate) {
 		dates.push(new Date(current));
 		current.setDate(current.getDate() + 1);
 	}
-	
+
 	return dates;
 }
 
 /**
  * Format date using locale
  */
-export function formatDate(date: Date | null, locale = 'en-US', options: Intl.DateTimeFormatOptions = {}): string {
+export function formatDate(
+	date: Date | null,
+	locale = 'en-US',
+	options: Intl.DateTimeFormatOptions = {}
+): string {
 	if (!date) return '';
 	return new Intl.DateTimeFormat(locale, {
 		year: 'numeric',

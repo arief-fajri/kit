@@ -1,32 +1,32 @@
 <script lang="ts">
 	import { Button, Accordion, InputText, Switch, SelectOption } from '@rief/kit';
 	import type { SelectOptionItem } from '@rief/kit';
-	
+
 	let currentTheme: SelectOptionItem | null = { value: 'light', label: 'Light Theme' };
 	let customPrimary = '#3b82f6';
 	let customSurface = '#ffffff';
 	let customText = '#1f2937';
-	
+
 	const themes = [
 		{ value: 'light', label: 'Light Theme' },
 		{ value: 'dark', label: 'Dark Theme' },
 		{ value: 'corporate', label: 'Corporate Theme' },
 		{ value: 'custom', label: 'Custom Theme' }
 	];
-	
+
 	function applyTheme(theme: SelectOptionItem | null) {
 		if (!theme) return;
-		
+
 		const root = document.documentElement;
 		root.setAttribute('data-theme', theme.value as string);
-		
+
 		if (theme.value === 'custom') {
 			root.style.setProperty('--color-primary', customPrimary);
 			root.style.setProperty('--color-surface', customSurface);
 			root.style.setProperty('--color-text', customText);
 		}
 	}
-	
+
 	$: applyTheme(currentTheme);
 </script>
 
@@ -39,8 +39,8 @@
 	<header class="docs-header">
 		<h1>Theming System</h1>
 		<p class="docs-description">
-			Kit provides a flexible theming system based on CSS custom properties. 
-			Easily customize colors, spacing, and component styles to match your design system.
+			Kit provides a flexible theming system based on CSS custom properties. Easily customize
+			colors, spacing, and component styles to match your design system.
 		</p>
 	</header>
 
@@ -53,33 +53,33 @@
 					options={themes}
 					bind:value={currentTheme}
 					behavior={{ closeOnSelect: true }}
-					styling={{ variant: "outlined" }}
+					styling={{ variant: 'outlined' }}
 				/>
-				
+
 				{#if currentTheme?.value === 'custom'}
 					<div class="custom-controls">
 						<InputText
 							label="Primary Color"
 							bind:value={customPrimary}
 							type="text"
-							styling={{ variant: "outlined" }}
+							styling={{ variant: 'outlined' }}
 						/>
 						<InputText
 							label="Surface Color"
 							bind:value={customSurface}
 							type="text"
-							styling={{ variant: "outlined" }}
+							styling={{ variant: 'outlined' }}
 						/>
 						<InputText
 							label="Text Color"
 							bind:value={customText}
 							type="text"
-							styling={{ variant: "outlined" }}
+							styling={{ variant: 'outlined' }}
 						/>
 					</div>
 				{/if}
 			</div>
-			
+
 			<div class="theme-preview">
 				<h3>Preview</h3>
 				<div class="preview-components">
@@ -88,7 +88,7 @@
 					<InputText
 						label="Sample Input"
 						placeholder="Type here..."
-						styling={{ variant: "outlined" }}
+						styling={{ variant: 'outlined' }}
 					/>
 					<Switch checked={true}>Enable feature</Switch>
 				</div>
@@ -99,8 +99,8 @@
 	<section class="theming-guide">
 		<Accordion
 			content={{
-				title: "Global Theme Override",
-				subtitle: "Override default theme colors",
+				title: 'Global Theme Override',
+				subtitle: 'Override default theme colors',
 				content: `
 					<div class="code-example">
 						<h4>CSS Custom Properties</h4>
@@ -132,14 +132,14 @@
 					</div>
 				`
 			}}
-			styling={{ variant: "outlined" }}
+			styling={{ variant: 'outlined' }}
 			behavior={{ showIcon: true }}
 		/>
 
 		<Accordion
 			content={{
-				title: "Dark Mode Support",
-				subtitle: "Built-in dark theme support",
+				title: 'Dark Mode Support',
+				subtitle: 'Built-in dark theme support',
 				content: `
 					<div class="code-example">
 						<h4>Dark Theme Variables</h4>
@@ -162,14 +162,14 @@
 					</div>
 				`
 			}}
-			styling={{ variant: "outlined" }}
+			styling={{ variant: 'outlined' }}
 			behavior={{ showIcon: true }}
 		/>
 
 		<Accordion
 			content={{
-				title: "Custom Themes",
-				subtitle: "Create your own theme variants",
+				title: 'Custom Themes',
+				subtitle: 'Create your own theme variants',
 				content: `
 					<div class="code-example">
 						<h4>Corporate Theme Example</h4>
@@ -187,14 +187,14 @@
 					</div>
 				`
 			}}
-			styling={{ variant: "outlined" }}
+			styling={{ variant: 'outlined' }}
 			behavior={{ showIcon: true }}
 		/>
 
 		<Accordion
 			content={{
-				title: "Component-Specific Theming",
-				subtitle: "Override styles for individual components",
+				title: 'Component-Specific Theming',
+				subtitle: 'Override styles for individual components',
 				content: `
 					<div class="code-example">
 						<h4>Button Component Override</h4>
@@ -215,14 +215,14 @@
 					</div>
 				`
 			}}
-			styling={{ variant: "outlined" }}
+			styling={{ variant: 'outlined' }}
 			behavior={{ showIcon: true }}
 		/>
 
 		<Accordion
 			content={{
-				title: "JavaScript Theme Switching",
-				subtitle: "Programmatically change themes",
+				title: 'JavaScript Theme Switching',
+				subtitle: 'Programmatically change themes',
 				content: `
 					<div class="code-example">
 						<h4>Theme Switcher Function</h4>
@@ -257,7 +257,7 @@ window.matchMedia('(prefers-color-scheme: dark)')
 					</div>
 				`
 			}}
-			styling={{ variant: "outlined" }}
+			styling={{ variant: 'outlined' }}
 			behavior={{ showIcon: true }}
 		/>
 	</section>

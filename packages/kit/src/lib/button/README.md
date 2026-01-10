@@ -44,30 +44,30 @@ The Button component follows a flexible layout hierarchy that adapts based on st
 
 ```svelte
 <script>
-  import { Button } from '@rief/kit';
+	import { Button } from '@rief/kit';
 </script>
 
 <!-- Basic button with grouped props -->
-<Button 
-  label="Click me"
-  styling={{
-    variant: "filled",
-    size: "md"
-  }}
+<Button
+	label="Click me"
+	styling={{
+		variant: 'filled',
+		size: 'md'
+	}}
 />
 
 <!-- Button with click handler and behavior -->
-<Button 
-  label="Submit"
-  styling={{
-    variant: "filled",
-    size: "md"
-  }}
-  behavior={{
-    disabled: false,
-    loading: false
-  }}
-  on:click={handleSubmit} 
+<Button
+	label="Submit"
+	styling={{
+		variant: 'filled',
+		size: 'md'
+	}}
+	behavior={{
+		disabled: false,
+		loading: false
+	}}
+	on:click={handleSubmit}
 />
 ```
 
@@ -75,103 +75,95 @@ The Button component follows a flexible layout hierarchy that adapts based on st
 
 ### Core Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `label` | `string` | `""` | Button text content |
+| Prop    | Type     | Default | Description         |
+| ------- | -------- | ------- | ------------------- |
+| `label` | `string` | `""`    | Button text content |
 
 ### Styling Props (`styling` object)
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `styling.variant` | `'filled' \| 'outlined' \| 'text' \| 'link'` | `'filled'` | Visual style variant |
-| `styling.semantic` | `'primary' \| 'success' \| 'warning' \| 'error' \| 'info'` | `undefined` | Semantic color variant |
-| `styling.size` | `'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | Button size |
-| `styling.fullRounded` | `boolean` | `false` | Apply full border radius |
-| `styling.className` | `string` | `""` | Additional CSS classes |
-| `styling.style` | `string` | `""` | Additional inline styles |
-| `styling.fillColor` | `string` | `undefined` | Custom background color |
-| `styling.textColor` | `string` | `undefined` | Custom text color |
-| `styling.outlineColor` | `string` | `undefined` | Custom border color |
+| Prop                   | Type                                                       | Default     | Description              |
+| ---------------------- | ---------------------------------------------------------- | ----------- | ------------------------ |
+| `styling.variant`      | `'filled' \| 'outlined' \| 'text' \| 'link'`               | `'filled'`  | Visual style variant     |
+| `styling.semantic`     | `'primary' \| 'success' \| 'warning' \| 'error' \| 'info'` | `undefined` | Semantic color variant   |
+| `styling.size`         | `'sm' \| 'md' \| 'lg' \| 'xl'`                             | `'md'`      | Button size              |
+| `styling.fullRounded`  | `boolean`                                                  | `false`     | Apply full border radius |
+| `styling.className`    | `string`                                                   | `""`        | Additional CSS classes   |
+| `styling.style`        | `string`                                                   | `""`        | Additional inline styles |
+| `styling.fillColor`    | `string`                                                   | `undefined` | Custom background color  |
+| `styling.textColor`    | `string`                                                   | `undefined` | Custom text color        |
+| `styling.outlineColor` | `string`                                                   | `undefined` | Custom border color      |
 
 ### Behavior Props (`behavior` object)
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `behavior.disabled` | `boolean` | `false` | Disable the button |
-| `behavior.state` | `'default' \| 'active' \| 'selected' \| 'highlight'` | `undefined` | Button state |
-| `behavior.loading` | `boolean` | `false` | Show loading state |
-| `behavior.loadingMessage` | `string` | `"Loading..."` | Text shown during loading |
-| `behavior.stopPropagation` | `boolean` | `false` | Stop event propagation |
-| `behavior.href` | `string` | `undefined` | URL (converts to anchor tag) |
-| `behavior.target` | `string` | `undefined` | Link target |
-| `behavior.rel` | `string` | `undefined` | Link rel attribute |
-| `behavior.iconPosition` | `'left' \| 'right' \| 'only'` | `'left'` | Icon placement |
+| Prop                       | Type                                                 | Default        | Description                  |
+| -------------------------- | ---------------------------------------------------- | -------------- | ---------------------------- |
+| `behavior.disabled`        | `boolean`                                            | `false`        | Disable the button           |
+| `behavior.state`           | `'default' \| 'active' \| 'selected' \| 'highlight'` | `undefined`    | Button state                 |
+| `behavior.loading`         | `boolean`                                            | `false`        | Show loading state           |
+| `behavior.loadingMessage`  | `string`                                             | `"Loading..."` | Text shown during loading    |
+| `behavior.stopPropagation` | `boolean`                                            | `false`        | Stop event propagation       |
+| `behavior.href`            | `string`                                             | `undefined`    | URL (converts to anchor tag) |
+| `behavior.target`          | `string`                                             | `undefined`    | Link target                  |
+| `behavior.rel`             | `string`                                             | `undefined`    | Link rel attribute           |
+| `behavior.iconPosition`    | `'left' \| 'right' \| 'only'`                        | `'left'`       | Icon placement               |
 
 ### Accessibility Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `ariaLabel` | `string` | `undefined` | Accessibility label |
+| Prop              | Type     | Default     | Description                 |
+| ----------------- | -------- | ----------- | --------------------------- |
+| `ariaLabel`       | `string` | `undefined` | Accessibility label         |
 | `ariaDescribedBy` | `string` | `undefined` | ARIA described by reference |
 
 ## Variants
 
 ### Filled (Default)
+
 Solid background with contrasting text.
 
 ```svelte
-<Button 
-  label="Filled Button"
-  styling={{ variant: "filled" }}
-/>
+<Button label="Filled Button" styling={{ variant: 'filled' }} />
 ```
 
 ### Outlined
+
 Transparent background with border.
 
 ```svelte
-<Button 
-  label="Outlined Button"
-  styling={{ variant: "outlined" }}
-/>
+<Button label="Outlined Button" styling={{ variant: 'outlined' }} />
 ```
 
 ### Text
+
 Minimal style with hover effects.
 
 ```svelte
-<Button 
-  label="Text Button"
-  styling={{ variant: "text" }}
-/>
+<Button label="Text Button" styling={{ variant: 'text' }} />
 ```
 
 ### Link
+
 Underlined text for link-like appearance.
 
 ```svelte
-<Button 
-  label="Link Button"
-  styling={{ variant: "link" }}
-/>
+<Button label="Link Button" styling={{ variant: 'link' }} />
 ```
 
 ## Sizes
 
 ```svelte
-<Button label="Small" styling={{ size: "sm" }} />
-<Button label="Medium" styling={{ size: "md" }} />
-<Button label="Large" styling={{ size: "lg" }} />
-<Button label="Extra Large" styling={{ size: "xl" }} />
+<Button label="Small" styling={{ size: 'sm' }} />
+<Button label="Medium" styling={{ size: 'md' }} />
+<Button label="Large" styling={{ size: 'lg' }} />
+<Button label="Extra Large" styling={{ size: 'xl' }} />
 ```
 
 ## States
 
 ```svelte
-<Button label="Default" behavior={{ state: "default" }} />
-<Button label="Active" behavior={{ state: "active" }} />
-<Button label="Selected" behavior={{ state: "selected" }} />
-<Button label="Highlight" behavior={{ state: "highlight" }} />
+<Button label="Default" behavior={{ state: 'default' }} />
+<Button label="Active" behavior={{ state: 'active' }} />
+<Button label="Selected" behavior={{ state: 'selected' }} />
+<Button label="Highlight" behavior={{ state: 'highlight' }} />
 ```
 
 ## Icons
@@ -180,32 +172,23 @@ Use the `icon` slot to add icons to your buttons.
 
 ```svelte
 <script>
-  import { Button } from '@rief/kit';
-  import Icon from './Icon.svelte';
+	import { Button } from '@rief/kit';
+	import Icon from './Icon.svelte';
 </script>
 
 <!-- Icon on the left (default) -->
-<Button 
-  label="Save"
-  behavior={{ iconPosition: "left" }}
->
-  <Icon name="save" slot="icon" />
+<Button label="Save" behavior={{ iconPosition: 'left' }}>
+	<Icon name="save" slot="icon" />
 </Button>
 
 <!-- Icon on the right -->
-<Button 
-  label="Next"
-  behavior={{ iconPosition: "right" }}
->
-  <Icon name="arrow-right" slot="icon" />
+<Button label="Next" behavior={{ iconPosition: 'right' }}>
+	<Icon name="arrow-right" slot="icon" />
 </Button>
 
 <!-- Icon only -->
-<Button 
-  behavior={{ iconPosition: "only" }}
-  ariaLabel="Close"
->
-  <Icon name="close" slot="icon" />
+<Button behavior={{ iconPosition: 'only' }} ariaLabel="Close">
+	<Icon name="close" slot="icon" />
 </Button>
 ```
 
@@ -213,38 +196,34 @@ Use the `icon` slot to add icons to your buttons.
 
 ```svelte
 <script>
-  let loading = false;
-  
-  async function handleSubmit() {
-    loading = true;
-    try {
-      await submitForm();
-    } finally {
-      loading = false;
-    }
-  }
+	let loading = false;
+
+	async function handleSubmit() {
+		loading = true;
+		try {
+			await submitForm();
+		} finally {
+			loading = false;
+		}
+	}
 </script>
 
 <!-- Basic loading -->
-<Button 
-  label="Submit"
-  behavior={{
-    loading: loading,
-    loadingMessage: "Submitting..."
-  }}
-  on:click={handleSubmit} 
+<Button
+	label="Submit"
+	behavior={{
+		loading: loading,
+		loadingMessage: 'Submitting...'
+	}}
+	on:click={handleSubmit}
 />
 
 <!-- Custom loading content -->
-<Button 
-  label="Upload"
-  behavior={{ loading: loading }}
-  on:click={handleUpload}
->
-  <div slot="loading" let:loadingMsg>
-    <CustomSpinner />
-    <span>{loadingMsg}</span>
-  </div>
+<Button label="Upload" behavior={{ loading: loading }} on:click={handleUpload}>
+	<div slot="loading" let:loadingMsg>
+		<CustomSpinner />
+		<span>{loadingMsg}</span>
+	</div>
 </Button>
 ```
 
@@ -254,25 +233,19 @@ When `href` is provided, the button automatically becomes an anchor tag.
 
 ```svelte
 <!-- Internal link -->
-<Button 
-  label="Go to Dashboard"
-  behavior={{ href: "/dashboard" }}
-/>
+<Button label="Go to Dashboard" behavior={{ href: '/dashboard' }} />
 
 <!-- External link (automatically gets target="_blank" and rel="noopener noreferrer") -->
-<Button 
-  label="Visit Site"
-  behavior={{ href: "https://example.com" }}
-/>
+<Button label="Visit Site" behavior={{ href: 'https://example.com' }} />
 
 <!-- Custom target and rel -->
-<Button 
-  label="Help"
-  behavior={{
-    href: "/help",
-    target: "_blank",
-    rel: "noopener"
-  }}
+<Button
+	label="Help"
+	behavior={{
+		href: '/help',
+		target: '_blank',
+		rel: 'noopener'
+	}}
 />
 ```
 
@@ -281,13 +254,13 @@ When `href` is provided, the button automatically becomes an anchor tag.
 Override colors using the styling props:
 
 ```svelte
-<Button 
-  label="Custom Colors"
-  styling={{
-    fillColor: "#ff6b6b",
-    textColor: "#ffffff",
-    outlineColor: "#ff5252"
-  }}
+<Button
+	label="Custom Colors"
+	styling={{
+		fillColor: '#ff6b6b',
+		textColor: '#ffffff',
+		outlineColor: '#ff5252'
+	}}
 />
 ```
 
@@ -296,13 +269,13 @@ Override colors using the styling props:
 The Button component dispatches several events:
 
 ```svelte
-<Button 
-  label="Interactive Button"
-  on:click={handleClick}
-  on:focus={handleFocus}
-  on:blur={handleBlur}
-  on:keydown={handleKeydown}
-  on:dragstart={handleDragStart}
+<Button
+	label="Interactive Button"
+	on:click={handleClick}
+	on:focus={handleFocus}
+	on:blur={handleBlur}
+	on:keydown={handleKeydown}
+	on:dragstart={handleDragStart}
 />
 ```
 
@@ -318,12 +291,8 @@ The Button component is fully accessible by default:
 
 ```svelte
 <!-- Accessible icon-only button -->
-<Button 
-  behavior={{ iconPosition: "only" }}
-  ariaLabel="Delete item"
-  on:click={deleteItem}
->
-  <TrashIcon slot="icon" />
+<Button behavior={{ iconPosition: 'only' }} ariaLabel="Delete item" on:click={deleteItem}>
+	<TrashIcon slot="icon" />
 </Button>
 ```
 
@@ -333,29 +302,29 @@ The Button component is fully accessible by default:
 
 ```svelte
 <Button on:click={toggle}>
-  <span slot="icon">
-    {#if expanded}
-      <ChevronUpIcon />
-    {:else}
-      <ChevronDownIcon />
-    {/if}
-  </span>
-  {expanded ? 'Collapse' : 'Expand'}
+	<span slot="icon">
+		{#if expanded}
+			<ChevronUpIcon />
+		{:else}
+			<ChevronDownIcon />
+		{/if}
+	</span>
+	{expanded ? 'Collapse' : 'Expand'}
 </Button>
 ```
 
 ### Conditional Rendering
 
 ```svelte
-<Button 
-  label={isEditing ? 'Save' : 'Edit'}
-  styling={{
-    variant: isPrimary ? 'filled' : 'outlined'
-  }}
-  behavior={{
-    state: currentState,
-    disabled: !isValid
-  }}
+<Button
+	label={isEditing ? 'Save' : 'Edit'}
+	styling={{
+		variant: isPrimary ? 'filled' : 'outlined'
+	}}
+	behavior={{
+		state: currentState,
+		disabled: !isValid
+	}}
 />
 ```
 
@@ -363,14 +332,14 @@ The Button component is fully accessible by default:
 
 ```svelte
 <form on:submit|preventDefault={handleSubmit}>
-  <Button 
-    type="submit"
-    label="Submit Form"
-    behavior={{
-      loading: submitting,
-      disabled: !isFormValid
-    }}
-  />
+	<Button
+		type="submit"
+		label="Submit Form"
+		behavior={{
+			loading: submitting,
+			disabled: !isFormValid
+		}}
+	/>
 </form>
 ```
 
@@ -386,14 +355,13 @@ The component exports comprehensive TypeScript types:
 import type { ButtonProps, ButtonStyling, ButtonBehavior } from '@rief/kit';
 
 const buttonConfig: ButtonProps = {
-  label: 'Typed Button',
-  styling: {
-    variant: 'filled',
-    size: 'lg'
-  },
-  behavior: {
-    state: 'default'
-  }
+	label: 'Typed Button',
+	styling: {
+		variant: 'filled',
+		size: 'lg'
+	},
+	behavior: {
+		state: 'default'
+	}
 };
 ```
-

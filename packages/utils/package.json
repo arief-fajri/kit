@@ -1,21 +1,21 @@
 {
-  "name": "@rief/utils",
-  "version": "1.0.0",
-  "description": "Shared utility functions",
-  "main": "./src/index.ts",
-  "type": "module",
-  "types": "./src/index.ts",
-  "exports": {
-    ".": {
-      "types": "./src/index.ts",
-      "default": "./src/index.ts"
-    }
-  },
-  "scripts": {
-    "build": "echo 'No build step required for utils package'",
-    "dev": "echo 'No dev step required for utils package'",
-    "lint": "echo 'No lint step required for utils package'"
-  },
-  "devDependencies": {},
-  "dependencies": {}
+	"name": "@rief/utils",
+	"version": "1.0.0",
+	"description": "Shared utility functions",
+	"main": "./src/index.ts",
+	"type": "module",
+	"types": "./src/index.ts",
+	"exports": {
+		".": {
+			"types": "./src/index.ts",
+			"default": "./src/index.ts"
+		}
+	},
+	"scripts": {
+		"build": "echo 'No build step required for utils package'",
+		"dev": "echo 'No dev step required for utils package'",
+		"lint": "echo 'No lint step required for utils package'"
+	},
+	"devDependencies": {},
+	"dependencies": {}
 }

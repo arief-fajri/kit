@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { Checkbox, Accordion, SelectOption } from '@rief/kit';
 	import type { CheckboxVariant, CheckboxSize, SelectOptionItem } from '@rief/kit';
-	
+
 	// Demo state
 	let checked = false;
 	let variant: SelectOptionItem | null = { value: 'default', label: 'Default' };
 	let size: SelectOptionItem | null = { value: 'md', label: 'Medium' };
 	let disabled = false;
 	let label = 'Accept terms and conditions';
-	
+
 	// Options
 	const variantOptions = [
 		{ value: 'default', label: 'Default' },
@@ -16,7 +16,7 @@
 		{ value: 'success', label: 'Success' },
 		{ value: 'error', label: 'Error' }
 	];
-	
+
 	const sizeOptions = [
 		{ value: 'xs', label: 'Extra Small' },
 		{ value: 'sm', label: 'Small' },
@@ -24,11 +24,11 @@
 		{ value: 'lg', label: 'Large' },
 		{ value: 'xl', label: 'Extra Large' }
 	];
-	
+
 	// Computed values for component props
-	$: checkboxVariant = variant?.value as CheckboxVariant || 'default';
-	$: checkboxSize = size?.value as CheckboxSize || 'md';
-	
+	$: checkboxVariant = (variant?.value as CheckboxVariant) || 'default';
+	$: checkboxSize = (size?.value as CheckboxSize) || 'md';
+
 	// Multiple checkboxes example
 	let preferences = {
 		newsletter: false,
@@ -47,8 +47,8 @@
 	<header class="docs-header">
 		<h1>Checkbox</h1>
 		<p class="docs-description">
-			A flexible checkbox component with multiple variants, sizes, and states.
-			Perfect for forms, settings, and any binary choice interfaces.
+			A flexible checkbox component with multiple variants, sizes, and states. Perfect for forms,
+			settings, and any binary choice interfaces.
 		</p>
 	</header>
 
@@ -56,19 +56,14 @@
 		<h2>Interactive Demo</h2>
 		<div class="demo-container">
 			<div class="demo-preview">
-				<Checkbox 
-					bind:checked
-					variant={checkboxVariant}
-					size={checkboxSize}
-					{disabled}
-				>
+				<Checkbox bind:checked variant={checkboxVariant} size={checkboxSize} {disabled}>
 					{label}
 				</Checkbox>
 				<p class="demo-value">
 					Status: <code>{checked ? 'Checked' : 'Unchecked'}</code>
 				</p>
 			</div>
-			
+
 			<div class="demo-controls">
 				<h3>Controls</h3>
 				<div class="controls-grid">
@@ -77,18 +72,18 @@
 						options={variantOptions}
 						bind:value={variant}
 						behavior={{ closeOnSelect: true }}
-						styling={{ variant: "outlined" }}
+						styling={{ variant: 'outlined' }}
 					/>
-					
+
 					<SelectOption
 						label="Size"
 						options={sizeOptions}
 						bind:value={size}
 						behavior={{ closeOnSelect: true }}
-						styling={{ variant: "outlined" }}
+						styling={{ variant: 'outlined' }}
 					/>
 				</div>
-				
+
 				<div class="checkbox-controls">
 					<Checkbox bind:checked={disabled}>Disabled</Checkbox>
 				</div>
@@ -98,14 +93,14 @@
 
 	<section class="examples-section">
 		<h2>Examples</h2>
-		
-		<Accordion 
+
+		<Accordion
 			content={{
-				title: "Variants",
-				subtitle: "Different checkbox styles",
-				content: ""
+				title: 'Variants',
+				subtitle: 'Different checkbox styles',
+				content: ''
 			}}
-			styling={{ variant: "outlined" }}
+			styling={{ variant: 'outlined' }}
 			behavior={{ showIcon: true }}
 		>
 			<div class="example-group">
@@ -116,13 +111,13 @@
 			</div>
 		</Accordion>
 
-		<Accordion 
+		<Accordion
 			content={{
-				title: "Sizes",
-				subtitle: "Different checkbox sizes",
-				content: ""
+				title: 'Sizes',
+				subtitle: 'Different checkbox sizes',
+				content: ''
 			}}
-			styling={{ variant: "outlined" }}
+			styling={{ variant: 'outlined' }}
 			behavior={{ showIcon: true }}
 		>
 			<div class="example-group">
@@ -132,13 +127,13 @@
 			</div>
 		</Accordion>
 
-		<Accordion 
+		<Accordion
 			content={{
-				title: "States",
-				subtitle: "Different checkbox states",
-				content: ""
+				title: 'States',
+				subtitle: 'Different checkbox states',
+				content: ''
 			}}
-			styling={{ variant: "outlined" }}
+			styling={{ variant: 'outlined' }}
 			behavior={{ showIcon: true }}
 		>
 			<div class="example-group">
@@ -149,32 +144,24 @@
 			</div>
 		</Accordion>
 
-		<Accordion 
+		<Accordion
 			content={{
-				title: "Form Example",
-				subtitle: "Multiple checkboxes in a form",
-				content: ""
+				title: 'Form Example',
+				subtitle: 'Multiple checkboxes in a form',
+				content: ''
 			}}
-			styling={{ variant: "outlined" }}
+			styling={{ variant: 'outlined' }}
 			behavior={{ showIcon: true }}
 		>
 			<div class="form-example">
 				<h4>Notification Preferences</h4>
 				<div class="checkbox-list">
-					<Checkbox bind:checked={preferences.newsletter}>
-						Email Newsletter
-					</Checkbox>
-					<Checkbox bind:checked={preferences.notifications}>
-						Push Notifications
-					</Checkbox>
-					<Checkbox bind:checked={preferences.marketing}>
-						Marketing Communications
-					</Checkbox>
-					<Checkbox bind:checked={preferences.updates}>
-						Product Updates
-					</Checkbox>
+					<Checkbox bind:checked={preferences.newsletter}>Email Newsletter</Checkbox>
+					<Checkbox bind:checked={preferences.notifications}>Push Notifications</Checkbox>
+					<Checkbox bind:checked={preferences.marketing}>Marketing Communications</Checkbox>
+					<Checkbox bind:checked={preferences.updates}>Product Updates</Checkbox>
 				</div>
-				
+
 				<div class="preferences-output">
 					<h5>Current Preferences:</h5>
 					<pre><code>{JSON.stringify(preferences, null, 2)}</code></pre>

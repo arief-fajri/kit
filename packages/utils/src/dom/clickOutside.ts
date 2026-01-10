@@ -4,17 +4,17 @@
  * @returns Action object with destroy method
  */
 export function clickOutside(node: HTMLElement): { destroy(): void } {
-  function handleClick(event: MouseEvent) {
-    if (node && !node.contains(event.target as Node)) {
-      node.dispatchEvent(new CustomEvent('outclick', { detail: event }));
-    }
-  }
+	function handleClick(event: MouseEvent) {
+		if (node && !node.contains(event.target as Node)) {
+			node.dispatchEvent(new CustomEvent('outclick', { detail: event }));
+		}
+	}
 
-  document.addEventListener('click', handleClick, true);
+	document.addEventListener('click', handleClick, true);
 
-  return {
-    destroy() {
-      document.removeEventListener('click', handleClick, true);
-    }
-  };
+	return {
+		destroy() {
+			document.removeEventListener('click', handleClick, true);
+		}
+	};
 }

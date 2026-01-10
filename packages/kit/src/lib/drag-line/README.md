@@ -17,7 +17,7 @@ A reusable drag detection component for Svelte applications. DragLine provides a
 The DragLine component renders as a flexible wrapper container that detects drag gestures and emits events. It uses a slot-based architecture allowing any content to be placed inside as the drag handle.
 
 ```
-<div 
+<div
   class="dragline {className}"
   class:dragging={isDragging}
   class:isVertical={isVertical}
@@ -43,26 +43,26 @@ The DragLine component renders as a flexible wrapper container that detects drag
 
 ```svelte
 <script>
-  import { DragLine } from '@rief/kit';
-  
-  let drawerWidth = '400px';
-  let initialWidth = 400;
-  
-  function handleDragStart(e) {
-    initialWidth = e.detail.elem.offsetWidth;
-  }
-  
-  function handleDragging(e) {
-    drawerWidth = (initialWidth - e.detail.diffX) + 'px';
-  }
+	import { DragLine } from '@rief/kit';
+
+	let drawerWidth = '400px';
+	let initialWidth = 400;
+
+	function handleDragStart(e) {
+		initialWidth = e.detail.elem.offsetWidth;
+	}
+
+	function handleDragging(e) {
+		drawerWidth = initialWidth - e.detail.diffX + 'px';
+	}
 </script>
 
 <DragLine
-  on:dragstart={handleDragStart}
-  on:dragging={handleDragging}
-  on:dragstop={() => console.log('Drag stopped')}
+	on:dragstart={handleDragStart}
+	on:dragging={handleDragging}
+	on:dragstop={() => console.log('Drag stopped')}
 >
-  <div class="drag-handle">Drag me</div>
+	<div class="drag-handle">Drag me</div>
 </DragLine>
 ```
 
@@ -70,31 +70,31 @@ The DragLine component renders as a flexible wrapper container that detects drag
 
 ### Core Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| *(No core props - DragLine uses only styling and behavior)* | | | |
+| Prop                                                        | Type | Default | Description |
+| ----------------------------------------------------------- | ---- | ------- | ----------- |
+| _(No core props - DragLine uses only styling and behavior)_ |      |         |             |
 
 ### Styling Props (`styling` object)
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `styling.className` | `string` | `""` | Additional CSS classes |
-| `styling.style` | `string` | `""` | Additional inline styles |
-| `styling.zIndex` | `number` | `101` | Z-index of the drag element |
+| Prop                | Type     | Default | Description                 |
+| ------------------- | -------- | ------- | --------------------------- |
+| `styling.className` | `string` | `""`    | Additional CSS classes      |
+| `styling.style`     | `string` | `""`    | Additional inline styles    |
+| `styling.zIndex`    | `number` | `101`   | Z-index of the drag element |
 
 ### Behavior Props (`behavior` object)
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `behavior.disabled` | `boolean` | `false` | Disable drag functionality |
-| `behavior.tolerance` | `number` | `0` | Minimum movement in pixels before drag starts |
-| `behavior.isVertical` | `boolean` | `false` | Vertical drag orientation (changes cursor) |
+| Prop                  | Type      | Default | Description                                   |
+| --------------------- | --------- | ------- | --------------------------------------------- |
+| `behavior.disabled`   | `boolean` | `false` | Disable drag functionality                    |
+| `behavior.tolerance`  | `number`  | `0`     | Minimum movement in pixels before drag starts |
+| `behavior.isVertical` | `boolean` | `false` | Vertical drag orientation (changes cursor)    |
 
 ### Accessibility Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `ariaLabel` | `string` | `undefined` | Accessibility label |
+| Prop              | Type     | Default     | Description                 |
+| ----------------- | -------- | ----------- | --------------------------- |
+| `ariaLabel`       | `string` | `undefined` | Accessibility label         |
 | `ariaDescribedBy` | `string` | `undefined` | ARIA described by reference |
 
 ## Events
@@ -106,11 +106,13 @@ The DragLine component dispatches three events:
 Dispatched when drag operation begins (after tolerance threshold is met).
 
 ```svelte
-<DragLine on:dragstart={(e) => {
-  console.log('Drag started', e.detail);
-  // e.detail.event - Original MouseEvent or TouchEvent
-  // e.detail.elem - HTMLElement reference
-}} />
+<DragLine
+	on:dragstart={(e) => {
+		console.log('Drag started', e.detail);
+		// e.detail.event - Original MouseEvent or TouchEvent
+		// e.detail.elem - HTMLElement reference
+	}}
+/>
 ```
 
 ### dragging
@@ -118,13 +120,15 @@ Dispatched when drag operation begins (after tolerance threshold is met).
 Dispatched continuously during drag movement.
 
 ```svelte
-<DragLine on:dragging={(e) => {
-  console.log('Dragging', e.detail);
-  // e.detail.event - Original MouseEvent or TouchEvent
-  // e.detail.elem - HTMLElement reference
-  // e.detail.diffX - Horizontal movement delta from start
-  // e.detail.diffY - Vertical movement delta from start
-}} />
+<DragLine
+	on:dragging={(e) => {
+		console.log('Dragging', e.detail);
+		// e.detail.event - Original MouseEvent or TouchEvent
+		// e.detail.elem - HTMLElement reference
+		// e.detail.diffX - Horizontal movement delta from start
+		// e.detail.diffY - Vertical movement delta from start
+	}}
+/>
 ```
 
 ### dragstop
@@ -132,11 +136,13 @@ Dispatched continuously during drag movement.
 Dispatched when drag operation ends.
 
 ```svelte
-<DragLine on:dragstop={(e) => {
-  console.log('Drag stopped', e.detail);
-  // e.detail.event - Original MouseEvent or TouchEvent
-  // e.detail.elem - HTMLElement reference
-}} />
+<DragLine
+	on:dragstop={(e) => {
+		console.log('Drag stopped', e.detail);
+		// e.detail.event - Original MouseEvent or TouchEvent
+		// e.detail.elem - HTMLElement reference
+	}}
+/>
 ```
 
 ## Orientation
@@ -145,7 +151,7 @@ Dispatched when drag operation ends.
 
 ```svelte
 <DragLine>
-  <div class="drag-handle">Horizontal drag</div>
+	<div class="drag-handle">Horizontal drag</div>
 </DragLine>
 ```
 
@@ -153,7 +159,7 @@ Dispatched when drag operation ends.
 
 ```svelte
 <DragLine behavior={{ isVertical: true }}>
-  <div class="drag-handle">Vertical drag</div>
+	<div class="drag-handle">Vertical drag</div>
 </DragLine>
 ```
 
@@ -164,7 +170,7 @@ The `tolerance` prop prevents accidental drags by requiring a minimum movement b
 ```svelte
 <!-- Require 5px movement before drag starts -->
 <DragLine behavior={{ tolerance: 5 }}>
-  <div class="drag-handle">Drag me</div>
+	<div class="drag-handle">Drag me</div>
 </DragLine>
 ```
 
@@ -172,7 +178,7 @@ The `tolerance` prop prevents accidental drags by requiring a minimum movement b
 
 ```svelte
 <DragLine behavior={{ disabled: isLocked }}>
-  <div class="drag-handle">Drag me</div>
+	<div class="drag-handle">Drag me</div>
 </DragLine>
 ```
 
@@ -181,8 +187,8 @@ The `tolerance` prop prevents accidental drags by requiring a minimum movement b
 Use the `styling` prop to add custom classes:
 
 ```svelte
-<DragLine styling={{ className: "my-custom-dragline" }}>
-  <div class="drag-handle">Drag me</div>
+<DragLine styling={{ className: 'my-custom-dragline' }}>
+	<div class="drag-handle">Drag me</div>
 </DragLine>
 ```
 
@@ -193,11 +199,8 @@ For global theming, see the [Styling Guide](./STYLING.md).
 The component includes ARIA attributes for accessibility:
 
 ```svelte
-<DragLine 
-  ariaLabel="Resize panel"
-  behavior={{ isVertical: true }}
->
-  <div class="drag-handle">Drag to resize</div>
+<DragLine ariaLabel="Resize panel" behavior={{ isVertical: true }}>
+	<div class="drag-handle">Drag to resize</div>
 </DragLine>
 ```
 
@@ -207,28 +210,25 @@ The component includes ARIA attributes for accessibility:
 
 ```svelte
 <script>
-  import { DragLine } from '@rief/kit';
-  
-  let panelWidth = 400;
-  let initialWidth = 400;
-  
-  function handleDragStart() {
-    initialWidth = panelWidth;
-  }
-  
-  function handleDragging(e) {
-    panelWidth = Math.max(200, initialWidth - e.detail.diffX);
-  }
+	import { DragLine } from '@rief/kit';
+
+	let panelWidth = 400;
+	let initialWidth = 400;
+
+	function handleDragStart() {
+		initialWidth = panelWidth;
+	}
+
+	function handleDragging(e) {
+		panelWidth = Math.max(200, initialWidth - e.detail.diffX);
+	}
 </script>
 
 <div class="panel" style="width: {panelWidth}px">
-  <div class="content">Panel content</div>
-  <DragLine
-    on:dragstart={handleDragStart}
-    on:dragging={handleDragging}
-  >
-    <div class="resize-handle"></div>
-  </DragLine>
+	<div class="content">Panel content</div>
+	<DragLine on:dragstart={handleDragStart} on:dragging={handleDragging}>
+		<div class="resize-handle"></div>
+	</DragLine>
 </div>
 ```
 
@@ -236,33 +236,26 @@ The component includes ARIA attributes for accessibility:
 
 ```svelte
 <script>
-  import { DragLine } from '@rief/kit';
-  
-  let leftWidth = 300;
-  let initialWidth = 300;
-  
-  function handleDragStart() {
-    initialWidth = leftWidth;
-  }
-  
-  function handleDragging(e) {
-    leftWidth = Math.max(100, Math.min(600, initialWidth + e.detail.diffX));
-  }
+	import { DragLine } from '@rief/kit';
+
+	let leftWidth = 300;
+	let initialWidth = 300;
+
+	function handleDragStart() {
+		initialWidth = leftWidth;
+	}
+
+	function handleDragging(e) {
+		leftWidth = Math.max(100, Math.min(600, initialWidth + e.detail.diffX));
+	}
 </script>
 
 <div class="split-view">
-  <div class="left-panel" style="width: {leftWidth}px">
-    Left content
-  </div>
-  <DragLine
-    on:dragstart={handleDragStart}
-    on:dragging={handleDragging}
-  >
-    <div class="split-handle"></div>
-  </DragLine>
-  <div class="right-panel">
-    Right content
-  </div>
+	<div class="left-panel" style="width: {leftWidth}px">Left content</div>
+	<DragLine on:dragstart={handleDragStart} on:dragging={handleDragging}>
+		<div class="split-handle"></div>
+	</DragLine>
+	<div class="right-panel">Right content</div>
 </div>
 ```
 
@@ -274,20 +267,19 @@ The component exports comprehensive TypeScript types:
 import type { DragLineProps, DragLineStyling, DragLineBehavior } from '@rief/kit';
 
 const dragLineConfig: DragLineProps = {
-  styling: {
-    className: 'custom-dragline',
-    zIndex: 200
-  },
-  behavior: {
-    tolerance: 5,
-    isVertical: false,
-    disabled: false
-  },
-  ariaLabel: 'Resize panel'
+	styling: {
+		className: 'custom-dragline',
+		zIndex: 200
+	},
+	behavior: {
+		tolerance: 5,
+		isVertical: false,
+		disabled: false
+	},
+	ariaLabel: 'Resize panel'
 };
 ```
 
 ## Global Styling
 
 See the [Global Styling Guide](./STYLING.md) for comprehensive theming options using CSS custom properties.
-
