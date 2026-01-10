@@ -24,8 +24,27 @@
 		innerWidth = window.innerWidth;
 	}
 
-	// Computed style strings
-	$: layoutStyles = `--base-layout-height: ${innerHeight || 0}px; --base-layout-width: ${innerWidth || 0}px; ${computedStyling.layoutStyle || computedStyling.style || ''}`;
+	let layoutStyles = '';
+
+	// Computed style strings - only add CSS variables if they have values
+	$: {
+		const styleParts: string[] = [];
+
+		if (innerHeight) {
+			styleParts.push(`--base-layout-height: ${innerHeight}px`);
+		}
+
+		if (innerWidth) {
+			styleParts.push(`--base-layout-width: ${innerWidth}px`);
+		}
+
+		const additionalStyles = computedStyling.layoutStyle || computedStyling.style || '';
+		if (additionalStyles) {
+			styleParts.push(additionalStyles);
+		}
+
+		layoutStyles = styleParts.join('; ');
+	}
 	$: bodyStyles = computedStyling.bodyStyle || '';
 </script>
 
@@ -47,7 +66,7 @@
 <style lang="postcss">
 	.base-layout {
 		position: fixed;
-		/* display: flex; */
+		display: flex;
 		width: 100vw;
 		height: 100vh;
 		width: var(--base-layout-width, 100vw);

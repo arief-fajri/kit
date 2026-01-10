@@ -1,79 +1,207 @@
 <script lang="ts">
-	import CopyButton from './CopyButton.svelte';
+	import { Button } from '@rief/kit';
+	import { onMount } from 'svelte';
+	import { browser } from '$app/environment';
+	import { getHighlighter, type Highlighter } from 'shiki';
+	import { theme } from '../stores/theme';
 
-	export let code: string;
-	export let language = 'typescript';
-	export let showCopyButton = true;
+	export let code: string = '';
+	export let language: string = 'text';
+	export let showCopyButton: boolean = true;
+	export let showLineNumbers: boolean = false;
+	export let maxHeight: string | undefined = undefined;
+
+	let highlightedCode = '';
+	let copied = false;
+	let loading = true;
+	let error: string | null = null;
+	let highlighter: Highlighter | null = null;
+
+	// Supported languages
+	const supportedLanguages = [
+		'svelte',
+		'typescript',
+		'javascript',
+		'css',
+		'json',
+		'bash',
+		'shell',
+		'html',
+		'markdown',
+		'yaml',
+		'text'
+	] as const;
+
+	// Normalize language
+	$: normalizedLanguage = supportedLanguages.includes(language as any)
+		? language
+		: 'text';
+
+	// Get theme based on current theme state
+	function getTheme(): 'github-light' | 'github-dark' {
+		if (!browser) return 'github-light';
+		if ($theme === 'dark') return 'github-dark';
+		if ($theme === 'system') {
+			return window.matchMedia('(prefers-color-scheme: dark)').matches
+				? 'github-dark'
+				: 'github-light';
+		}
+		return 'github-light';
+	}
+
+	// Initialize highlighter
+	async function initHighlighter() {
+		if (!browser) {
+			loading = false;
+			return;
+		}
+
+		try {
+			loading = true;
+			error = null;
+
+			highlighter = await getHighlighter({
+				themes: ['github-light', 'github-dark'],
+				langs: supportedLanguages as any
+			});
+
+			updateHighlight();
+			loading = false;
+		} catch (err) {
+			console.error('Failed to initialize code highlighter:', err);
+			error = 'Failed to load syntax highlighter';
+			loading = false;
+		}
+	}
+
+	// Update highlighted code
+	function updateHighlight() {
+		if (!highlighter || !code) {
+			highlightedCode = '';
+			return;
+		}
+
+		try {
+			const currentTheme = getTheme();
+			highlightedCode = highlighter.codeToHtml(code, {
+				lang: normalizedLanguage,
+				theme: currentTheme
+			});
+		} catch (err) {
+			console.error('Failed to highlight code:', err);
+			error = 'Failed to highlight code';
+			highlightedCode = escapeHtml(code);
+		}
+	}
+
+	// Escape HTML for fallback
+	function escapeHtml(text: string): string {
+		const div = document.createElement('div');
+		div.textContent = text;
+		return div.innerHTML;
+	}
+
+	// Copy code to clipboard
+	async function copyCode() {
+		if (!browser || !code) return;
+
+		try {
+			await navigator.clipboard.writeText(code);
+			copied = true;
+			setTimeout(() => {
+				copied = false;
+			}, 2000);
+		} catch (err) {
+			console.error('Failed to copy code:', err);
+			error = 'Failed to copy to clipboard';
+		}
+	}
+
+	// Watch for code, language, and theme changes
+	$: if (highlighter && code && normalizedLanguage) {
+		updateHighlight();
+	}
+
+	// Watch for system theme changes
+	let mediaQuery: MediaQueryList | null = null;
+	let mediaQueryHandler: (() => void) | null = null;
+
+	onMount(() => {
+		initHighlighter();
+
+		// Set up media query listener for system theme
+		if (browser) {
+			mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+			mediaQueryHandler = () => {
+				if ($theme === 'system' && highlighter) {
+					updateHighlight();
+				}
+			};
+			mediaQuery.addEventListener('change', mediaQueryHandler);
+		}
+
+		return () => {
+			if (mediaQuery && mediaQueryHandler) {
+				mediaQuery.removeEventListener('change', mediaQueryHandler);
+			}
+		};
+	});
+
+	// Update highlight when theme changes
+	$: if (highlighter && $theme) {
+		updateHighlight();
+	}
 </script>
 
-<div class="code-block-wrapper">
-	{#if showCopyButton}
-		<div class="code-block-header">
-			<span class="language-label">{language}</span>
-			<CopyButton text={code} />
+<div class="relative group code-block">
+	{#if showCopyButton && browser}
+		<div class="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+			<Button
+				label={copied ? 'Copied!' : 'Copy'}
+				styling={{ variant: 'text', size: 'sm' }}
+				behavior={{ disabled: loading || !!error }}
+				on:click={copyCode}
+				ariaLabel={copied ? 'Code copied to clipboard' : 'Copy code to clipboard'}
+			/>
 		</div>
 	{/if}
-	<pre class="code-block"><code>{code}</code></pre>
+
+	<div
+		class="code-block__container overflow-x-auto rounded-lg bg-gray-100 dark:bg-gray-800 p-4 {error
+			? 'border border-red-300 dark:border-red-700'
+			: ''}"
+		style={maxHeight ? `max-height: ${maxHeight}; overflow-y: auto;` : ''}
+	>
+		{#if loading && browser}
+			<div class="text-sm text-gray-500 dark:text-gray-400">Loading...</div>
+		{:else if error}
+			<div class="text-sm text-red-600 dark:text-red-400 mb-2">{error}</div>
+			<pre class="m-0"><code class="text-sm">{code || '(empty)'}</code></pre>
+		{:else if highlightedCode}
+			{@html highlightedCode}
+		{:else}
+			<pre class="m-0"><code class="text-sm language-{normalizedLanguage}">{code || '(empty)'}</code></pre>
+		{/if}
+	</div>
+
+	{#if showLineNumbers && !loading && !error}
+		<!-- Line numbers can be added here if needed -->
+	{/if}
 </div>
 
 <style>
-	.code-block-wrapper {
-		position: relative;
-		margin: 1.5rem 0;
-		border-radius: 0.5rem;
-		overflow: hidden;
-		background: #1f2937;
-		border: 1px solid var(--color-border, #374151);
+	:global(.code-block pre) {
+		@apply m-0;
+		background: transparent !important;
 	}
 
-	.code-block-header {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding: 0.5rem 1rem;
-		background: #111827;
-		border-bottom: 1px solid var(--color-border, #374151);
+	:global(.code-block code) {
+		@apply text-sm;
+		font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
 	}
 
-	.language-label {
-		font-size: 0.75rem;
-		font-weight: 500;
-		color: var(--color-text-secondary, #9ca3af);
-		text-transform: uppercase;
-		letter-spacing: 0.05em;
-	}
-
-	.code-block {
-		margin: 0;
-		padding: 1.5rem;
-		overflow-x: auto;
-		background: #1f2937;
-		color: #f9fafb;
-		font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Courier New', monospace;
-		font-size: 0.875rem;
-		line-height: 1.6;
-	}
-
-	.code-block code {
-		font-family: inherit;
-		font-size: inherit;
-		color: inherit;
-		background: transparent;
-		padding: 0;
-		border: none;
-	}
-
-	:global([data-theme='dark'] .code-block-wrapper) {
-		background: #0f172a;
-		border-color: #1e293b;
-	}
-
-	:global([data-theme='dark'] .code-block-header) {
-		background: #020617;
-		border-bottom-color: #1e293b;
-	}
-
-	:global([data-theme='dark'] .code-block) {
-		background: #0f172a;
+	:global(.code-block .shiki) {
+		@apply m-0;
+		background: transparent !important;
 	}
 </style>
