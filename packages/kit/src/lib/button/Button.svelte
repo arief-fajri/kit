@@ -10,7 +10,7 @@
   export let label: ButtonProps["label"] = "";
   export let fullRounded: ButtonProps["fullRounded"] = false;
   export let className: ButtonProps["className"] = "";
-  export let customStyle: ButtonProps["className"] = "";
+  export let customStyle: ButtonProps["customStyle"] = "";
   export let disabled: ButtonProps["disabled"] = false;
   export let loading: ButtonProps["loading"] = false;
   export let loadingMessage: ButtonProps["loadingMessage"] = "Loading...";
@@ -144,8 +144,6 @@
       </div>
     </slot>
   {:else}
-    <!-- <div class="btn__content" data-icon-position={iconPosition}>
-    </div> -->
     {#if iconPosition === "left" || iconPosition === "only"}
       <slot name="icon" />
     {/if}

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from "svelte";
+  import { uniqueId as generateUniqueId } from "@rief/utils";
 
   // Types
   interface TagItem {
@@ -96,7 +97,7 @@
   
   onMount(() => {
     if (!uniqueId) {
-      uniqueId = "sti_" + Math.random().toString(36).substring(2, 11);
+      uniqueId = generateUniqueId("sti_");
     }
   });
   

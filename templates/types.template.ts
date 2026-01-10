@@ -15,6 +15,8 @@ export interface [ComponentName]Props {
 	state?: [ComponentName]State;
 	/** [Custom CSS class] */
 	className?: string;
+	/** [Custom inline styles] */
+	customStyle?: string;
 	/** [Disabled state] */
 	disabled?: boolean;
 	/** [Loading/processing state] */

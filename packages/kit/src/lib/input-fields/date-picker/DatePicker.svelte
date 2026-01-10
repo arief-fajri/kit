@@ -33,7 +33,7 @@
   export let showWeekNumbers: DatePickerProps["showWeekNumbers"] = false;
   export let showToday: DatePickerProps["showToday"] = true;
   export let showClear: DatePickerProps["showClear"] = true;
-  export const closeOnSelect: DatePickerProps["closeOnSelect"] = true;
+  export let closeOnSelect: DatePickerProps["closeOnSelect"] = true;
   export let labels: DatePickerProps["labels"] = {};
   export let className: DatePickerProps["className"] = "";
   export let disabled: DatePickerProps["disabled"] = false;

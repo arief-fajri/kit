@@ -31,8 +31,7 @@
 	// Ensure minWidth has a value
 	$: minWidthValue = minWidth ?? 320;
 
-	let classes: string = '';
-	export { classes as class };
+	export let className: string = '';
 
 	// Internal state
 	let sidebarElem: HTMLElement;
@@ -166,7 +165,7 @@
 
 <aside
 	bind:this={sidebarElem}
-	class="sidebar {classes} {sidebarClassName}"
+	class="sidebar {className} {sidebarClassName}"
 	class:sidebar--collapsed={collapsed}
 	class:sidebar--draggable={isDraggable}
 	style={computedStyle}

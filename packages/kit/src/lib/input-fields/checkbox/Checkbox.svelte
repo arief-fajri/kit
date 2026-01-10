@@ -32,8 +32,7 @@
     export let variant: Variant = "default";
     
     // Styling props
-    let className: string = "";
-    export { className as class };
+    export let className: string = "";
     
     // Behavior props
     export let stopPropagation: boolean = false;

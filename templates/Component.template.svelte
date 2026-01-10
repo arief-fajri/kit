@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { createEventDispatcher } from "svelte";
+	import { createEventDispatcher, onMount } from "svelte";
+	import { uniqueId } from "@rief/utils";
 	import type { [ComponentName]Variant, [ComponentName]Size, [ComponentName]State, [ComponentName]Props } from '../types.js';
 
 	// Props with defaults
@@ -8,8 +9,10 @@
 	export let state: [ComponentName]Props['state'] = undefined;
 	export let [primaryProp]: [ComponentName]Props['[primaryProp]'] = "[default-value]";
 	export let className: [ComponentName]Props['className'] = "";
+	export let customStyle: [ComponentName]Props['customStyle'] = "";
 	export let disabled: [ComponentName]Props['disabled'] = false;
 	export let loading: [ComponentName]Props['loading'] = false;
+	export let loadingMessage: [ComponentName]Props['loadingMessage'] = "Loading...";
 	export let [customProp1]: [ComponentName]Props['[customProp1]'] = undefined;
 	export let [customProp2]: [ComponentName]Props['[customProp2]'] = undefined;
 	export let [customProp3]: [ComponentName]Props['[customProp3]'] = false;
@@ -27,11 +30,20 @@
 	// Determine if loading
 	$: isLoading = loading;
 
+	// Generate unique ID if not provided (SSR-safe)
+	let [componentId]: string = "";
+	onMount(() => {
+		if (![componentId]) {
+			[componentId] = uniqueId("[component-prefix]-");
+		}
+	});
+
 	// Generate CSS custom properties for style overrides
 	$: customStyles = (() => {
 		const styles: string[] = [];
 		if ([customProp1]) styles.push(`--[component-prefix]-[property]: ${[customProp1]}`);
 		if ([customProp2]) styles.push(`--[component-prefix]-[property]: ${[customProp2]}`);
+		if (customStyle) styles.push(customStyle);
 		return styles.join("; ");
 	})();
 
@@ -61,7 +73,7 @@
 	class:[component-class]--disabled={disabled || isLoading}
 	class:[component-class]--loading={isLoading}
 	class:[component-class]--state-{actualState}={actualState !== 'default'}
-	style={customStyles}
+	style={customStyles || undefined}
 	{...$$restProps}
 	on:[primaryEvent]={[handlePrimaryEvent]}
 	on:[secondaryEvent]={[handleSecondaryEvent]}

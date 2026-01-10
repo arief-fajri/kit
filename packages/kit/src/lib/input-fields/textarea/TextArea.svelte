@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from "svelte";
   import { slide } from "svelte/transition";
+  import { uniqueId } from "@rief/utils";
   import type { TextAreaStyling, TextAreaValidation, TextAreaBehavior, TextAreaLayout } from "../../types.js";
 
   // Core props
@@ -12,10 +13,10 @@
   export let textareaRef: HTMLTextAreaElement | undefined = undefined;
 
   // Generate unique ID if not provided (SSR-safe)
-  let textareaId: string = id || (typeof window !== "undefined" ? `textarea-${Math.random().toString(36).substr(2, 9)}` : "");
+  let textareaId: string = id || (typeof window !== "undefined" ? uniqueId("textarea-") : "");
   onMount(() => {
     if (!id && !textareaId) {
-      textareaId = `textarea-${Math.random().toString(36).substr(2, 9)}`;
+      textareaId = uniqueId("textarea-");
     }
   });
 
@@ -59,7 +60,16 @@
     autoResize: layout.autoResize ?? !layout.fixedHeight
   };
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher<{
+    input: string;
+    keydown: { key: string; event: KeyboardEvent };
+    focus: void;
+    outFocus: void;
+    change: string;
+    paste: ClipboardEvent;
+    "paste-rejected": { reason: string; maxLength: number };
+    clear: void;
+  }>();
 
   const handleKeydown = (e: KeyboardEvent) => {
     const { key } = e;

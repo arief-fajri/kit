@@ -2,6 +2,7 @@
   import SortHeader from "./SortHeader.svelte";
   import Pagination from "../pagination/Pagination.svelte";
   import { createEventDispatcher } from "svelte";
+  import { uniqueId } from "@rief/utils";
   import type { TableColumn, TableRow } from "../../types.js";
 
   /**
@@ -122,7 +123,7 @@
   }>();
 
   // Generate unique table ID if not provided
-  $: uniqueTableId = tableId || `table-listing-${Math.random().toString(36).substr(2, 9)}`;
+  $: uniqueTableId = tableId || (typeof window !== "undefined" ? uniqueId("table-listing-") : "table-listing-ssr");
 
   // Normalize column key/field and title/label/name
   function normalizeColumn(col: TableColumn): TableColumn & { key: string; title: string } {

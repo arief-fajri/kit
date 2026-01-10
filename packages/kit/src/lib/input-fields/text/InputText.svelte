@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from "svelte";
+  import { createEventDispatcher, onMount, onDestroy } from "svelte";
   import { slide } from "svelte/transition";
+  import { uniqueId } from "@rief/utils";
   import type {
     InputTextProps,
     InputTextStyling,
@@ -29,10 +30,10 @@
   export let inputRef: HTMLInputElement | undefined = undefined;
 
   // Generate unique ID if not provided (SSR-safe)
-  let inputId: string = id || (typeof window !== "undefined" ? `input-${Math.random().toString(36).substr(2, 9)}` : "");
+  let inputId: string = id || (typeof window !== "undefined" ? uniqueId("input-") : "");
   onMount(() => {
     if (!id && !inputId) {
-      inputId = `input-${Math.random().toString(36).substr(2, 9)}`;
+      inputId = uniqueId("input-");
     }
   });
 
@@ -78,16 +79,36 @@
   let passwordView: boolean = false;
   let cursorPosition: number = 0;
 
+  // Event listener cleanup
+  let cleanupListeners: (() => void) | null = null;
+
   // Reactive statements
   $: {
-    if (computedBehavior.useKeyup) {
-      inputRef?.removeEventListener("input", handleInput);
-      inputRef?.addEventListener("keyup", handleInput);
-    } else {
-      inputRef?.removeEventListener("keyup", handleInput);
-      inputRef?.addEventListener("input", handleInput);
+    if (inputRef) {
+      // Clean up previous listeners
+      if (cleanupListeners) {
+        cleanupListeners();
+      }
+
+      if (computedBehavior.useKeyup) {
+        inputRef.addEventListener("keyup", handleInput);
+        cleanupListeners = () => {
+          inputRef?.removeEventListener("keyup", handleInput);
+        };
+      } else {
+        inputRef.addEventListener("input", handleInput);
+        cleanupListeners = () => {
+          inputRef?.removeEventListener("input", handleInput);
+        };
+      }
     }
   }
+
+  onDestroy(() => {
+    if (cleanupListeners) {
+      cleanupListeners();
+    }
+  });
 
   $: if (value && !firstLoad) {
     firstLoad = true;
@@ -98,7 +119,14 @@
 
   $: if (computedBehavior.autoFocus && inputRef) inputRef.focus();
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher<{
+    input: string;
+    keyup: string;
+    keydown: { key: string; event: KeyboardEvent };
+    focus: void;
+    outFocus: void;
+    change: Event;
+  }>();
 
   const handleKeydown = (e: KeyboardEvent) => {
     const { key } = e;

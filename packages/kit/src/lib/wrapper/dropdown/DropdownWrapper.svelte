@@ -26,8 +26,7 @@
   export let isFullAnchorWidth: boolean = true;
 
   // Custom styling
-  let classes: string = "";
-  export { classes as class };
+  export let className: string = "";
 
   let dropdownEl: HTMLElement;
   const dispatch = createEventDispatcher<{
@@ -203,7 +202,7 @@
   <div
     bind:this={dropdownEl}
     use:portal
-    class="dropdown dropdown--{variant} dropdown--{size} {classes}"
+    class="dropdown dropdown--{variant} dropdown--{size} {className}"
     style={composeStyle()}
     transition:grow
     role="menu"

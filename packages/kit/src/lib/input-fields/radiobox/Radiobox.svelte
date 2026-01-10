@@ -12,8 +12,7 @@
     export let rtl: boolean = false;
     
     // CSS class props
-    let className: string = "";
-    export { className as class };
+    export let className: string = "";
     export let labelClass: string = "";
     export let radioClass: string = "";
   

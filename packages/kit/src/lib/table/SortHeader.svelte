@@ -1,9 +1,8 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
 
-  let classes = "";
-  export { classes as class }; // export reserved keyword
-  export let colClass = "";
+  export let className: string = "";
+  export let colClass: string = "";
 
   export let name: string | undefined;
   export let key: string;
@@ -43,12 +42,12 @@
   scope="col"
   tabindex="0"
   title={key}
-  class="sort-header {classes}"
+  class="sort-header {className}"
   class:sort-header--disabled={disable}
   style:cursor={!disable ? "pointer" : "default"}
   on:click={toggleSort}
 >
-  <div class="sort-header__content {classes} {colClass}" class:sort-header__content--hoverable={!disable}>
+  <div class="sort-header__content {className} {colClass}" class:sort-header__content--hoverable={!disable}>
     <slot>
       <p class="sort-header__text">{name}</p>
     </slot>
